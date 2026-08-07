@@ -1,0 +1,9 @@
+{
+  "name": "haychic-boutique",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HAYCHIC Boutique site (static, GitHub Pages) plus its Stripe checkout serverless function (deployed separately to Vercel).",
+  "dependencies": {
+    "stripe": "^16.0.0"
+  }
+}
