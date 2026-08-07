@@ -1,0 +1,34 @@
+[
+  {
+    "id": "the-tiffany",
+    "name": "The Tiffany",
+    "price": "$XX.XX",
+    "status": "in-stock",
+    "category": "Bags",
+    "image": ""
+  },
+  {
+    "id": "the-gabriella-bag",
+    "name": "The Gabriella Bag",
+    "price": "$XX.XX",
+    "status": "preorder",
+    "category": "Bags",
+    "image": ""
+  },
+  {
+    "id": "the-cutie-set",
+    "name": "The Cutie Set",
+    "price": "$XX.XX",
+    "status": "in-stock",
+    "category": "Clothing",
+    "image": ""
+  },
+  {
+    "id": "everyday-sneaker",
+    "name": "Everyday Sneaker",
+    "price": "$XX.XX",
+    "status": "preorder",
+    "category": "Shoes",
+    "image": ""
+  }
+]
