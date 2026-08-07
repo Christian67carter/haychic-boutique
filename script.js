@@ -145,9 +145,7 @@ document.addEventListener('DOMContentLoaded', loadProductDetail);
 
 /* ---------- Shopping Bag / Cart ---------- */
 const CART_KEY = 'haychic_cart';
-// TODO: once the Stripe checkout backend is deployed, set this to its URL,
-// e.g. 'https://haychic-checkout.vercel.app/api/create-checkout-session'
-const CHECKOUT_API = '';
+const CHECKOUT_API = 'https://haychic-boutique.vercel.app/api/create-checkout-session';
 
 function parsePriceToCents(priceStr){
   const n = parseFloat(String(priceStr).replace(/[^0-9.]/g, ''));
