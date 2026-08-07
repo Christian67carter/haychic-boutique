@@ -1,11 +1,12 @@
 [
   {
     "id": "the-tiffany",
-    "name": "The Tiffany",
-    "price": "$XX.XX",
+    "name": "The Gabriella",
+    "price": "$77.00",
     "status": "in-stock",
     "category": "Bags",
-    "image": ""
+    "image": "",
+    "description": ""
   },
   {
     "id": "the-gabriella-bag",
