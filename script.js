@@ -19,7 +19,7 @@ function renderProductCard(p){
         <h3>${escapeHtml(p.name)}</h3>
         <p class="price">${escapeHtml(p.price)}</p>
       </a>
-      <button onclick="showToast('${escapeHtml(p.name).replace(/'/g, "\\'")} added to bag'); logProductInterest('${escapeHtml(p.id)}','${escapeHtml(p.name).replace(/'/g, "\\'")}')">Add to Bag</button>
+      <button class="add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}">Add to Bag</button>
     </article>`;
 }
 
@@ -130,7 +130,7 @@ async function loadProductDetail(){
         <p class="pdp-desc">${desc}</p>
         ${preorderNote}
         <div class="hero-actions">
-          <button class="btn primary" onclick="showToast('${escapeHtml(p.name).replace(/'/g, "\\'")} added to bag'); logProductInterest('${escapeHtml(p.id)}','${escapeHtml(p.name).replace(/'/g, "\\'")}')">Add to Bag</button>
+          <button class="btn primary add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}">Add to Bag</button>
           <a class="btn secondary" href="index.html#request">Ask a Question</a>
         </div>
       </div>`;
@@ -142,3 +142,187 @@ async function loadProductDetail(){
   }
 }
 document.addEventListener('DOMContentLoaded', loadProductDetail);
+
+/* ---------- Shopping Bag / Cart ---------- */
+const CART_KEY = 'haychic_cart';
+// TODO: once the Stripe checkout backend is deployed, set this to its URL,
+// e.g. 'https://haychic-checkout.vercel.app/api/create-checkout-session'
+const CHECKOUT_API = '';
+
+function parsePriceToCents(priceStr){
+  const n = parseFloat(String(priceStr).replace(/[^0-9.]/g, ''));
+  return isNaN(n) ? 0 : Math.round(n * 100);
+}
+
+function loadCart(){
+  try{ return JSON.parse(localStorage.getItem(CART_KEY)) || []; }catch(e){ return []; }
+}
+
+function saveCart(cart){
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  updateBagBadge();
+  renderCartDrawer();
+}
+
+function getCartCount(cart){
+  return cart.reduce((sum, item) => sum + item.qty, 0);
+}
+
+function updateBagBadge(){
+  const count = getCartCount(loadCart());
+  document.querySelectorAll('.bag-count').forEach(el => {
+    el.textContent = count > 0 ? count : '';
+    el.classList.toggle('show', count > 0);
+  });
+}
+
+function addToCart(id, name, priceStr, image){
+  const cart = loadCart();
+  const existing = cart.find(item => item.id === id);
+  if(existing){ existing.qty += 1; }
+  else { cart.push({ id, name, price: priceStr, image: image || '', qty: 1 }); }
+  saveCart(cart);
+}
+
+function removeFromCart(id){
+  saveCart(loadCart().filter(item => item.id !== id));
+}
+
+function changeQty(id, delta){
+  const cart = loadCart();
+  const item = cart.find(x => x.id === id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0){ removeFromCart(id); return; }
+  saveCart(cart);
+}
+
+function injectCartDrawer(){
+  if(document.getElementById('cartDrawer')) return;
+  const wrap = document.createElement('div');
+  wrap.innerHTML = `
+    <div id="cartOverlay" class="cart-overlay"></div>
+    <aside id="cartDrawer" class="cart-drawer">
+      <div class="cart-drawer-header">
+        <h3>Your Bag ♡</h3>
+        <button class="cart-close-btn" aria-label="Close bag">✕</button>
+      </div>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="cart-drawer-footer">
+        <div class="cart-subtotal"><span>Subtotal</span><strong id="cartSubtotal">$0.00</strong></div>
+        <button class="btn primary cart-checkout-btn" style="width:100%;text-align:center;">Checkout</button>
+        <p class="cart-note">Shipping and any final adjustments are calculated at checkout.</p>
+      </div>
+    </aside>`;
+  document.body.appendChild(wrap);
+}
+
+function renderCartDrawer(){
+  const itemsWrap = document.getElementById('cartItems');
+  const subtotalEl = document.getElementById('cartSubtotal');
+  if(!itemsWrap || !subtotalEl) return;
+  const cart = loadCart();
+  if(!cart.length){
+    itemsWrap.innerHTML = '<p class="cart-empty">Your bag is empty ♡<br>Go find something you love!</p>';
+    subtotalEl.textContent = '$0.00';
+    return;
+  }
+  let subtotalCents = 0;
+  itemsWrap.innerHTML = cart.map(item => {
+    subtotalCents += parsePriceToCents(item.price) * item.qty;
+    const bg = item.image ? `background-image:url('${item.image}');background-size:cover;background-position:center;` : '';
+    return `
+      <div class="cart-item">
+        <div class="cart-item-thumb" style="${bg}"></div>
+        <div class="cart-item-info">
+          <h4>${escapeHtml(item.name)}</h4>
+          <span>${escapeHtml(item.price)}</span>
+          <div class="cart-qty">
+            <button class="cart-qty-btn" data-id="${escapeHtml(item.id)}" data-delta="-1">−</button>
+            <span>${item.qty}</span>
+            <button class="cart-qty-btn" data-id="${escapeHtml(item.id)}" data-delta="1">+</button>
+          </div>
+        </div>
+        <button class="cart-remove-btn" data-id="${escapeHtml(item.id)}" aria-label="Remove">✕</button>
+      </div>`;
+  }).join('');
+  subtotalEl.textContent = '$' + (subtotalCents / 100).toFixed(2);
+}
+
+function toggleCart(){
+  renderCartDrawer();
+  document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+}
+
+function closeCart(){
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+}
+
+async function checkout(){
+  const cart = loadCart();
+  if(!cart.length) return;
+  if(!CHECKOUT_API){
+    showToast('Online checkout is almost ready — message Hayden to complete your order for now ♡');
+    return;
+  }
+  const checkoutBtn = document.querySelector('.cart-checkout-btn');
+  if(checkoutBtn){ checkoutBtn.disabled = true; checkoutBtn.textContent = 'Redirecting…'; }
+  try{
+    const res = await fetch(CHECKOUT_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        items: cart.map(item => ({
+          name: item.name,
+          unitAmount: parsePriceToCents(item.price),
+          quantity: item.qty,
+          image: item.image
+        }))
+      })
+    });
+    const data = await res.json();
+    if(data.url){ window.location = data.url; }
+    else { throw new Error('No checkout URL returned'); }
+  }catch(err){
+    showToast('Something went wrong starting checkout. Please try again.');
+    if(checkoutBtn){ checkoutBtn.disabled = false; checkoutBtn.textContent = 'Checkout'; }
+  }
+}
+
+function injectBagBadges(){
+  document.querySelectorAll('.bag-btn').forEach(btn => {
+    if(btn.querySelector('.bag-count')) return;
+    const span = document.createElement('span');
+    span.className = 'bag-count';
+    btn.appendChild(span);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  injectCartDrawer();
+  injectBagBadges();
+  updateBagBadge();
+});
+
+document.addEventListener('click', (e) => {
+  const addBtn = e.target.closest('.add-to-bag-btn');
+  if(addBtn){
+    const { id, name, price, image } = addBtn.dataset;
+    addToCart(id, name, price, image);
+    showToast(`${name} added to bag`);
+    logProductInterest(id, name);
+    return;
+  }
+  const bagBtn = e.target.closest('.bag-btn');
+  if(bagBtn){ toggleCart(); return; }
+  const qtyBtn = e.target.closest('.cart-qty-btn');
+  if(qtyBtn){ changeQty(qtyBtn.dataset.id, parseInt(qtyBtn.dataset.delta, 10)); return; }
+  const removeBtn = e.target.closest('.cart-remove-btn');
+  if(removeBtn){ removeFromCart(removeBtn.dataset.id); return; }
+  const closeEl = e.target.closest('.cart-close-btn, .cart-overlay');
+  if(closeEl){ closeCart(); return; }
+  const checkoutBtn = e.target.closest('.cart-checkout-btn');
+  if(checkoutBtn){ checkout(); return; }
+});
