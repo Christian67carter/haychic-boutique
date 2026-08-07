@@ -3,30 +3,46 @@ function escapeHtml(str){
   return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
+let ALL_PRODUCTS = [];
+
+function renderProductCard(p){
+  const statusClass = p.status === 'in-stock' ? 'in-stock' : 'preorder';
+  const statusLabel = p.status === 'in-stock' ? 'IN STOCK' : 'PRE-ORDER';
+  const bg = p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : '';
+  const inner = p.image ? '' : '<span>HAYCHIC</span>';
+  return `
+    <article class="product-card">
+      <div class="product-image placeholder" style="${bg}">${inner}</div>
+      <div class="badges"><span class="badge ${statusClass}">${statusLabel}</span></div>
+      <h3>${escapeHtml(p.name)}</h3>
+      <p class="price">${escapeHtml(p.price)}</p>
+      <button onclick="showToast('${escapeHtml(p.name).replace(/'/g, "\\'")} added to bag'); logProductInterest('${escapeHtml(p.id)}','${escapeHtml(p.name).replace(/'/g, "\\'")}')">Add to Bag</button>
+    </article>`;
+}
+
+function renderGrid(el, products, emptyMsg){
+  if(!el) return;
+  if(!products.length){
+    el.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--muted);">${emptyMsg}</p>`;
+    return;
+  }
+  el.innerHTML = products.map(renderProductCard).join('');
+}
+
+function applyFilter(cat){
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.toggle('active', p.dataset.cat === cat));
+  const filtered = cat === 'All' ? ALL_PRODUCTS : ALL_PRODUCTS.filter(p => p.category === cat);
+  renderGrid(document.getElementById('products'), filtered, 'New arrivals coming soon ♡');
+}
+
 async function loadProducts(){
   const grid = document.getElementById('products');
   if(!grid) return;
   try{
     const res = await fetch('products.json?_=' + Date.now());
-    const products = await res.json();
-    if(!products.length){
-      grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);">New arrivals coming soon ♡</p>';
-      return;
-    }
-    grid.innerHTML = products.map(p => {
-      const statusClass = p.status === 'in-stock' ? 'in-stock' : 'preorder';
-      const statusLabel = p.status === 'in-stock' ? 'IN STOCK' : 'PRE-ORDER';
-      const bg = p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : '';
-      const inner = p.image ? '' : '<span>HAYCHIC</span>';
-      return `
-        <article class="product-card">
-          <div class="product-image placeholder" style="${bg}">${inner}</div>
-          <div class="badges"><span class="badge ${statusClass}">${statusLabel}</span></div>
-          <h3>${escapeHtml(p.name)}</h3>
-          <p class="price">${escapeHtml(p.price)}</p>
-          <button onclick="showToast('${escapeHtml(p.name).replace(/'/g, "\\'")} added to bag'); logProductInterest('${escapeHtml(p.id)}','${escapeHtml(p.name).replace(/'/g, "\\'")}')">Add to Bag</button>
-        </article>`;
-    }).join('');
+    ALL_PRODUCTS = await res.json();
+    applyFilter('All');
+    renderGrid(document.getElementById('preorder-products'), ALL_PRODUCTS.filter(p => p.status === 'preorder'), 'Pre-order picks coming soon ♡');
   }catch(err){
     grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);">Could not load products right now.</p>';
   }
@@ -70,4 +86,8 @@ function logProductInterest(id, name){
   if(window.HAYCHIC_logActivity){
     window.HAYCHIC_logActivity('product_interest', { productId: id, productName: name });
   }
+}
+function scrollTesti(dir){
+  const track = document.getElementById('testiTrack');
+  if(track) track.scrollBy({ left: dir * 300, behavior: 'smooth' });
 }
