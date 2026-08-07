@@ -7,7 +7,7 @@
   <meta name="description" content="HAYCHIC Boutique — trendy bags, clothing, shoes, accessories, beauty, pre-orders and special-order finds." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -25,8 +25,11 @@
       <a href="about.html">About</a>
       <a href="#pr">PR Team</a>
       <a href="#faq">FAQ</a>
+      <a class="nav-cta" href="#shop">Shop Now</a>
     </nav>
-    <button class="bag-btn" aria-label="Shopping bag">Bag ♡</button>
+    <div class="header-actions">
+      <button class="bag-btn" aria-label="Shopping bag">Bag ♡</button>
+    </div>
   </header>
 
   <main>
@@ -59,6 +62,19 @@
       </div>
     </section>
 
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>★ Thank you for shopping small</span>
+        <span>★ New drops weekly</span>
+        <span>★ Follow along on Instagram</span>
+        <span>★ Happy Shopping ♡</span>
+        <span>★ Thank you for shopping small</span>
+        <span>★ New drops weekly</span>
+        <span>★ Follow along on Instagram</span>
+        <span>★ Happy Shopping ♡</span>
+      </div>
+    </div>
+
     <section class="section" id="shop">
       <div class="section-heading">
         <span class="eyebrow">shop by category</span>
@@ -74,13 +90,27 @@
       </div>
     </section>
 
+    <section class="banner">
+      <div class="banner-content">
+        <span class="eyebrow">on hand &amp; in stock</span>
+        <h2>Shop it now, love it sooner</h2>
+        <p>Every HAYCHIC piece is hand-picked to help you feel confident and put-together — no long wait required.</p>
+        <a class="btn primary" href="#instock">Browse In-Stock Items</a>
+      </div>
+    </section>
+
     <section class="section products-section" id="new">
-      <div class="section-heading row">
-        <div>
-          <span class="eyebrow">just dropped</span>
-          <h2>Shop our favorites</h2>
-        </div>
-        <a href="#products" class="text-link">View all →</a>
+      <div class="section-heading">
+        <span class="eyebrow">just dropped</span>
+        <h2>Most Loved</h2>
+      </div>
+      <div class="filter-pills" id="filterPills">
+        <button class="filter-pill active" data-cat="All" onclick="applyFilter('All')">All</button>
+        <button class="filter-pill" data-cat="Bags" onclick="applyFilter('Bags')">Bags</button>
+        <button class="filter-pill" data-cat="Clothing" onclick="applyFilter('Clothing')">Clothing</button>
+        <button class="filter-pill" data-cat="Shoes" onclick="applyFilter('Shoes')">Shoes</button>
+        <button class="filter-pill" data-cat="Beauty" onclick="applyFilter('Beauty')">Beauty</button>
+        <button class="filter-pill" data-cat="Accessories" onclick="applyFilter('Accessories')">Accessories</button>
       </div>
 
       <div class="product-grid" id="products">
@@ -107,11 +137,59 @@
       </div>
     </section>
 
+    <section class="section products-section">
+      <div class="section-heading">
+        <span class="eyebrow">3–4 weeks to arrive</span>
+        <h2>Pre-Order Picks</h2>
+      </div>
+      <div class="product-grid" id="preorder-products">
+        <p style="grid-column:1/-1;text-align:center;color:var(--muted);">Loading pre-order picks…</p>
+      </div>
+    </section>
+
     <section class="section in-stock-callout" id="instock">
       <span class="eyebrow">ready sooner</span>
       <h2>Shop what’s in stock now ♡</h2>
       <p>Perfect for shoppers who don’t want to wait for a pre-order.</p>
       <a class="btn secondary" href="#products">Browse In-Stock Items</a>
+    </section>
+
+    <section class="testimonials">
+      <div class="section-heading">
+        <span class="eyebrow">customer love</span>
+        <h2>What shoppers are saying</h2>
+      </div>
+      <div class="testi-track" id="testiTrack">
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p>“Came in so fast and in great condition — even cuter in person!”</p>
+          <strong>Future You</strong>
+          <span>New Arrival</span>
+        </div>
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p>“Obsessed with the quality, exactly what I hoped for.”</p>
+          <strong>Future You</strong>
+          <span>Pre-Order Pick</span>
+        </div>
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p>“So easy to order and Hayden kept me updated the whole way.”</p>
+          <strong>Future You</strong>
+          <span>In-Stock Item</span>
+        </div>
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p>“HAYCHIC is my go-to for cute finds on a budget.”</p>
+          <strong>Future You</strong>
+          <span>Accessories</span>
+        </div>
+      </div>
+      <div class="testi-controls">
+        <button aria-label="Previous reviews" onclick="scrollTesti(-1)">←</button>
+        <button aria-label="Next reviews" onclick="scrollTesti(1)">→</button>
+      </div>
+      <p class="note">★ Sample reviews shown while HAYCHIC collects real customer feedback ★</p>
     </section>
 
     <section class="request-section" id="request">
@@ -170,15 +248,37 @@
       </div>
     </section>
 
+    <section class="section collections">
+      <div class="section-heading">
+        <span class="eyebrow">click to shop</span>
+        <h2>Shop Favorites</h2>
+      </div>
+      <div class="collections-scroll">
+        <a class="coll-tile coll-1" href="#products"><span class="emoji">👜</span><strong>Bags</strong><small>Shop now</small></a>
+        <a class="coll-tile coll-2" href="#products"><span class="emoji">👗</span><strong>Clothing</strong><small>Shop now</small></a>
+        <a class="coll-tile coll-3" href="#products"><span class="emoji">👟</span><strong>Shoes</strong><small>Shop now</small></a>
+        <a class="coll-tile coll-4" href="#products"><span class="emoji">💄</span><strong>Beauty</strong><small>Shop now</small></a>
+        <a class="coll-tile coll-5" href="#products"><span class="emoji">✨</span><strong>Accessories</strong><small>Shop now</small></a>
+        <a class="coll-tile coll-6" href="#preorders"><span class="emoji">♡</span><strong>Pre-Orders</strong><small>Shop now</small></a>
+      </div>
+    </section>
+
     <section class="section faq" id="faq">
       <div class="section-heading">
         <span class="eyebrow">need to know</span>
         <h2>Frequently asked questions</h2>
       </div>
-      <details><summary>What does pre-order mean?</summary><p>A pre-order item is not currently on hand. It is ordered after purchase and usually takes around 2–3 weeks to arrive to HAYCHIC before final delivery, pickup or shipment.</p></details>
-      <details><summary>Can I request an item that isn’t listed?</summary><p>Yes. Use the Request an Item form and send details or a reference photo/link.</p></details>
-      <details><summary>How do I know if something is in stock?</summary><p>Products are labeled IN STOCK or PRE-ORDER directly on the product card and product page.</p></details>
-      <details><summary>Do you offer pickup or delivery?</summary><p>Local pickup or delivery can be offered when available. Final options should be shown at checkout.</p></details>
+      <details><summary>What does pre-order mean?<span></span></summary><p>A pre-order item is not currently on hand. It is ordered after purchase and usually takes around 2–3 weeks to arrive to HAYCHIC before final delivery, pickup or shipment.</p></details>
+      <details><summary>Can I request an item that isn’t listed?<span></span></summary><p>Yes. Use the Request an Item form and send details or a reference photo/link.</p></details>
+      <details><summary>How do I know if something is in stock?<span></span></summary><p>Products are labeled IN STOCK or PRE-ORDER directly on the product card and product page.</p></details>
+      <details><summary>Do you offer pickup or delivery?<span></span></summary><p>Local pickup or delivery can be offered when available. Final options should be shown at checkout.</p></details>
+    </section>
+
+    <section class="follow-band">
+      <span class="eyebrow">social media</span>
+      <h2>Follow along @HAYCHICBOUTIQUE</h2>
+      <p>New drops, restocks and behind-the-scenes boutique life — first on Instagram.</p>
+      <a class="btn" href="https://instagram.com/" target="_blank" rel="noopener">Follow on Instagram →</a>
     </section>
 
     <section class="newsletter">
@@ -189,6 +289,19 @@
         <button>Sign Me Up</button>
       </form>
     </section>
+
+    <div class="marquee brand-marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>♡ HAYCHIC BOUTIQUE</span>
+        <span>♡ HAYCHIC BOUTIQUE</span>
+        <span>♡ HAYCHIC BOUTIQUE</span>
+        <span>♡ HAYCHIC BOUTIQUE</span>
+        <span>♡ HAYCHIC BOUTIQUE</span>
+        <span>♡ HAYCHIC BOUTIQUE</span>
+        <span>♡ HAYCHIC BOUTIQUE</span>
+        <span>♡ HAYCHIC BOUTIQUE</span>
+      </div>
+    </div>
   </main>
 
   <footer>
