@@ -282,10 +282,16 @@
         // Also try to start a listings session (Vercel-backed GitHub writes).
         // If this isn't configured yet (see ADMIN-SETUP.md) the Listings tab
         // will just show a setup note — everything else still works.
+        // Note: onAuthStateChanged fires as soon as the Firebase sign-in
+        // above resolves, and immediately calls loadListings() — which can
+        // race ahead of this call and run before ghSession is set. So once
+        // we have a token here, refresh the Listings tab again to make sure
+        // it picks it up.
         try{
           const data = await callAdmin('login', { username: email, password });
           ghSession = data.token;
           localStorage.setItem('haychic_admin_session', ghSession);
+          loadListings();
         }catch(e){ /* listings backend not set up yet — that's OK */ }
       }catch(err){
         statusEl.textContent = err.message;
