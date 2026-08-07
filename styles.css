@@ -98,6 +98,7 @@ h2{font-size:clamp(2.2rem,4vw,4rem)}
 
 .product-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 .product-card{position:relative}
+.product-link{display:block;color:inherit;text-decoration:none}
 .product-image{aspect-ratio:4/5;border-radius:22px;display:grid;place-items:center;margin-bottom:14px;background:linear-gradient(150deg,var(--pink),var(--blue))}
 .placeholder span{font-family:"Playfair Display",serif;letter-spacing:.14em;color:var(--pink-dark);opacity:.55}
 .badges{position:absolute;top:12px;left:12px}
@@ -106,6 +107,22 @@ h2{font-size:clamp(2.2rem,4vw,4rem)}
 .product-card h3{margin:6px 0 0;font-family:"Playfair Display",serif;color:var(--brown);font-size:1.05rem}.price{margin:3px 0 10px;color:var(--pink-dark);font-weight:700}
 .product-card button{width:100%;border:1px solid var(--pink-dark);background:transparent;color:var(--pink-dark);border-radius:999px;padding:10px;cursor:pointer;font-weight:700}
 .product-card button:hover{background:var(--pink-dark);color:white}
+
+/* Product detail page */
+.back-link{display:inline-block;margin:34px 7vw 0;color:var(--muted);font-size:.86rem;font-weight:700}
+.back-link:hover{color:var(--pink-dark)}
+.pdp-wrap{max-width:1100px;margin:0 auto;padding:30px 7vw 100px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.pdp-image{aspect-ratio:4/5;border-radius:28px;display:grid;place-items:center;box-shadow:var(--shadow);background:linear-gradient(150deg,var(--pink),var(--blue))}
+.pdp-image span{font-family:"Playfair Display",serif;letter-spacing:.14em;color:var(--pink-dark);opacity:.55;font-size:1.4rem}
+.pdp-info h1{margin:.25em 0}
+.pdp-category{text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;color:var(--muted);margin:0 0 6px}
+.pdp-price{font-size:1.7rem;color:var(--pink-dark);font-weight:700;margin:0 0 22px}
+.pdp-desc{color:var(--brown);line-height:1.75;margin-bottom:22px;font-size:1.02rem}
+.pdp-note{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:14px 18px;font-size:.88rem;color:var(--muted);margin-bottom:24px}
+.pdp-note a{color:var(--pink-dark);font-weight:700}
+@media (max-width:900px){
+  .pdp-wrap{grid-template-columns:1fr;gap:30px}
+}
 
 /* Full-bleed gradient banner */
 .banner{min-height:420px;display:flex;align-items:center;padding:0 8vw;position:relative;overflow:hidden;
