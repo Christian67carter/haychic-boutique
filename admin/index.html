@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HAYCHIC Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body{background:var(--cream);}
+  .admin-header{position:sticky;top:0;background:rgba(255,250,245,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:18px 5vw;display:flex;align-items:center;justify-content:space-between;}
+  .admin-header .brand{font-size:1.4rem;}
+  .admin-wrap{max-width:900px;margin:0 auto;padding:40px 20px 90px;}
+  .admin-card{background:white;border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:var(--shadow);margin-bottom:30px;}
+  .admin-card h2{font-size:1.5rem;margin-top:0;}
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:.82rem;font-weight:700;margin-bottom:6px;}
+  .field input, .field select{width:100%;border:1px solid var(--line);background:var(--cream);border-radius:12px;padding:11px 14px;color:var(--brown);}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .btn-row{display:flex;gap:10px;margin-top:6px;}
+  .listing{display:flex;align-items:center;gap:16px;padding:14px 0;border-top:1px solid var(--line);}
+  .listing:first-child{border-top:none;}
+  .listing .thumb{width:64px;height:64px;border-radius:12px;background:var(--sage) center/cover no-repeat;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--muted);text-align:center;}
+  .listing .info{flex:1;}
+  .listing .info h4{margin:0 0 2px;font-size:1rem;}
+  .listing .info span{font-size:.82rem;color:var(--muted);}
+  .listing .actions{display:flex;gap:8px;}
+  .listing .actions button{border:1px solid var(--line);background:var(--cream);border-radius:999px;padding:7px 14px;font-size:.78rem;cursor:pointer;}
+  .listing .actions button.danger{border-color:#c98a7b;color:#a05f70;}
+  #loginScreen{max-width:480px;margin:80px auto;text-align:center;}
+  #loginScreen textarea{width:100%;min-height:80px;border:1px solid var(--line);background:var(--cream);border-radius:12px;padding:12px;color:var(--brown);font-family:monospace;font-size:.85rem;}
+  details{margin-top:16px;text-align:left;background:var(--cream);border-radius:14px;padding:14px 16px;}
+  details summary{cursor:pointer;font-weight:700;font-size:.88rem;}
+  details ol{font-size:.85rem;color:var(--muted);padding-left:20px;margin-top:10px;}
+  #status{position:fixed;bottom:20px;right:20px;background:var(--brown);color:white;padding:14px 20px;border-radius:14px;opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none;z-index:99;}
+  #status.show{opacity:1;transform:none;}
+  .hidden{display:none !important;}
+  .spin{opacity:.55;pointer-events:none;}
+</style>
+</head>
+<body>
+
+  <div id="loginScreen">
+    <h1 style="font-family:'Playfair Display',serif;">HAYCHIC Admin ♡</h1>
+    <p style="color:var(--muted);">Paste your GitHub access token to manage listings and photos.</p>
+    <textarea id="tokenInput" placeholder="ghp_..."></textarea>
+    <div class="btn-row" style="justify-content:center;margin-top:14px;">
+      <button class="btn primary" onclick="login()">Log In</button>
+    </div>
+    <details>
+      <summary>How do I get a token? (one-time setup)</summary>
+      <ol>
+        <li>Go to github.com &rarr; click your profile photo &rarr; Settings.</li>
+        <li>Scroll to <strong>Developer settings</strong> (bottom of left sidebar).</li>
+        <li>Click <strong>Personal access tokens</strong> &rarr; <strong>Fine-grained tokens</strong> &rarr; <strong>Generate new token</strong>.</li>
+        <li>Name it "HAYCHIC Admin". Under <strong>Repository access</strong>, choose "Only select repositories" and pick <strong>haychic-boutique</strong>.</li>
+        <li>Under <strong>Permissions &rarr; Repository permissions</strong>, set <strong>Contents</strong> to "Read and write".</li>
+        <li>Click <strong>Generate token</strong> and copy it — paste it above. It's saved only in this browser.</li>
+      </ol>
+    </details>
+  </div>
+
+  <div id="adminApp" class="hidden">
+    <div class="admin-header">
+      <a class="brand" href="../index.html" style="font-family:'Playfair Display',serif;">HAYCHIC <span style="font-size:.6rem;letter-spacing:.2em;">ADMIN</span></a>
+      <button class="btn secondary" onclick="logout()">Log Out</button>
+    </div>
+
+    <div class="admin-wrap">
+      <div class="admin-card">
+        <h2 id="formTitle">Add a New Listing</h2>
+        <div class="field">
+          <label>Item Name</label>
+          <input type="text" id="fName" placeholder="e.g. The Gabriella Bag">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Price</label>
+            <input type="text" id="fPrice" placeholder="e.g. $48.00">
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="fStatus">
+              <option value="in-stock">In Stock</option>
+              <option value="preorder">Pre-Order</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select id="fCategory">
+            <option>Bags</option>
+            <option>Clothing</option>
+            <option>Shoes</option>
+            <option>Beauty</option>
+            <option>Accessories</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Photo (optional, but recommended!)</label>
+          <input type="file" id="fImage" accept="image/*">
+        </div>
+        <div class="btn-row">
+          <button class="btn primary" id="saveBtn" onclick="saveProduct()">Add Listing</button>
+          <button class="btn secondary hidden" id="cancelEditBtn" onclick="cancelEdit()">Cancel</button>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h2>Current Listings</h2>
+        <div id="listings"><p style="color:var(--muted);">Loading…</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="status"></div>
+
+<script>
+const OWNER = 'Christian67carter';
+const REPO = 'haychic-boutique';
+const BRANCH = 'main';
+const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
+
+let token = localStorage.getItem('haychic_admin_token') || '';
+let products = [];
+let productsSha = null;
+let editingId = null;
+
+function showStatus(msg, isError){
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.style.background = isError ? '#a05f70' : 'var(--brown)';
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 3200);
+}
+
+function ghHeaders(){
+  return {
+    'Authorization': `token ${token}`,
+    'Accept': 'application/vnd.github+json',
+    'Content-Type': 'application/json'
+  };
+}
+
+async function login(){
+  const val = document.getElementById('tokenInput').value.trim();
+  if(!val){ showStatus('Please paste a token first.', true); return; }
+  token = val;
+  try{
+    const res = await fetch(`${API}`, { headers: ghHeaders() });
+    if(!res.ok) throw new Error('Token could not access the repo. Check permissions.');
+    localStorage.setItem('haychic_admin_token', token);
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('adminApp').classList.remove('hidden');
+    loadListings();
+  }catch(err){
+    showStatus(err.message, true);
+  }
+}
+
+function logout(){
+  localStorage.removeItem('haychic_admin_token');
+  token = '';
+  location.reload();
+}
+
+async function loadListings(){
+  const wrap = document.getElementById('listings');
+  wrap.innerHTML = '<p style="color:var(--muted);">Loading…</p>';
+  try{
+    const res = await fetch(`${API}/contents/products.json?ref=${BRANCH}`, { headers: ghHeaders() });
+    if(!res.ok) throw new Error('Could not load products.json');
+    const data = await res.json();
+    productsSha = data.sha;
+    products = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+    renderListings();
+  }catch(err){
+    wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
+  }
+}
+
+function renderListings(){
+  const wrap = document.getElementById('listings');
+  if(!products.length){
+    wrap.innerHTML = '<p style="color:var(--muted);">No listings yet.</p>';
+    return;
+  }
+  wrap.innerHTML = products.map(p => `
+    <div class="listing">
+      <div class="thumb" style="${p.image ? `background-image:url('../${p.image}')` : ''}">${p.image ? '' : 'HAYCHIC'}</div>
+      <div class="info">
+        <h4>${p.name}</h4>
+        <span>${p.price} &middot; ${p.category} &middot; ${p.status === 'in-stock' ? 'In Stock' : 'Pre-Order'}</span>
+      </div>
+      <div class="actions">
+        <button onclick="editProduct('${p.id}')">Edit</button>
+        <button class="danger" onclick="deleteProduct('${p.id}')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function slugify(str){
+  return str.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);
+}
+
+function resizeImage(file, maxW){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = e => { img.src = e.target.result; };
+    reader.onerror = reject;
+    img.onload = () => {
+      const scale = Math.min(1, maxW / img.width);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const base64 = canvas.toDataURL('image/jpeg', 0.82).split(',')[1];
+      resolve(base64);
+    };
+    img.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function jsonToBase64(obj){
+  return btoa(unescape(encodeURIComponent(JSON.stringify(obj, null, 2))));
+}
+
+async function saveProduct(){
+  const name = document.getElementById('fName').value.trim();
+  const price = document.getElementById('fPrice').value.trim();
+  const status = document.getElementById('fStatus').value;
+  const category = document.getElementById('fCategory').value;
+  const fileInput = document.getElementById('fImage');
+  const file = fileInput.files[0];
+
+  if(!name || !price){ showStatus('Please fill in item name and price.', true); return; }
+
+  const saveBtn = document.getElementById('saveBtn');
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Saving…';
+
+  try{
+    let entry;
+    if(editingId){
+      entry = products.find(p => p.id === editingId);
+    } else {
+      entry = { id: slugify(name), image: '' };
+      products.push(entry);
+    }
+    entry.name = name;
+    entry.price = price;
+    entry.status = status;
+    entry.category = category;
+
+    if(file){
+      showStatus('Uploading photo…');
+      const base64 = await resizeImage(file, 1200);
+      const ext = 'jpg';
+      const imgPath = `assets/products/${entry.id}.${ext}`;
+      await fetch(`${API}/contents/${imgPath}`, {
+        method: 'PUT',
+        headers: ghHeaders(),
+        body: JSON.stringify({
+          message: `Add photo for ${name}`,
+          content: base64,
+          branch: BRANCH
+        })
+      });
+      entry.image = imgPath;
+    }
+
+    showStatus('Saving listing…');
+    const putRes = await fetch(`${API}/contents/products.json`, {
+      method: 'PUT',
+      headers: ghHeaders(),
+      body: JSON.stringify({
+        message: editingId ? `Update listing: ${name}` : `Add listing: ${name}`,
+        content: jsonToBase64(products),
+        sha: productsSha,
+        branch: BRANCH
+      })
+    });
+    if(!putRes.ok) throw new Error('Could not save listing.');
+    const putData = await putRes.json();
+    productsSha = putData.content.sha;
+
+    showStatus('Saved! It will appear on the site in a minute ♡');
+    cancelEdit();
+    renderListings();
+  }catch(err){
+    showStatus(err.message || 'Something went wrong.', true);
+  }finally{
+    saveBtn.disabled = false;
+    saveBtn.textContent = editingId ? 'Save Changes' : 'Add Listing';
+  }
+}
+
+function editProduct(id){
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  editingId = id;
+  document.getElementById('formTitle').textContent = 'Edit Listing';
+  document.getElementById('fName').value = p.name;
+  document.getElementById('fPrice').value = p.price;
+  document.getElementById('fStatus').value = p.status;
+  document.getElementById('fCategory').value = p.category;
+  document.getElementById('saveBtn').textContent = 'Save Changes';
+  document.getElementById('cancelEditBtn').classList.remove('hidden');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function cancelEdit(){
+  editingId = null;
+  document.getElementById('formTitle').textContent = 'Add a New Listing';
+  document.getElementById('fName').value = '';
+  document.getElementById('fPrice').value = '';
+  document.getElementById('fStatus').value = 'in-stock';
+  document.getElementById('fCategory').value = 'Bags';
+  document.getElementById('fImage').value = '';
+  document.getElementById('saveBtn').textContent = 'Add Listing';
+  document.getElementById('cancelEditBtn').classList.add('hidden');
+}
+
+async function deleteProduct(id){
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  if(!confirm(`Delete "${p.name}"? This can't be undone.`)) return;
+  try{
+    products = products.filter(x => x.id !== id);
+    const putRes = await fetch(`${API}/contents/products.json`, {
+      method: 'PUT',
+      headers: ghHeaders(),
+      body: JSON.stringify({
+        message: `Delete listing: ${p.name}`,
+        content: jsonToBase64(products),
+        sha: productsSha,
+        branch: BRANCH
+      })
+    });
+    if(!putRes.ok) throw new Error('Could not delete listing.');
+    const putData = await putRes.json();
+    productsSha = putData.content.sha;
+    showStatus('Deleted.');
+    renderListings();
+  }catch(err){
+    showStatus(err.message, true);
+  }
+}
+
+if(token){
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('adminApp').classList.remove('hidden');
+  loadListings();
+}
+</script>
+</body>
+</html>
