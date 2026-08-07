@@ -207,7 +207,13 @@ footer .brand{display:inline-block;margin-bottom:6px}
 /* ---------- About Me page ---------- */
 .script{font-family:"Caveat","Playfair Display",cursive;}
 .about-hero{text-align:center;padding:70px 7vw 20px;}
-.about-hero .about-logo{width:140px;height:140px;border-radius:50%;object-fit:cover;margin:0 auto 18px;box-shadow:var(--shadow);}
+.about-hero .wordmark{margin:0 auto 18px;}
+.about-hero .wordmark .flower{width:44px;height:auto;color:var(--pink-dark);margin:0 auto 4px;display:block;}
+.about-hero .wordmark h1{font-family:"Playfair Display",serif;font-size:3.2rem;letter-spacing:.05em;color:var(--brown);margin:0;font-weight:600;}
+.about-hero .wordmark-divider{display:flex;align-items:center;justify-content:center;gap:14px;max-width:260px;margin:10px auto 6px;}
+.about-hero .wordmark-divider .line{flex:1;height:1px;background:var(--line);}
+.about-hero .wordmark-divider .bow{width:22px;height:14px;color:var(--pink-dark);}
+.about-hero .wordmark .sub{display:block;font-family:"DM Sans",sans-serif;font-size:.8rem;letter-spacing:.5em;padding-left:.5em;text-transform:uppercase;color:var(--muted);}
 .about-hero .pill{display:inline-block;background:var(--pink);color:var(--pink-dark);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;padding:9px 20px;border-radius:999px;margin-top:6px;font-weight:700}
 .about-wrap{max-width:1080px;margin:0 auto;padding:50px 7vw 90px;display:grid;grid-template-columns:.85fr 1.15fr;gap:70px;align-items:center;}
 .polaroid{background:#fff;padding:14px 14px 46px;border-radius:6px;box-shadow:var(--shadow);transform:rotate(-3deg);position:relative;max-width:380px;margin:0 auto;}
@@ -234,6 +240,7 @@ footer .brand{display:inline-block;margin-bottom:6px}
 @media (max-width:900px){
   .about-wrap{grid-template-columns:1fr;gap:36px;}
   .value-grid{grid-template-columns:1fr 1fr;}
+  .about-hero .wordmark h1{font-size:2.5rem;}
 }
 /* Shopping bag / cart */
 .bag-btn{position:relative}
