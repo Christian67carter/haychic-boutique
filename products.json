@@ -10,11 +10,12 @@
   },
   {
     "id": "the-gabriella-bag",
-    "name": "The Gabriella Bag",
-    "price": "$XX.XX",
-    "status": "preorder",
+    "name": "The Candice",
+    "price": "$75",
+    "status": "in-stock",
     "category": "Bags",
-    "image": ""
+    "image": "",
+    "description": ""
   },
   {
     "id": "the-cutie-set",
