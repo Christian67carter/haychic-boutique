@@ -1,4 +1,38 @@
 
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function loadProducts(){
+  const grid = document.getElementById('products');
+  if(!grid) return;
+  try{
+    const res = await fetch('products.json?_=' + Date.now());
+    const products = await res.json();
+    if(!products.length){
+      grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);">New arrivals coming soon ♡</p>';
+      return;
+    }
+    grid.innerHTML = products.map(p => {
+      const statusClass = p.status === 'in-stock' ? 'in-stock' : 'preorder';
+      const statusLabel = p.status === 'in-stock' ? 'IN STOCK' : 'PRE-ORDER';
+      const bg = p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : '';
+      const inner = p.image ? '' : '<span>HAYCHIC</span>';
+      return `
+        <article class="product-card">
+          <div class="product-image placeholder" style="${bg}">${inner}</div>
+          <div class="badges"><span class="badge ${statusClass}">${statusLabel}</span></div>
+          <h3>${escapeHtml(p.name)}</h3>
+          <p class="price">${escapeHtml(p.price)}</p>
+          <button onclick="showToast('${escapeHtml(p.name).replace(/'/g, "\\'")} added to bag')">Add to Bag</button>
+        </article>`;
+    }).join('');
+  }catch(err){
+    grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);">Could not load products right now.</p>';
+  }
+}
+document.addEventListener('DOMContentLoaded', loadProducts);
+
 function toggleMenu(){
   document.getElementById('nav').classList.toggle('open');
 }
