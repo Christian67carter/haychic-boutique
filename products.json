@@ -28,10 +28,11 @@
   },
   {
     "id": "everyday-sneaker",
-    "name": "Everyday Sneaker",
-    "price": "$XX.XX",
-    "status": "preorder",
-    "category": "Shoes",
-    "image": ""
+    "name": "The Veronica",
+    "price": "$65",
+    "status": "in-stock",
+    "category": "Bags",
+    "image": "",
+    "description": ""
   }
 ]
