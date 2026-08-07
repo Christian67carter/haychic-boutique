@@ -25,10 +25,18 @@ Environment Variables**.
 - In Vercel, add environment variable `GITHUB_TOKEN` = that token.
 
 ### 2. Pick a username and password
-- Add `ADMIN_USERNAME` = whatever you want to log in with (e.g. `hayden`).
-- Add `ADMIN_PASSWORD` = a password you'll remember. This is what you'll
-  type into the admin login screen from now on — nothing to paste, nothing
-  to regenerate.
+The admin panel now has a single login for everything — listings, access
+requests, and the CRM — using your email + a password (the CRM side has
+always used Firebase email/password sign-in; this just reuses that same
+login for listings too).
+
+- Add `ADMIN_USERNAME` = the **same email** you use (or will create) to
+  sign in on the admin login screen.
+- Add `ADMIN_PASSWORD` = the **same password** as that account.
+
+If you haven't created that login yet, go to `haychicboutique.com/admin/`
+and click "Create your admin login" first, then come back and set these
+two values to match exactly what you just signed up with.
 
 ### 3. Add a session secret
 - Add `ADMIN_SECRET` = any long random string (mash the keyboard, 30+
@@ -43,10 +51,16 @@ latest one manually.
 
 ## Using it
 
-Go to `haychicboutique.com/admin/`, enter the username and password from
-steps above, and you're in — same listing management as before, just no
-more copying tokens around. Log in sessions last 24 hours before you'll
-need to log in again.
+Go to `haychicboutique.com/admin/`, enter the email and password from
+steps above, and you're in. Listings, Access Requests, All Leads/CRM, and
+Email Settings are now tabs on that one page — the old separate
+`admin/crm.html` page just redirects here now, so any old bookmark still
+works.
 
-If you ever want to change the password, just update `ADMIN_PASSWORD` in
-Vercel — no code changes needed.
+If the Listings tab shows an error about not being configured yet, double
+check `ADMIN_USERNAME`/`ADMIN_PASSWORD` in Vercel match your login exactly
+— everything else (Access Requests, Leads, Email Settings) only needs your
+Firebase login and works independently of the Vercel setup.
+
+If you ever want to change your password, do it from Firebase (or just
+sign up a new login) and update `ADMIN_PASSWORD` in Vercel to match.
