@@ -19,8 +19,8 @@ Keep this private — never share it or paste it into chat/email.
 Stripe's payment page is hosted on stripe.com, not our site, so it needs its
 own branding set once:
 - In the Stripe Dashboard, go to **Settings → Branding**.
-- Set **Brand color** to `#E8578F` (HAYCHIC pink).
-- Set **Accent color** (buttons) to `#C9A24C` (HAYCHIC gold) or the same pink.
+- Set **Brand color** to `#C1836A` (HAYCHIC dusty rose).
+- Set **Accent color** (buttons) to `#B08655` (HAYCHIC gold) or the same rose.
 - Upload the HAYCHIC logo (the same file used for the site header/about page)
   as the **Icon** and **Logo**.
 - Save. Every checkout session will now use these colors automatically —
