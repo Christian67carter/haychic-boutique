@@ -83,7 +83,12 @@ module.exports = async (req, res) => {
   try {
     if (action === 'login') {
       const { username, password } = body;
-      if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
+      // Email addresses are case-insensitive (Firebase treats them that way
+      // too), so compare usernames case-insensitively. Passwords stay
+      // case-sensitive.
+      const usernameMatches = String(username || '').trim().toLowerCase() ===
+        String(process.env.ADMIN_USERNAME || '').trim().toLowerCase();
+      if (usernameMatches && password === process.env.ADMIN_PASSWORD) {
         const token = sign({ u: username, exp: Date.now() + SESSION_MS });
         res.status(200).json({ token });
       } else {
