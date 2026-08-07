@@ -19,11 +19,12 @@
   },
   {
     "id": "the-cutie-set",
-    "name": "The Cutie Set",
-    "price": "$XX.XX",
+    "name": "The Lucy",
+    "price": "$70",
     "status": "in-stock",
-    "category": "Clothing",
-    "image": ""
+    "category": "Bags",
+    "image": "",
+    "description": ""
   },
   {
     "id": "everyday-sneaker",
