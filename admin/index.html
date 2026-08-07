@@ -65,7 +65,10 @@
   <div id="adminApp" class="hidden">
     <div class="admin-header">
       <a class="brand" href="../index.html" style="font-family:'Playfair Display',serif;">HAYCHIC <span style="font-size:.6rem;letter-spacing:.2em;">ADMIN</span></a>
-      <button class="btn secondary" onclick="logout()">Log Out</button>
+      <div style="display:flex;gap:10px;">
+        <a class="btn secondary" href="crm.html">CRM &amp; Access →</a>
+        <button class="btn secondary" onclick="logout()">Log Out</button>
+      </div>
     </div>
 
     <div class="admin-wrap">
@@ -98,6 +101,10 @@
             <option>Accessories</option>
             <option>Other</option>
           </select>
+        </div>
+        <div class="field">
+          <label>Description (shown on the item's own page)</label>
+          <textarea id="fDescription" rows="3" placeholder="A few sentences about this item — fit, material, why you love it..." style="width:100%;border:1px solid var(--line);background:var(--cream);border-radius:12px;padding:11px 14px;color:var(--brown);font:inherit;resize:vertical;"></textarea>
         </div>
         <div class="field">
           <label>Photo (optional, but recommended!)</label>
@@ -237,6 +244,7 @@ async function saveProduct(){
   const price = document.getElementById('fPrice').value.trim();
   const status = document.getElementById('fStatus').value;
   const category = document.getElementById('fCategory').value;
+  const description = document.getElementById('fDescription').value.trim();
   const fileInput = document.getElementById('fImage');
   const file = fileInput.files[0];
 
@@ -258,6 +266,7 @@ async function saveProduct(){
     entry.price = price;
     entry.status = status;
     entry.category = category;
+    entry.description = description;
 
     if(file){
       showStatus('Uploading photo…');
@@ -311,6 +320,7 @@ function editProduct(id){
   document.getElementById('fPrice').value = p.price;
   document.getElementById('fStatus').value = p.status;
   document.getElementById('fCategory').value = p.category;
+  document.getElementById('fDescription').value = p.description || '';
   document.getElementById('saveBtn').textContent = 'Save Changes';
   document.getElementById('cancelEditBtn').classList.remove('hidden');
   window.scrollTo({top:0, behavior:'smooth'});
@@ -323,6 +333,7 @@ function cancelEdit(){
   document.getElementById('fPrice').value = '';
   document.getElementById('fStatus').value = 'in-stock';
   document.getElementById('fCategory').value = 'Bags';
+  document.getElementById('fDescription').value = '';
   document.getElementById('fImage').value = '';
   document.getElementById('saveBtn').textContent = 'Add Listing';
   document.getElementById('cancelEditBtn').classList.add('hidden');
