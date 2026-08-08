@@ -115,22 +115,32 @@ module.exports = async (req, res) => {
     }
 
     if (action === 'save') {
-      const { products, sha, image, message } = body;
+      // `image` (single) is kept for backwards compatibility. `images` is a
+      // list of { id, base64 } — used for color-variant photos, where a
+      // single listing can have several photos to upload in one save.
+      const { products, sha, image, images, message } = body;
       if (!Array.isArray(products)) throw new Error('Missing product list.');
 
-      let imagePath = null;
-      if (image && image.id && image.base64) {
-        imagePath = `assets/products/${image.id}.jpg`;
+      const uploads = [];
+      if (image && image.id && image.base64) uploads.push(image);
+      if (Array.isArray(images)) {
+        for (const img of images) {
+          if (img && img.id && img.base64) uploads.push(img);
+        }
+      }
+
+      for (const img of uploads) {
+        const imagePath = `assets/products/${img.id}.jpg`;
         const imgRes = await fetch(`${GITHUB_API}/contents/${imagePath}`, {
           method: 'PUT',
           headers: ghHeaders(),
           body: JSON.stringify({
-            message: `Add photo for ${image.id}`,
-            content: image.base64,
+            message: `Add photo for ${img.id}`,
+            content: img.base64,
             branch: BRANCH,
           }),
         });
-        if (!imgRes.ok) throw new Error('Could not upload the photo.');
+        if (!imgRes.ok) throw new Error(`Could not upload the photo for ${img.id}.`);
       }
 
       const putRes = await fetch(`${GITHUB_API}/contents/products.json`, {
@@ -148,7 +158,10 @@ module.exports = async (req, res) => {
         throw new Error(errData.message || 'Could not save the listing.');
       }
       const putData = await putRes.json();
-      res.status(200).json({ sha: putData.content.sha, imagePath });
+      res.status(200).json({
+        sha: putData.content.sha,
+        imagePaths: uploads.map((u) => `assets/products/${u.id}.jpg`),
+      });
       return;
     }
 
