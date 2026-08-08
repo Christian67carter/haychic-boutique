@@ -147,6 +147,7 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <select id="fStatus">
 <option value="in-stock">In Stock</option>
 <option value="preorder">Pre-Order</option>
+<option value="sold-out">Sold Out</option>
 </select>
 </div>
 </div>
@@ -467,7 +468,7 @@ return `
 <div class="thumb" style="${thumbImage ? `background-image:url('../${thumbImage}')` : ''}">${thumbImage ? '' : 'HAYCHIC'}</div>
 <div class="info">
 <h4>${escapeHtml(p.name)}</h4>
-<span>${escapeHtml(p.price)} &middot; ${escapeHtml(p.category)} &middot; ${p.status === 'in-stock' ? 'In Stock' : 'Pre-Order'}${colorNote}${sizeNote}</span>
+<span>${escapeHtml(p.price)} &middot; ${escapeHtml(p.category)} &middot; ${p.status === 'sold-out' ? 'Sold Out' : (p.status === 'preorder' ? 'Pre-Order' : 'In Stock')}${colorNote}${sizeNote}</span>
 </div>
 <div class="actions">
 <button onclick="editProduct('${p.id}')">Edit</button>
@@ -525,8 +526,9 @@ ${hasExisting ? `<span class="existing-note">Current photo saved ✓ (choose a f
 <div class="field field-stock">
 <label>Stock</label>
 <select class="colorStatus">
-<option value="in-stock" ${color.status !== 'preorder' ? 'selected' : ''}>In Stock</option>
+<option value="in-stock" ${(!color.status || color.status === 'in-stock') ? 'selected' : ''}>In Stock</option>
 <option value="preorder" ${color.status === 'preorder' ? 'selected' : ''}>Pre-Order</option>
+<option value="sold-out" ${color.status === 'sold-out' ? 'selected' : ''}>Sold Out</option>
 </select>
 </div>
 <button type="button" class="color-remove-btn" onclick="this.closest('.color-row').remove()" aria-label="Remove color">✕</button>
@@ -574,8 +576,9 @@ return `
 <div class="field field-stock">
 <label>Stock</label>
 <select class="sizeStatus">
-<option value="in-stock" ${size.status !== 'preorder' ? 'selected' : ''}>In Stock</option>
+<option value="in-stock" ${(!size.status || size.status === 'in-stock') ? 'selected' : ''}>In Stock</option>
 <option value="preorder" ${size.status === 'preorder' ? 'selected' : ''}>Pre-Order</option>
+<option value="sold-out" ${size.status === 'sold-out' ? 'selected' : ''}>Sold Out</option>
 </select>
 </div>
 <button type="button" class="size-remove-btn" onclick="this.closest('.size-admin-row').remove()" aria-label="Remove size">✕</button>
