@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Request an Item | HAYCHIC Boutique</title>
+  <meta name="description" content="Can't find it on HAYCHIC Boutique? Send us what you're looking for and we'll check availability." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="announcement">♡ NEW ARRIVALS + PRE-ORDERS AVAILABLE ♡</div>
+
+  <header class="site-header">
+    <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
+    <a class="brand" href="index.html">HAYCHIC <span>Boutique</span></a>
+    <nav id="nav">
+      <a href="shop.html">Shop</a>
+      <a href="shop.html">New Arrivals</a>
+      <a href="preorders.html">Pre-Orders</a>
+      <a href="in-stock.html">In Stock</a>
+      <a href="request.html">Request an Item</a>
+      <a href="about.html">About</a>
+      <a href="pr.html">PR Team</a>
+      <a href="faq.html">FAQ</a>
+      <a class="nav-cta" href="shop.html">Shop Now</a>
+    </nav>
+    <div class="header-actions">
+      <button class="bag-btn" aria-label="Shopping bag">Bag ♡</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="request-section" id="request">
+      <div>
+        <span class="eyebrow">can’t find it?</span>
+        <h2>Send us what you’re looking for.</h2>
+        <p>Not everything HAYCHIC can order is listed online. Send a photo or description and we’ll check availability, pricing, and expected timing.</p>
+      </div>
+      <form onsubmit="submitRequest(event)">
+        <div class="form-row">
+          <label>Name<input required name="name" placeholder="Your name"></label>
+          <label>Instagram / TikTok<input name="social" placeholder="@username"></label>
+        </div>
+        <div class="form-row">
+          <label>Item type
+            <select name="type">
+              <option>Bag</option><option>Clothing</option><option>Shoes</option>
+              <option>Beauty</option><option>Accessory</option><option>Other</option>
+            </select>
+          </label>
+          <label>Size / Color<input name="details" placeholder="Ex: Medium, pink"></label>
+        </div>
+        <label>What are you looking for?<textarea required name="request" rows="5" placeholder="Describe the item or paste a product link..."></textarea></label>
+        <button class="btn primary" type="submit">Send My Request ♡</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand footer-brand" href="index.html">HAYCHIC <span>Boutique</span></a>
+    <div class="footer-links">
+      <a href="shop.html">Shop</a><a href="preorders.html">Pre-Orders</a><a href="request.html">Request an Item</a>
+      <a href="about.html">About</a><a href="pr.html">PR Team</a><a href="faq.html">FAQ</a>
+    </div>
+    <p>© 2026 HAYCHIC Boutique. All rights reserved.</p>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/gate.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
