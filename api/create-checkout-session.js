@@ -75,6 +75,30 @@ module.exports = async (req, res) => {
       mode: 'payment',
       line_items,
       shipping_address_collection: { allowed_countries: ['US'] },
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: { amount: 699, currency: 'usd' },
+            display_name: 'Standard Shipping',
+            delivery_estimate: {
+              minimum: { unit: 'business_day', value: 5 },
+              maximum: { unit: 'business_day', value: 7 },
+            },
+          },
+        },
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: { amount: 1499, currency: 'usd' },
+            display_name: 'Express Shipping',
+            delivery_estimate: {
+              minimum: { unit: 'business_day', value: 2 },
+              maximum: { unit: 'business_day', value: 3 },
+            },
+          },
+        },
+      ],
       success_url: `${SITE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/index.html#shop`,
     });
