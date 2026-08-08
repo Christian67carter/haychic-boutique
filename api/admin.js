@@ -118,7 +118,11 @@ module.exports = async (req, res) => {
       // `image` (single) is kept for backwards compatibility. `images` is a
       // list of { id, base64 } — used for color-variant photos, where a
       // single listing can have several photos to upload in one save.
-      const { products, sha, image, images, message } = body;
+      // `pages` is a list of { id, content } — plain-text HTML for a
+      // brand-new product's clean-URL page (e.g. "the-tiffany.html"). We
+      // only create these, never overwrite an existing page, so re-saving
+      // an existing product doesn't produce a pointless commit.
+      const { products, sha, image, images, pages, message } = body;
       if (!Array.isArray(products)) throw new Error('Missing product list.');
 
       const uploads = [];
@@ -143,6 +147,27 @@ module.exports = async (req, res) => {
         if (!imgRes.ok) throw new Error(`Could not upload the photo for ${img.id}.`);
       }
 
+      const pageWrites = [];
+      if (Array.isArray(pages)) {
+        for (const pg of pages) {
+          if (!pg || !pg.id || !pg.content) continue;
+          const pagePath = `${pg.id}.html`;
+          const existsRes = await fetch(`${GITHUB_API}/contents/${pagePath}?ref=${BRANCH}`, { headers: ghHeaders() });
+          if (existsRes.status === 200) continue; // already there, don't overwrite
+          const pageRes = await fetch(`${GITHUB_API}/contents/${pagePath}`, {
+            method: 'PUT',
+            headers: ghHeaders(),
+            body: JSON.stringify({
+              message: `Create page for ${pg.id}`,
+              content: Buffer.from(pg.content, 'utf-8').toString('base64'),
+              branch: BRANCH,
+            }),
+          });
+          if (!pageRes.ok) throw new Error(`Could not create the page for ${pg.id}.`);
+          pageWrites.push(pagePath);
+        }
+      }
+
       const putRes = await fetch(`${GITHUB_API}/contents/products.json`, {
         method: 'PUT',
         headers: ghHeaders(),
@@ -161,6 +186,7 @@ module.exports = async (req, res) => {
       res.status(200).json({
         sha: putData.content.sha,
         imagePaths: uploads.map((u) => `assets/products/${u.id}.jpg`),
+        pagePaths: pageWrites,
       });
       return;
     }
