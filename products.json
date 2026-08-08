@@ -104,5 +104,14 @@
         "status": "in-stock"
       }
     ]
+  },
+  {
+    "id": "the-special-terry-mskpkxca",
+    "image": "assets/products/the-special-terry-mskpkxca.jpg",
+    "name": "The Special Terry",
+    "price": "$75",
+    "status": "in-stock",
+    "category": "Bags",
+    "description": ""
   }
 ]
