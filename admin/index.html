@@ -82,6 +82,15 @@ body{background:var(--cream);}
 .color-remove-btn{border:1px solid var(--line);background:white;border-radius:999px;width:38px;height:38px;cursor:pointer;font-size:.9rem;color:#a05f70;flex-shrink:0;}
 .color-remove-btn:hover{background:#f1d3cf;}
 #colorRows:empty + .add-color-btn{margin-top:0;}
+
+/* Size variants (named .size-admin-row so it doesn't collide with the
+   storefront's own .size-row class in styles.css) */
+.size-admin-row{display:flex;gap:12px;align-items:flex-end;margin-bottom:12px;padding:14px;background:var(--cream);border-radius:14px;flex-wrap:wrap;}
+.size-admin-row .field{flex:1;min-width:140px;margin-bottom:0;}
+.size-admin-row .field-stock{flex:0 0 130px;}
+.size-remove-btn{border:1px solid var(--line);background:white;border-radius:999px;width:38px;height:38px;cursor:pointer;font-size:.9rem;color:#a05f70;flex-shrink:0;}
+.size-remove-btn:hover{background:#f1d3cf;}
+#sizeRows:empty + .add-size-btn{margin-top:0;}
 </style>
 </head>
 <body>
@@ -168,6 +177,13 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <button type="button" class="btn secondary add-color-btn" onclick="addColorRow()">+ Add Color</button>
 </div>
 
+<div class="field">
+<label>Sizes (optional)</label>
+<p class="hint" style="margin:0 0 10px;">Add a row per size — each gets its own stock status, no photo. If you add sizes, shoppers will see a size picker on the item page. Not every item needs this.</p>
+<div id="sizeRows"></div>
+<button type="button" class="btn secondary add-size-btn" onclick="addSizeRow()">+ Add Size</button>
+</div>
+
 <div class="btn-row">
 <button class="btn primary" id="saveBtn" onclick="saveProduct()">Add Listing</button>
 <button class="btn secondary hidden" id="cancelEditBtn" onclick="cancelEdit()">Cancel</button>
@@ -229,7 +245,6 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 </div>
 </div>
 </div>
-</div>
 
 <!-- Activity modal -->
 <div id="activityModal" class="hidden" style="position:fixed;inset:0;background:rgba(74,63,46,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;">
@@ -252,6 +267,70 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <script>
 // ============ Shared ============
 const ADMIN_API = 'https://haychic-boutique.vercel.app/api/admin';
+
+// Verbatim copy of product.html — used to create a brand-new product's own
+// clean-URL page (e.g. "the-tiffany.html") the first time it's saved.
+const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Item | HAYCHIC Boutique</title>
+  <meta name="description" content="Shop this item from HAYCHIC Boutique." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="announcement">♡ NEW ARRIVALS + PRE-ORDERS AVAILABLE ♡</div>
+
+  <header class="site-header">
+    <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
+    <a class="brand" href="index.html">HAYCHIC <span>Boutique</span></a>
+    <nav id="nav">
+      <a href="index.html#shop">Shop</a>
+      <a href="index.html#new">New Arrivals</a>
+      <a href="index.html#preorders">Pre-Orders</a>
+      <a href="index.html#instock">In Stock</a>
+      <a href="index.html#request">Request an Item</a>
+      <a href="about.html">About</a>
+      <a href="index.html#pr">PR Team</a>
+      <a href="index.html#faq">FAQ</a>
+      <a class="nav-cta" href="index.html#shop">Shop Now</a>
+    </nav>
+    <div class="header-actions">
+      <button class="bag-btn" aria-label="Shopping bag">Bag ♡</button>
+    </div>
+  </header>
+
+  <main>
+    <a class="back-link" href="index.html#products">← Back to Shop</a>
+    <div class="pdp-wrap" id="productDetail">
+      <p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:60px 0;">Loading item…</p>
+    </div>
+  </main>
+
+  <footer>
+    <a class="brand footer-brand" href="index.html">HAYCHIC <span>Boutique</span></a>
+    <div class="footer-links">
+      <a href="index.html#shop">Shop</a><a href="index.html#preorders">Pre-Orders</a><a href="index.html#request">Request an Item</a>
+      <a href="about.html">About</a><a href="index.html#pr">PR Team</a><a href="index.html#faq">FAQ</a>
+    </div>
+    <p>© 2026 HAYCHIC Boutique. All rights reserved.</p>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/gate.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
+`;
+
 let authMode = 'signin'; // or 'signup'
 let ghSession = localStorage.getItem('haychic_admin_session') || '';
 
@@ -382,12 +461,13 @@ return;
 wrap.innerHTML = products.map(p => {
 const thumbImage = (p.colors && p.colors.length && p.colors[0].image) ? p.colors[0].image : p.image;
 const colorNote = (p.colors && p.colors.length) ? ` &middot; ${p.colors.length} color${p.colors.length===1?'':'s'}` : '';
+const sizeNote = (p.sizes && p.sizes.length) ? ` &middot; ${p.sizes.length} size${p.sizes.length===1?'':'s'}` : '';
 return `
 <div class="listing">
 <div class="thumb" style="${thumbImage ? `background-image:url('../${thumbImage}')` : ''}">${thumbImage ? '' : 'HAYCHIC'}</div>
 <div class="info">
 <h4>${escapeHtml(p.name)}</h4>
-<span>${escapeHtml(p.price)} &middot; ${escapeHtml(p.category)} &middot; ${p.status === 'in-stock' ? 'In Stock' : 'Pre-Order'}${colorNote}</span>
+<span>${escapeHtml(p.price)} &middot; ${escapeHtml(p.category)} &middot; ${p.status === 'in-stock' ? 'In Stock' : 'Pre-Order'}${colorNote}${sizeNote}</span>
 </div>
 <div class="actions">
 <button onclick="editProduct('${p.id}')">Edit</button>
@@ -482,6 +562,46 @@ colors.push({ name, image: imagePath, status });
 return { colors, images };
 }
 
+// ---- Size variant rows ----
+function sizeRowHtml(size){
+size = size || {};
+return `
+<div class="size-admin-row">
+<div class="field">
+<label>Size Name</label>
+<input type="text" class="sizeName" value="${escapeAttr(size.name || '')}" placeholder="e.g. Small">
+</div>
+<div class="field field-stock">
+<label>Stock</label>
+<select class="sizeStatus">
+<option value="in-stock" ${size.status !== 'preorder' ? 'selected' : ''}>In Stock</option>
+<option value="preorder" ${size.status === 'preorder' ? 'selected' : ''}>Pre-Order</option>
+</select>
+</div>
+<button type="button" class="size-remove-btn" onclick="this.closest('.size-admin-row').remove()" aria-label="Remove size">✕</button>
+</div>`;
+}
+
+function addSizeRow(size){
+document.getElementById('sizeRows').insertAdjacentHTML('beforeend', sizeRowHtml(size));
+}
+
+function clearSizeRows(){
+document.getElementById('sizeRows').innerHTML = '';
+}
+
+function collectSizes(){
+const rows = Array.from(document.querySelectorAll('#sizeRows .size-admin-row'));
+const sizes = [];
+for(const row of rows){
+const name = row.querySelector('.sizeName').value.trim();
+if(!name) continue;
+const status = row.querySelector('.sizeStatus').value;
+sizes.push({ name, status });
+}
+return sizes;
+}
+
 async function saveProduct(){
 const name = document.getElementById('fName').value.trim();
 const price = document.getElementById('fPrice').value.trim();
@@ -498,6 +618,7 @@ saveBtn.disabled = true;
 saveBtn.textContent = 'Saving…';
 
 try{
+const isNew = !editingId;
 let entry;
 if(editingId){
 entry = products.find(p => p.id === editingId);
@@ -529,11 +650,20 @@ entry.image = `assets/products/${entry.id}.jpg`;
 }
 }
 
+const sizes = collectSizes();
+if(sizes.length){ entry.sizes = sizes; } else { delete entry.sizes; }
+
+// Give brand-new products their own clean-URL page (e.g. /the-tiffany).
+// Existing products already have theirs, and the API skips creating one
+// if the file is already there, so this is safe to always send.
+const pages = isNew ? [{ id: entry.id, content: PRODUCT_PAGE_HTML }] : [];
+
 showStatus('Saving listing…');
 const data = await callAdmin('save', {
 products,
 sha: productsSha,
 images,
+pages,
 message: editingId ? `Update listing: ${name}` : `Add listing: ${name}`
 });
 productsSha = data.sha;
@@ -563,6 +693,8 @@ document.getElementById('saveBtn').textContent = 'Save Changes';
 document.getElementById('cancelEditBtn').classList.remove('hidden');
 clearColorRows();
 (p.colors || []).forEach(c => addColorRow(c));
+clearSizeRows();
+(p.sizes || []).forEach(s => addSizeRow(s));
 switchTab('listings');
 window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -579,6 +711,7 @@ document.getElementById('fImage').value = '';
 document.getElementById('saveBtn').textContent = 'Add Listing';
 document.getElementById('cancelEditBtn').classList.add('hidden');
 clearColorRows();
+clearSizeRows();
 }
 
 async function deleteProduct(id){
