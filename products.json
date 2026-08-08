@@ -119,7 +119,7 @@
     "image": "",
     "name": "Test",
     "price": "60",
-    "status": "sold-out",
+    "status": "preorder",
     "category": "Shoes",
     "description": "I love testing",
     "colors": [
