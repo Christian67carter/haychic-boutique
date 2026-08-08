@@ -120,6 +120,13 @@ h2{font-size:clamp(2.2rem,4vw,4rem)}
 .pdp-desc{color:var(--brown);line-height:1.75;margin-bottom:22px;font-size:1.02rem}
 .pdp-note{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:14px 18px;font-size:.88rem;color:var(--muted);margin-bottom:24px}
 .pdp-note a{color:var(--pink-dark);font-weight:700}
+.pdp-colors{margin-bottom:20px}
+.pdp-colors-label{display:block;font-size:.86rem;color:var(--muted);margin-bottom:10px}
+.pdp-colors-label strong{color:var(--brown)}
+.swatch-row{display:flex;flex-wrap:wrap;gap:10px}
+.color-swatch{width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background-color:var(--pink);background-size:cover;background-position:center;cursor:pointer;padding:0;transition:.15s}
+.color-swatch:hover{border-color:var(--pink-dark)}
+.color-swatch.active{border-color:var(--pink-dark);box-shadow:0 0 0 2px var(--pink-dark)}
 @media (max-width:900px){
   .pdp-wrap{grid-template-columns:1fr;gap:30px}
 }
