@@ -9,730 +9,824 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../styles.css" />
 <style>
-  body{background:var(--cream);}
-  .admin-header{position:sticky;top:0;background:rgba(255,250,245,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:18px 5vw;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;z-index:10;}
-  .admin-header .brand{font-size:1.4rem;}
-  .admin-wrap{max-width:1000px;margin:0 auto;padding:30px 20px 90px;}
-  .admin-card{background:white;border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:var(--shadow);margin-bottom:26px;}
-  .admin-card h2{font-size:1.4rem;margin-top:0;}
-  .admin-card p.hint{color:var(--muted);font-size:.86rem;margin-top:-8px;}
-  .field{margin-bottom:16px;}
-  .field label{display:block;font-size:.82rem;font-weight:700;margin-bottom:6px;}
-  .field input, .field select, .field textarea{width:100%;border:1px solid var(--line);background:var(--cream);border-radius:12px;padding:11px 14px;color:var(--brown);}
-  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+body{background:var(--cream);}
+.admin-header{position:sticky;top:0;background:rgba(255,250,245,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:18px 5vw;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;z-index:10;}
+.admin-header .brand{font-size:1.4rem;}
+.admin-wrap{max-width:1000px;margin:0 auto;padding:30px 20px 90px;}
+.admin-card{background:white;border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:var(--shadow);margin-bottom:26px;}
+.admin-card h2{font-size:1.4rem;margin-top:0;}
+.admin-card p.hint{color:var(--muted);font-size:.86rem;margin-top:-8px;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:.82rem;font-weight:700;margin-bottom:6px;}
+.field input, .field select, .field textarea{width:100%;border:1px solid var(--line);background:var(--cream);border-radius:12px;padding:11px 14px;color:var(--brown);}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
 
-  .tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
-  .tab-btn{border:1px solid var(--line);background:white;border-radius:999px;padding:9px 18px;font-size:.85rem;font-weight:700;cursor:pointer;}
-  .tab-btn.active{background:var(--brown);color:white;border-color:var(--brown);}
-  .tab-panel{display:none;}
-  .tab-panel.active{display:block;}
+.tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
+.tab-btn{border:1px solid var(--line);background:white;border-radius:999px;padding:9px 18px;font-size:.85rem;font-weight:700;cursor:pointer;}
+.tab-btn.active{background:var(--brown);color:white;border-color:var(--brown);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
 
-  .listing{display:flex;align-items:center;gap:16px;padding:14px 0;border-top:1px solid var(--line);}
-  .listing:first-child{border-top:none;}
-  .listing .thumb{width:64px;height:64px;border-radius:12px;background:var(--sage) center/cover no-repeat;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--muted);text-align:center;}
-  .listing .info{flex:1;}
-  .listing .info h4{margin:0 0 2px;font-size:1rem;}
-  .listing .info span{font-size:.82rem;color:var(--muted);}
-  .listing .actions{display:flex;gap:8px;}
-  .listing .actions button{border:1px solid var(--line);background:var(--cream);border-radius:999px;padding:7px 14px;font-size:.78rem;cursor:pointer;}
-  .listing .actions button.danger{border-color:#c98a7b;color:#a05f70;}
+.listing{display:flex;align-items:center;gap:16px;padding:14px 0;border-top:1px solid var(--line);}
+.listing:first-child{border-top:none;}
+.listing .thumb{width:64px;height:64px;border-radius:12px;background:var(--sage) center/cover no-repeat;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--muted);text-align:center;}
+.listing .info{flex:1;}
+.listing .info h4{margin:0 0 2px;font-size:1rem;}
+.listing .info span{font-size:.82rem;color:var(--muted);}
+.listing .actions{display:flex;gap:8px;}
+.listing .actions button{border:1px solid var(--line);background:var(--cream);border-radius:999px;padding:7px 14px;font-size:.78rem;cursor:pointer;}
+.listing .actions button.danger{border-color:#c98a7b;color:#a05f70;}
 
-  .req-card{border-top:1px solid var(--line);padding:18px 0;}
-  .req-card:first-child{border-top:none;}
-  .req-card h4{margin:0 0 2px;}
-  .req-card .meta{font-size:.8rem;color:var(--muted);margin-bottom:8px;}
-  .req-card .msg{font-size:.9rem;background:var(--cream);border-radius:12px;padding:10px 12px;margin-bottom:10px;}
-  .pill-badge{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:5px 11px;}
-  .pill-requested{background:#FBE7C6;color:#8A6B22;}
-  .pill-approved{background:var(--sage);color:#3F4A34;}
-  .pill-denied{background:#f1d3cf;color:#a05f70;}
-  .lead-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border-top:1px solid var(--line);padding:14px 0;}
-  .lead-row:first-child{border-top:none;}
-  .lead-row .info h4{margin:0 0 2px;}
-  .lead-row .info span{font-size:.8rem;color:var(--muted);}
-  .lead-row .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
-  .lead-row .actions button{border:1px solid var(--line);background:var(--cream);border-radius:999px;padding:7px 13px;font-size:.76rem;cursor:pointer;}
-  .lead-detail{grid-column:1/-1;background:var(--cream);border-radius:14px;padding:16px;margin-top:10px;display:none;}
-  .lead-detail.open{display:block;}
-  .lead-detail textarea{min-height:70px;}
-  .password-chip{font-family:monospace;background:var(--brown);color:white;border-radius:8px;padding:6px 10px;font-size:.85rem;}
-  .activity-list{max-height:260px;overflow:auto;margin-top:10px;}
-  .activity-item{font-size:.82rem;padding:8px 0;border-top:1px dashed var(--line);}
-  .activity-item:first-child{border-top:none;}
-  .activity-item .a-type{font-weight:700;text-transform:capitalize;}
-  .activity-item .a-time{color:var(--muted);float:right;}
+.req-card{border-top:1px solid var(--line);padding:18px 0;}
+.req-card:first-child{border-top:none;}
+.req-card h4{margin:0 0 2px;}
+.req-card .meta{font-size:.8rem;color:var(--muted);margin-bottom:8px;}
+.req-card .msg{font-size:.9rem;background:var(--cream);border-radius:12px;padding:10px 12px;margin-bottom:10px;}
+.pill-badge{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:5px 11px;}
+.pill-requested{background:#FBE7C6;color:#8A6B22;}
+.pill-approved{background:var(--sage);color:#3F4A34;}
+.pill-denied{background:#f1d3cf;color:#a05f70;}
+.lead-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border-top:1px solid var(--line);padding:14px 0;}
+.lead-row:first-child{border-top:none;}
+.lead-row .info h4{margin:0 0 2px;}
+.lead-row .info span{font-size:.8rem;color:var(--muted);}
+.lead-row .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+.lead-row .actions button{border:1px solid var(--line);background:var(--cream);border-radius:999px;padding:7px 13px;font-size:.76rem;cursor:pointer;}
+.lead-detail{grid-column:1/-1;background:var(--cream);border-radius:14px;padding:16px;margin-top:10px;display:none;}
+.lead-detail.open{display:block;}
+.lead-detail textarea{min-height:70px;}
+.password-chip{font-family:monospace;background:var(--brown);color:white;border-radius:8px;padding:6px 10px;font-size:.85rem;}
+.activity-list{max-height:260px;overflow:auto;margin-top:10px;}
+.activity-item{font-size:.82rem;padding:8px 0;border-top:1px dashed var(--line);}
+.activity-item:first-child{border-top:none;}
+.activity-item .a-type{font-weight:700;text-transform:capitalize;}
+.activity-item .a-time{color:var(--muted);float:right;}
 
-  #loginScreen{max-width:440px;margin:80px auto;text-align:center;}
-  #loginScreen .field{text-align:left;}
-  #loginStatus{color:#a05f70;font-size:.85rem;min-height:1.2em;margin-top:10px;}
-  .link-btn{background:none;border:0;color:var(--pink-dark);font-weight:700;cursor:pointer;text-decoration:underline;padding:0;font-size:.85rem;}
+#loginScreen{max-width:440px;margin:80px auto;text-align:center;}
+#loginScreen .field{text-align:left;}
+#loginStatus{color:#a05f70;font-size:.85rem;min-height:1.2em;margin-top:10px;}
+.link-btn{background:none;border:0;color:var(--pink-dark);font-weight:700;cursor:pointer;text-decoration:underline;padding:0;font-size:.85rem;}
 
-  #status{position:fixed;bottom:20px;right:20px;background:var(--brown);color:white;padding:14px 20px;border-radius:14px;opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none;z-index:99;max-width:320px;}
-  #status.show{opacity:1;transform:none;}
-  .hidden{display:none !important;}
-  .empty{color:var(--muted);font-size:.9rem;}
+#status{position:fixed;bottom:20px;right:20px;background:var(--brown);color:white;padding:14px 20px;border-radius:14px;opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none;z-index:99;max-width:320px;}
+#status.show{opacity:1;transform:none;}
+.hidden{display:none !important;}
+.empty{color:var(--muted);font-size:.9rem;}
+
+/* Color variants */
+.color-row{display:flex;gap:12px;align-items:flex-end;margin-bottom:12px;padding:14px;background:var(--cream);border-radius:14px;flex-wrap:wrap;}
+.color-row .field{flex:1;min-width:140px;margin-bottom:0;}
+.color-row .field-photo{flex:1.2;min-width:160px;}
+.color-row .field-photo .existing-note{display:block;font-size:.74rem;color:var(--muted);margin-top:4px;}
+.color-row .field-stock{flex:0 0 130px;}
+.color-remove-btn{border:1px solid var(--line);background:white;border-radius:999px;width:38px;height:38px;cursor:pointer;font-size:.9rem;color:#a05f70;flex-shrink:0;}
+.color-remove-btn:hover{background:#f1d3cf;}
+#colorRows:empty + .add-color-btn{margin-top:0;}
 </style>
 </head>
 <body>
 
-  <div id="loginScreen">
-    <h1 style="font-family:'Playfair Display',serif;">HAYCHIC Admin ♡</h1>
-    <p style="color:var(--muted);" id="loginTagline">Log in to manage listings, access requests and customers — all in one place.</p>
-    <div class="field">
-      <label>Email</label>
-      <input type="email" id="authEmail" autocomplete="username" placeholder="you@example.com">
-    </div>
-    <div class="field">
-      <label>Password</label>
-      <input type="password" id="authPassword" autocomplete="current-password" placeholder="••••••••">
-    </div>
-    <div class="btn-row" style="justify-content:center;">
-      <button class="btn primary" id="signInBtn" onclick="doSignIn()">Sign In</button>
-    </div>
-    <p style="margin-top:18px;font-size:.85rem;">
-      First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMode()">Create your admin login</button>
-    </p>
-    <p id="loginStatus"></p>
-  </div>
+<div id="loginScreen">
+<h1 style="font-family:'Playfair Display',serif;">HAYCHIC Admin ♡</h1>
+<p style="color:var(--muted);" id="loginTagline">Log in to manage listings, access requests and customers — all in one place.</p>
+<div class="field">
+<label>Email</label>
+<input type="email" id="authEmail" autocomplete="username" placeholder="you@example.com">
+</div>
+<div class="field">
+<label>Password</label>
+<input type="password" id="authPassword" autocomplete="current-password" placeholder="••••••••">
+</div>
+<div class="btn-row" style="justify-content:center;">
+<button class="btn primary" id="signInBtn" onclick="doSignIn()">Sign In</button>
+</div>
+<p style="margin-top:18px;font-size:.85rem;">
+First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMode()">Create your admin login</button>
+</p>
+<p id="loginStatus"></p>
+</div>
 
-  <div id="adminApp" class="hidden">
-    <div class="admin-header">
-      <a class="brand" href="../index.html" style="font-family:'Playfair Display',serif;">HAYCHIC <span style="font-size:.6rem;letter-spacing:.2em;">ADMIN</span></a>
-      <button class="btn secondary" onclick="doSignOut()">Log Out</button>
-    </div>
+<div id="adminApp" class="hidden">
+<div class="admin-header">
+<a class="brand" href="../index.html" style="font-family:'Playfair Display',serif;">HAYCHIC <span style="font-size:.6rem;letter-spacing:.2em;">ADMIN</span></a>
+<button class="btn secondary" onclick="doSignOut()">Log Out</button>
+</div>
 
-    <div class="admin-wrap">
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="listings" onclick="switchTab('listings')">Listings</button>
-        <button class="tab-btn" data-tab="requests" onclick="switchTab('requests')">Access Requests <span id="reqCount"></span></button>
-        <button class="tab-btn" data-tab="leads" onclick="switchTab('leads')">All Leads / CRM</button>
-        <button class="tab-btn" data-tab="settings" onclick="switchTab('settings')">Email Settings</button>
-      </div>
+<div class="admin-wrap">
+<div class="tabs">
+<button class="tab-btn active" data-tab="listings" onclick="switchTab('listings')">Listings</button>
+<button class="tab-btn" data-tab="requests" onclick="switchTab('requests')">Access Requests <span id="reqCount"></span></button>
+<button class="tab-btn" data-tab="leads" onclick="switchTab('leads')">All Leads / CRM</button>
+<button class="tab-btn" data-tab="settings" onclick="switchTab('settings')">Email Settings</button>
+</div>
 
-      <!-- ---------- Listings ---------- -->
-      <div class="tab-panel active" id="panel-listings">
-        <div class="admin-card">
-          <h2 id="formTitle">Add a New Listing</h2>
-          <div class="field">
-            <label>Item Name</label>
-            <input type="text" id="fName" placeholder="e.g. The Gabriella Bag">
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label>Price</label>
-              <input type="text" id="fPrice" placeholder="e.g. $48.00">
-            </div>
-            <div class="field">
-              <label>Status</label>
-              <select id="fStatus">
-                <option value="in-stock">In Stock</option>
-                <option value="preorder">Pre-Order</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <label>Category</label>
-            <select id="fCategory">
-              <option>Bags</option>
-              <option>Clothing</option>
-              <option>Shoes</option>
-              <option>Beauty</option>
-              <option>Accessories</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Description (shown on the item's own page)</label>
-            <textarea id="fDescription" rows="3" placeholder="A few sentences about this item — fit, material, why you love it..."></textarea>
-          </div>
-          <div class="field">
-            <label>Photo (optional, but recommended!)</label>
-            <input type="file" id="fImage" accept="image/*">
-          </div>
-          <div class="btn-row">
-            <button class="btn primary" id="saveBtn" onclick="saveProduct()">Add Listing</button>
-            <button class="btn secondary hidden" id="cancelEditBtn" onclick="cancelEdit()">Cancel</button>
-          </div>
-        </div>
+<!-- ---------- Listings ---------- -->
+<div class="tab-panel active" id="panel-listings">
+<div class="admin-card">
+<h2 id="formTitle">Add a New Listing</h2>
+<div class="field">
+<label>Item Name</label>
+<input type="text" id="fName" placeholder="e.g. The Gabriella Bag">
+</div>
+<div class="field-row">
+<div class="field">
+<label>Price</label>
+<input type="text" id="fPrice" placeholder="e.g. $48.00">
+</div>
+<div class="field">
+<label>Status</label>
+<select id="fStatus">
+<option value="in-stock">In Stock</option>
+<option value="preorder">Pre-Order</option>
+</select>
+</div>
+</div>
+<div class="field">
+<label>Category</label>
+<select id="fCategory">
+<option>Bags</option>
+<option>Clothing</option>
+<option>Shoes</option>
+<option>Beauty</option>
+<option>Accessories</option>
+<option>Other</option>
+</select>
+</div>
+<div class="field">
+<label>Description (shown on the item's own page)</label>
+<textarea id="fDescription" rows="3" placeholder="A few sentences about this item — fit, material, why you love it..."></textarea>
+</div>
+<div class="field">
+<label>Cover Photo (used if this item has no colors below)</label>
+<input type="file" id="fImage" accept="image/*">
+</div>
 
-        <div class="admin-card">
-          <h2>Current Listings</h2>
-          <div id="listings"><p class="empty">Loading…</p></div>
-        </div>
-      </div>
+<div class="field">
+<label>Colors / Variants (optional)</label>
+<p class="hint" style="margin:0 0 10px;">Add a row per color — each gets its own photo and its own stock status. If you add colors, shoppers will see a color picker on the item page and the cover photo above is skipped.</p>
+<div id="colorRows"></div>
+<button type="button" class="btn secondary add-color-btn" onclick="addColorRow()">+ Add Color</button>
+</div>
 
-      <!-- ---------- Access Requests ---------- -->
-      <div class="tab-panel" id="panel-requests">
-        <div class="admin-card">
-          <h2>Pending Access Requests</h2>
-          <p class="hint">Visitors who asked to unlock the site. Approve to generate a password, then email it to them.</p>
-          <div id="requestsList"><p class="empty">Loading…</p></div>
-        </div>
-      </div>
+<div class="btn-row">
+<button class="btn primary" id="saveBtn" onclick="saveProduct()">Add Listing</button>
+<button class="btn secondary hidden" id="cancelEditBtn" onclick="cancelEdit()">Cancel</button>
+</div>
+</div>
 
-      <!-- ---------- Leads / CRM ---------- -->
-      <div class="tab-panel" id="panel-leads">
-        <div class="admin-card">
-          <h2>All Leads &amp; Customers</h2>
-          <p class="hint">Every visitor who's requested access or been added manually — with notes, status, and site activity.</p>
-          <div class="btn-row" style="margin-bottom:16px;">
-            <button class="btn primary" onclick="showAddLead()">+ Add Lead Manually</button>
-          </div>
-          <div id="addLeadForm" class="hidden" style="margin-bottom:20px;padding:16px;background:var(--cream);border-radius:14px;">
-            <div class="field-row">
-              <div class="field"><label>Name</label><input type="text" id="newLeadName"></div>
-              <div class="field"><label>Email</label><input type="email" id="newLeadEmail"></div>
-            </div>
-            <div class="field-row">
-              <div class="field"><label>Phone (optional)</label><input type="text" id="newLeadPhone"></div>
-              <div class="field"><label>Notes (optional)</label><input type="text" id="newLeadNotes"></div>
-            </div>
-            <div class="btn-row">
-              <button class="btn primary" onclick="addLeadManually()">Add Lead</button>
-              <button class="btn secondary" onclick="hideAddLead()">Cancel</button>
-            </div>
-          </div>
-          <div id="leadsList"><p class="empty">Loading…</p></div>
-        </div>
-      </div>
+<div class="admin-card">
+<h2>Current Listings</h2>
+<div id="listings"><p class="empty">Loading…</p></div>
+</div>
+</div>
 
-      <!-- ---------- Email Settings ---------- -->
-      <div class="tab-panel" id="panel-settings">
-        <div class="admin-card">
-          <h2>Email Sending Setup (EmailJS)</h2>
-          <p class="hint">These connect the "Send Password" button to your real inbox via EmailJS. Set up a free EmailJS account, connect your email as a Service, and create a template with variables <code>{{to_name}}</code>, <code>{{to_email}}</code>, <code>{{password}}</code>, <code>{{site_url}}</code>. Paste the IDs below (saved only in this browser).</p>
-          <div class="field"><label>EmailJS Public Key</label><input type="text" id="emailjsPublicKey" placeholder="e.g. AbCdEfGhIjKlMnOp"></div>
-          <div class="field"><label>EmailJS Service ID</label><input type="text" id="emailjsServiceId" placeholder="e.g. service_xxxxxxx"></div>
-          <div class="field"><label>EmailJS Template ID</label><input type="text" id="emailjsTemplateId" placeholder="e.g. template_xxxxxxx"></div>
-          <div class="btn-row">
-            <button class="btn primary" onclick="saveEmailSettings()">Save Settings</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- ---------- Access Requests ---------- -->
+<div class="tab-panel" id="panel-requests">
+<div class="admin-card">
+<h2>Pending Access Requests</h2>
+<p class="hint">Visitors who asked to unlock the site. Approve to generate a password, then email it to them.</p>
+<div id="requestsList"><p class="empty">Loading…</p></div>
+</div>
+</div>
 
-  <!-- Activity modal -->
-  <div id="activityModal" class="hidden" style="position:fixed;inset:0;background:rgba(74,63,46,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;">
-    <div style="background:white;border-radius:24px;max-width:520px;width:100%;max-height:80vh;overflow:auto;padding:26px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <h3 style="margin:0;font-family:'Playfair Display',serif;">Activity — <span id="activityLeadName"></span></h3>
-        <button class="link-btn" onclick="closeActivity()">Close</button>
-      </div>
-      <div id="activityContent" class="activity-list"><p class="empty">Loading…</p></div>
-    </div>
-  </div>
+<!-- ---------- Leads / CRM ---------- -->
+<div class="tab-panel" id="panel-leads">
+<div class="admin-card">
+<h2>All Leads &amp; Customers</h2>
+<p class="hint">Every visitor who's requested access or been added manually — with notes, status, and site activity.</p>
+<div class="btn-row" style="margin-bottom:16px;">
+<button class="btn primary" onclick="showAddLead()">+ Add Lead Manually</button>
+</div>
+<div id="addLeadForm" class="hidden" style="margin-bottom:20px;padding:16px;background:var(--cream);border-radius:14px;">
+<div class="field-row">
+<div class="field"><label>Name</label><input type="text" id="newLeadName"></div>
+<div class="field"><label>Email</label><input type="email" id="newLeadEmail"></div>
+</div>
+<div class="field-row">
+<div class="field"><label>Phone (optional)</label><input type="text" id="newLeadPhone"></div>
+<div class="field"><label>Notes (optional)</label><input type="text" id="newLeadNotes"></div>
+</div>
+<div class="btn-row">
+<button class="btn primary" onclick="addLeadManually()">Add Lead</button>
+<button class="btn secondary" onclick="hideAddLead()">Cancel</button>
+</div>
+</div>
+<div id="leadsList"><p class="empty">Loading…</p></div>
+</div>
+</div>
 
-  <div id="status"></div>
+<!-- ---------- Email Settings ---------- -->
+<div class="tab-panel" id="panel-settings">
+<div class="admin-card">
+<h2>Email Sending Setup (EmailJS)</h2>
+<p class="hint">These connect the "Send Password" button to your real inbox via EmailJS. Set up a free EmailJS account, connect your email as a Service, and create a template with variables <code>{{to_name}}</code>, <code>{{to_email}}</code>, <code>{{password}}</code>, <code>{{site_url}}</code>. Paste the IDs below (saved only in this browser).</p>
+<div class="field"><label>EmailJS Public Key</label><input type="text" id="emailjsPublicKey" placeholder="e.g. AbCdEfGhIjKlMnOp"></div>
+<div class="field"><label>EmailJS Service ID</label><input type="text" id="emailjsServiceId" placeholder="e.g. service_xxxxxxx"></div>
+<div class="field"><label>EmailJS Template ID</label><input type="text" id="emailjsTemplateId" placeholder="e.g. template_xxxxxxx"></div>
+<div class="btn-row">
+<button class="btn primary" onclick="saveEmailSettings()">Save Settings</button>
+</div>
+</div>
+</div>
+</div>
+</div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
-  <script src="../assets/js/firebase-config.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>
-    // ============ Shared ============
-    const ADMIN_API = 'https://haychic-boutique.vercel.app/api/admin';
-    let authMode = 'signin'; // or 'signup'
-    let ghSession = localStorage.getItem('haychic_admin_session') || '';
+<!-- Activity modal -->
+<div id="activityModal" class="hidden" style="position:fixed;inset:0;background:rgba(74,63,46,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;">
+<div style="background:white;border-radius:24px;max-width:520px;width:100%;max-height:80vh;overflow:auto;padding:26px;">
+<div style="display:flex;justify-content:space-between;align-items:center;">
+<h3 style="margin:0;font-family:'Playfair Display',serif;">Activity — <span id="activityLeadName"></span></h3>
+<button class="link-btn" onclick="closeActivity()">Close</button>
+</div>
+<div id="activityContent" class="activity-list"><p class="empty">Loading…</p></div>
+</div>
+</div>
 
-    function showStatus(msg, isError){
-      const el = document.getElementById('status');
-      el.textContent = msg;
-      el.style.background = isError ? '#a05f70' : 'var(--brown)';
-      el.classList.add('show');
-      setTimeout(()=>el.classList.remove('show'), 3400);
-    }
-    function escapeHtml(str){
-      return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-    function escapeAttr(str){
-      return String(str||'').replace(/'/g, "\\'");
-    }
-    function switchTab(name){
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      document.getElementById('panel-' + name).classList.add('active');
-    }
+<div id="status"></div>
 
-    // ============ Login (one email + password for everything) ============
-    function toggleAuthMode(){
-      authMode = authMode === 'signin' ? 'signup' : 'signin';
-      document.getElementById('signInBtn').textContent = authMode === 'signin' ? 'Sign In' : 'Create Login';
-      document.getElementById('loginTagline').textContent = authMode === 'signin'
-        ? 'Log in to manage listings, access requests and customers — all in one place.'
-        : 'Create your HAYCHIC admin login. Only you should know this password.';
-      document.getElementById('modeToggle').textContent = authMode === 'signin' ? 'Create your admin login' : 'Back to sign in';
-      document.getElementById('loginStatus').textContent = '';
-    }
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+<script src="../assets/js/firebase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+// ============ Shared ============
+const ADMIN_API = 'https://haychic-boutique.vercel.app/api/admin';
+let authMode = 'signin'; // or 'signup'
+let ghSession = localStorage.getItem('haychic_admin_session') || '';
 
-    async function doSignIn(){
-      const email = document.getElementById('authEmail').value.trim();
-      const password = document.getElementById('authPassword').value;
-      const statusEl = document.getElementById('loginStatus');
-      if(!email || !password){ statusEl.textContent = 'Enter your email and password.'; return; }
-      statusEl.textContent = '';
-      try{
-        if(authMode === 'signin'){
-          await auth.signInWithEmailAndPassword(email, password);
-        } else {
-          await auth.createUserWithEmailAndPassword(email, password);
-        }
-        // Also try to start a listings session (Vercel-backed GitHub writes).
-        // If this isn't configured yet (see ADMIN-SETUP.md) the Listings tab
-        // will just show a setup note — everything else still works.
-        // Note: onAuthStateChanged fires as soon as the Firebase sign-in
-        // above resolves, and immediately calls loadListings() — which can
-        // race ahead of this call and run before ghSession is set. So once
-        // we have a token here, refresh the Listings tab again to make sure
-        // it picks it up.
-        try{
-          const data = await callAdmin('login', { username: email, password });
-          ghSession = data.token;
-          localStorage.setItem('haychic_admin_session', ghSession);
-          loadListings();
-        }catch(e){ /* listings backend not set up yet — that's OK */ }
-      }catch(err){
-        statusEl.textContent = err.message;
-      }
-    }
+function showStatus(msg, isError){
+const el = document.getElementById('status');
+el.textContent = msg;
+el.style.background = isError ? '#a05f70' : 'var(--brown)';
+el.classList.add('show');
+setTimeout(()=>el.classList.remove('show'), 3400);
+}
+function escapeHtml(str){
+return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(str){
+return String(str||'').replace(/'/g, "\\'");
+}
+function switchTab(name){
+document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+document.getElementById('panel-' + name).classList.add('active');
+}
 
-    function doSignOut(){
-      localStorage.removeItem('haychic_admin_session');
-      ghSession = '';
-      auth.signOut();
-    }
+// ============ Login (one email + password for everything) ============
+function toggleAuthMode(){
+authMode = authMode === 'signin' ? 'signup' : 'signin';
+document.getElementById('signInBtn').textContent = authMode === 'signin' ? 'Sign In' : 'Create Login';
+document.getElementById('loginTagline').textContent = authMode === 'signin'
+? 'Log in to manage listings, access requests and customers — all in one place.'
+: 'Create your HAYCHIC admin login. Only you should know this password.';
+document.getElementById('modeToggle').textContent = authMode === 'signin' ? 'Create your admin login' : 'Back to sign in';
+document.getElementById('loginStatus').textContent = '';
+}
 
-    auth.onAuthStateChanged(function(user){
-      if(user){
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('adminApp').classList.remove('hidden');
-        loadListings();
-        loadRequests();
-        loadLeads();
-        loadEmailSettings();
-      } else {
-        document.getElementById('loginScreen').classList.remove('hidden');
-        document.getElementById('adminApp').classList.add('hidden');
-      }
-    });
+async function doSignIn(){
+const email = document.getElementById('authEmail').value.trim();
+const password = document.getElementById('authPassword').value;
+const statusEl = document.getElementById('loginStatus');
+if(!email || !password){ statusEl.textContent = 'Enter your email and password.'; return; }
+statusEl.textContent = '';
+try{
+if(authMode === 'signin'){
+await auth.signInWithEmailAndPassword(email, password);
+} else {
+await auth.createUserWithEmailAndPassword(email, password);
+}
+// Also try to start a listings session (Vercel-backed GitHub writes).
+// If this isn't configured yet (see ADMIN-SETUP.md) the Listings tab
+// will just show a setup note — everything else still works.
+// Note: onAuthStateChanged fires as soon as the Firebase sign-in
+// above resolves, and immediately calls loadListings() — which can
+// race ahead of this call and run before ghSession is set. So once
+// we have a token here, refresh the Listings tab again to make sure
+// it picks it up.
+try{
+const data = await callAdmin('login', { username: email, password });
+ghSession = data.token;
+localStorage.setItem('haychic_admin_session', ghSession);
+loadListings();
+}catch(e){ /* listings backend not set up yet — that's OK */ }
+}catch(err){
+statusEl.textContent = err.message;
+}
+}
 
-    function fmtDate(ts){
-      if(!ts || !ts.toDate) return '';
-      return ts.toDate().toLocaleString();
-    }
+function doSignOut(){
+localStorage.removeItem('haychic_admin_session');
+ghSession = '';
+auth.signOut();
+}
 
-    // ============ Listings (product admin, via /api/admin -> GitHub) ============
-    let products = [];
-    let productsSha = null;
-    let editingId = null;
+auth.onAuthStateChanged(function(user){
+if(user){
+document.getElementById('loginScreen').classList.add('hidden');
+document.getElementById('adminApp').classList.remove('hidden');
+loadListings();
+loadRequests();
+loadLeads();
+loadEmailSettings();
+} else {
+document.getElementById('loginScreen').classList.remove('hidden');
+document.getElementById('adminApp').classList.add('hidden');
+}
+});
 
-    async function callAdmin(action, payload){
-      const res = await fetch(ADMIN_API, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(ghSession ? { 'Authorization': `Bearer ${ghSession}` } : {})
-        },
-        body: JSON.stringify({ action, ...payload })
-      });
-      const data = await res.json().catch(() => ({}));
-      if(!res.ok) throw new Error(data.error || 'Something went wrong.');
-      return data;
-    }
+function fmtDate(ts){
+if(!ts || !ts.toDate) return '';
+return ts.toDate().toLocaleString();
+}
 
-    async function loadListings(){
-      const wrap = document.getElementById('listings');
-      wrap.innerHTML = '<p class="empty">Loading…</p>';
-      try{
-        const data = await callAdmin('list', {});
-        products = data.products;
-        productsSha = data.sha;
-        renderListings();
-      }catch(err){
-        wrap.innerHTML = `<p style="color:#a05f70;">${err.message} — see <code>ADMIN-SETUP.md</code> to finish connecting listings.</p>`;
-      }
-    }
+// ============ Listings (product admin, via /api/admin -> GitHub) ============
+let products = [];
+let productsSha = null;
+let editingId = null;
 
-    function renderListings(){
-      const wrap = document.getElementById('listings');
-      if(!products.length){
-        wrap.innerHTML = '<p class="empty">No listings yet.</p>';
-        return;
-      }
-      wrap.innerHTML = products.map(p => `
-        <div class="listing">
-          <div class="thumb" style="${p.image ? `background-image:url('../${p.image}')` : ''}">${p.image ? '' : 'HAYCHIC'}</div>
-          <div class="info">
-            <h4>${escapeHtml(p.name)}</h4>
-            <span>${escapeHtml(p.price)} &middot; ${escapeHtml(p.category)} &middot; ${p.status === 'in-stock' ? 'In Stock' : 'Pre-Order'}</span>
-          </div>
-          <div class="actions">
-            <button onclick="editProduct('${p.id}')">Edit</button>
-            <button class="danger" onclick="deleteProduct('${p.id}')">Delete</button>
-          </div>
-        </div>
-      `).join('');
-    }
+async function callAdmin(action, payload){
+const res = await fetch(ADMIN_API, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+...(ghSession ? { 'Authorization': `Bearer ${ghSession}` } : {})
+},
+body: JSON.stringify({ action, ...payload })
+});
+const data = await res.json().catch(() => ({}));
+if(!res.ok) throw new Error(data.error || 'Something went wrong.');
+return data;
+}
 
-    function slugify(str){
-      return str.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);
-    }
+async function loadListings(){
+const wrap = document.getElementById('listings');
+wrap.innerHTML = '<p class="empty">Loading…</p>';
+try{
+const data = await callAdmin('list', {});
+products = data.products;
+productsSha = data.sha;
+renderListings();
+}catch(err){
+wrap.innerHTML = `<p style="color:#a05f70;">${err.message} — see <code>ADMIN-SETUP.md</code> to finish connecting listings.</p>`;
+}
+}
 
-    function resizeImage(file, maxW){
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        const reader = new FileReader();
-        reader.onload = e => { img.src = e.target.result; };
-        reader.onerror = reject;
-        img.onload = () => {
-          const scale = Math.min(1, maxW / img.width);
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width * scale;
-          canvas.height = img.height * scale;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          const base64 = canvas.toDataURL('image/jpeg', 0.82).split(',')[1];
-          resolve(base64);
-        };
-        img.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
+function renderListings(){
+const wrap = document.getElementById('listings');
+if(!products.length){
+wrap.innerHTML = '<p class="empty">No listings yet.</p>';
+return;
+}
+wrap.innerHTML = products.map(p => {
+const thumbImage = (p.colors && p.colors.length && p.colors[0].image) ? p.colors[0].image : p.image;
+const colorNote = (p.colors && p.colors.length) ? ` &middot; ${p.colors.length} color${p.colors.length===1?'':'s'}` : '';
+return `
+<div class="listing">
+<div class="thumb" style="${thumbImage ? `background-image:url('../${thumbImage}')` : ''}">${thumbImage ? '' : 'HAYCHIC'}</div>
+<div class="info">
+<h4>${escapeHtml(p.name)}</h4>
+<span>${escapeHtml(p.price)} &middot; ${escapeHtml(p.category)} &middot; ${p.status === 'in-stock' ? 'In Stock' : 'Pre-Order'}${colorNote}</span>
+</div>
+<div class="actions">
+<button onclick="editProduct('${p.id}')">Edit</button>
+<button class="danger" onclick="deleteProduct('${p.id}')">Delete</button>
+</div>
+</div>
+`;
+}).join('');
+}
 
-    async function saveProduct(){
-      const name = document.getElementById('fName').value.trim();
-      const price = document.getElementById('fPrice').value.trim();
-      const status = document.getElementById('fStatus').value;
-      const category = document.getElementById('fCategory').value;
-      const description = document.getElementById('fDescription').value.trim();
-      const fileInput = document.getElementById('fImage');
-      const file = fileInput.files[0];
+function slugify(str){
+return str.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);
+}
 
-      if(!name || !price){ showStatus('Please fill in item name and price.', true); return; }
+function colorSlug(str){
+return String(str||'').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'color';
+}
 
-      const saveBtn = document.getElementById('saveBtn');
-      saveBtn.disabled = true;
-      saveBtn.textContent = 'Saving…';
+function resizeImage(file, maxW){
+return new Promise((resolve, reject) => {
+const img = new Image();
+const reader = new FileReader();
+reader.onload = e => { img.src = e.target.result; };
+reader.onerror = reject;
+img.onload = () => {
+const scale = Math.min(1, maxW / img.width);
+const canvas = document.createElement('canvas');
+canvas.width = img.width * scale;
+canvas.height = img.height * scale;
+const ctx = canvas.getContext('2d');
+ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+const base64 = canvas.toDataURL('image/jpeg', 0.82).split(',')[1];
+resolve(base64);
+};
+img.onerror = reject;
+reader.readAsDataURL(file);
+});
+}
 
-      try{
-        let entry;
-        if(editingId){
-          entry = products.find(p => p.id === editingId);
-        } else {
-          entry = { id: slugify(name), image: '' };
-          products.push(entry);
-        }
-        entry.name = name;
-        entry.price = price;
-        entry.status = status;
-        entry.category = category;
-        entry.description = description;
+// ---- Color variant rows ----
+function colorRowHtml(color){
+color = color || {};
+const hasExisting = !!color.image;
+return `
+<div class="color-row" data-existing-image="${escapeAttr(color.image || '')}">
+<div class="field">
+<label>Color Name</label>
+<input type="text" class="colorName" value="${escapeAttr(color.name || '')}" placeholder="e.g. Blush Pink">
+</div>
+<div class="field field-photo">
+<label>Photo</label>
+<input type="file" class="colorImage" accept="image/*">
+${hasExisting ? `<span class="existing-note">Current photo saved ✓ (choose a file to replace it)</span>` : ''}
+</div>
+<div class="field field-stock">
+<label>Stock</label>
+<select class="colorStatus">
+<option value="in-stock" ${color.status !== 'preorder' ? 'selected' : ''}>In Stock</option>
+<option value="preorder" ${color.status === 'preorder' ? 'selected' : ''}>Pre-Order</option>
+</select>
+</div>
+<button type="button" class="color-remove-btn" onclick="this.closest('.color-row').remove()" aria-label="Remove color">✕</button>
+</div>`;
+}
 
-        let image = null;
-        if(file){
-          showStatus('Uploading photo…');
-          const base64 = await resizeImage(file, 1200);
-          image = { id: entry.id, base64 };
-          entry.image = `assets/products/${entry.id}.jpg`;
-        }
+function addColorRow(color){
+document.getElementById('colorRows').insertAdjacentHTML('beforeend', colorRowHtml(color));
+}
 
-        showStatus('Saving listing…');
-        const data = await callAdmin('save', {
-          products,
-          sha: productsSha,
-          image,
-          message: editingId ? `Update listing: ${name}` : `Add listing: ${name}`
-        });
-        productsSha = data.sha;
+function clearColorRows(){
+document.getElementById('colorRows').innerHTML = '';
+}
 
-        showStatus('Saved! It will appear on the site in a minute ♡');
-        cancelEdit();
-        renderListings();
-      }catch(err){
-        showStatus(err.message || 'Something went wrong.', true);
-      }finally{
-        saveBtn.disabled = false;
-        saveBtn.textContent = editingId ? 'Save Changes' : 'Add Listing';
-      }
-    }
+async function collectColors(entryId){
+const rows = Array.from(document.querySelectorAll('#colorRows .color-row'));
+const colors = [];
+const images = [];
+for(const row of rows){
+const name = row.querySelector('.colorName').value.trim();
+if(!name) continue;
+const status = row.querySelector('.colorStatus').value;
+const file = row.querySelector('.colorImage').files[0];
+let imagePath = row.dataset.existingImage || '';
+if(file){
+const imgId = `${entryId}-${colorSlug(name)}`;
+const base64 = await resizeImage(file, 1200);
+images.push({ id: imgId, base64 });
+imagePath = `assets/products/${imgId}.jpg`;
+}
+colors.push({ name, image: imagePath, status });
+}
+return { colors, images };
+}
 
-    function editProduct(id){
-      const p = products.find(x => x.id === id);
-      if(!p) return;
-      editingId = id;
-      document.getElementById('formTitle').textContent = 'Edit Listing';
-      document.getElementById('fName').value = p.name;
-      document.getElementById('fPrice').value = p.price;
-      document.getElementById('fStatus').value = p.status;
-      document.getElementById('fCategory').value = p.category;
-      document.getElementById('fDescription').value = p.description || '';
-      document.getElementById('saveBtn').textContent = 'Save Changes';
-      document.getElementById('cancelEditBtn').classList.remove('hidden');
-      switchTab('listings');
-      window.scrollTo({top:0, behavior:'smooth'});
-    }
+async function saveProduct(){
+const name = document.getElementById('fName').value.trim();
+const price = document.getElementById('fPrice').value.trim();
+const status = document.getElementById('fStatus').value;
+const category = document.getElementById('fCategory').value;
+const description = document.getElementById('fDescription').value.trim();
+const fileInput = document.getElementById('fImage');
+const file = fileInput.files[0];
 
-    function cancelEdit(){
-      editingId = null;
-      document.getElementById('formTitle').textContent = 'Add a New Listing';
-      document.getElementById('fName').value = '';
-      document.getElementById('fPrice').value = '';
-      document.getElementById('fStatus').value = 'in-stock';
-      document.getElementById('fCategory').value = 'Bags';
-      document.getElementById('fDescription').value = '';
-      document.getElementById('fImage').value = '';
-      document.getElementById('saveBtn').textContent = 'Add Listing';
-      document.getElementById('cancelEditBtn').classList.add('hidden');
-    }
+if(!name || !price){ showStatus('Please fill in item name and price.', true); return; }
 
-    async function deleteProduct(id){
-      const p = products.find(x => x.id === id);
-      if(!p) return;
-      if(!confirm(`Delete "${p.name}"? This can't be undone.`)) return;
-      try{
-        const filtered = products.filter(x => x.id !== id);
-        const data = await callAdmin('save', {
-          products: filtered,
-          sha: productsSha,
-          message: `Delete listing: ${p.name}`
-        });
-        products = filtered;
-        productsSha = data.sha;
-        showStatus('Deleted.');
-        renderListings();
-      }catch(err){
-        showStatus(err.message, true);
-      }
-    }
+const saveBtn = document.getElementById('saveBtn');
+saveBtn.disabled = true;
+saveBtn.textContent = 'Saving…';
 
-    // ============ Access Requests ============
-    async function loadRequests(){
-      const wrap = document.getElementById('requestsList');
-      wrap.innerHTML = '<p class="empty">Loading…</p>';
-      try{
-        const snap = await db.collection('leads').where('status','==','requested').get();
-        let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        docs.sort((a,b) => (b.createdAt?.toMillis?.()||0) - (a.createdAt?.toMillis?.()||0));
-        document.getElementById('reqCount').textContent = docs.length ? `(${docs.length})` : '';
-        if(!docs.length){ wrap.innerHTML = '<p class="empty">No pending requests right now.</p>'; return; }
-        wrap.innerHTML = docs.map(l => `
-          <div class="req-card" id="req-${l.id}">
-            <span class="pill-badge pill-requested">Requested</span>
-            <h4>${escapeHtml(l.name||'(no name)')}</h4>
-            <div class="meta">${escapeHtml(l.email||'')} ${l.phone ? '&middot; ' + escapeHtml(l.phone) : ''} &middot; ${fmtDate(l.createdAt)}</div>
-            ${l.message ? `<div class="msg">${escapeHtml(l.message)}</div>` : ''}
-            <div class="btn-row">
-              <button class="btn primary" onclick="approveAndGenerate('${l.id}','${escapeAttr(l.email)}','${escapeAttr(l.name)}')">Approve &amp; Generate Password</button>
-              <button class="btn secondary" onclick="declineRequest('${l.id}')">Decline</button>
-            </div>
-          </div>
-        `).join('');
-      }catch(err){
-        wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
-      }
-    }
+try{
+let entry;
+if(editingId){
+entry = products.find(p => p.id === editingId);
+} else {
+entry = { id: slugify(name), image: '' };
+products.push(entry);
+}
+entry.name = name;
+entry.price = price;
+entry.status = status;
+entry.category = category;
+entry.description = description;
 
-    async function declineRequest(id){
-      if(!confirm('Decline this request?')) return;
-      await db.collection('leads').doc(id).update({ status: 'denied' });
-      showStatus('Request declined.');
-      loadRequests();
-      loadLeads();
-    }
+const images = [];
 
-    function generatePassword(){
-      const words = ['chic','haute','blush','luxe','dainty','golden','pearl','velvet','rosy','sweet'];
-      const w = words[Math.floor(Math.random()*words.length)];
-      const n = Math.floor(100 + Math.random()*900);
-      return `${w}-${n}`;
-    }
+const { colors, images: colorImages } = await collectColors(entry.id);
+images.push(...colorImages);
 
-    async function generateUniquePassword(){
-      for(let i=0;i<8;i++){
-        const pw = generatePassword();
-        const doc = await db.collection('access_codes').doc(pw).get();
-        if(!doc.exists) return pw;
-      }
-      return generatePassword() + '-' + Date.now().toString(36).slice(-3);
-    }
+if(colors.length){
+entry.colors = colors;
+entry.image = colors[0].image;
+} else {
+delete entry.colors;
+if(file){
+showStatus('Uploading photo…');
+const base64 = await resizeImage(file, 1200);
+images.push({ id: entry.id, base64 });
+entry.image = `assets/products/${entry.id}.jpg`;
+}
+}
 
-    async function approveAndGenerate(leadId, email, name){
-      try{
-        showStatus('Generating password…');
-        const password = await generateUniquePassword();
-        await db.collection('access_codes').doc(password).set({
-          leadId: leadId, email: email, active: true,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        await db.collection('leads').doc(leadId).update({
-          status: 'approved', password: password,
-          approvedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        showStatus('Password generated! Sending email…');
-        await sendPasswordEmail(email, name, password);
-        loadRequests();
-        loadLeads();
-      }catch(err){
-        showStatus(err.message, true);
-      }
-    }
+showStatus('Saving listing…');
+const data = await callAdmin('save', {
+products,
+sha: productsSha,
+images,
+message: editingId ? `Update listing: ${name}` : `Add listing: ${name}`
+});
+productsSha = data.sha;
 
-    // ============ EmailJS ============
-    function loadEmailSettings(){
-      document.getElementById('emailjsPublicKey').value = localStorage.getItem('haychic_emailjs_public_key') || '';
-      document.getElementById('emailjsServiceId').value = localStorage.getItem('haychic_emailjs_service_id') || '';
-      document.getElementById('emailjsTemplateId').value = localStorage.getItem('haychic_emailjs_template_id') || '';
-    }
-    function saveEmailSettings(){
-      localStorage.setItem('haychic_emailjs_public_key', document.getElementById('emailjsPublicKey').value.trim());
-      localStorage.setItem('haychic_emailjs_service_id', document.getElementById('emailjsServiceId').value.trim());
-      localStorage.setItem('haychic_emailjs_template_id', document.getElementById('emailjsTemplateId').value.trim());
-      showStatus('Email settings saved in this browser.');
-    }
+showStatus('Saved! It will appear on the site in a minute ♡');
+cancelEdit();
+renderListings();
+}catch(err){
+showStatus(err.message || 'Something went wrong.', true);
+}finally{
+saveBtn.disabled = false;
+saveBtn.textContent = editingId ? 'Save Changes' : 'Add Listing';
+}
+}
 
-    async function sendPasswordEmail(email, name, password){
-      const publicKey = localStorage.getItem('haychic_emailjs_public_key');
-      const serviceId = localStorage.getItem('haychic_emailjs_service_id');
-      const templateId = localStorage.getItem('haychic_emailjs_template_id');
-      if(!publicKey || !serviceId || !templateId){
-        showStatus(`Password is ${password} — set up Email Settings tab to auto-send it.`, true);
-        return;
-      }
-      try{
-        emailjs.init(publicKey);
-        await emailjs.send(serviceId, templateId, {
-          to_email: email, to_name: name || 'there', password: password,
-          site_url: 'https://haychicboutique.com'
-        });
-        showStatus(`Password emailed to ${email} ♡`);
-      }catch(err){
-        showStatus(`Password is ${password} but the email failed to send: ${err.text || err.message || err}`, true);
-      }
-    }
+function editProduct(id){
+const p = products.find(x => x.id === id);
+if(!p) return;
+editingId = id;
+document.getElementById('formTitle').textContent = 'Edit Listing';
+document.getElementById('fName').value = p.name;
+document.getElementById('fPrice').value = p.price;
+document.getElementById('fStatus').value = p.status;
+document.getElementById('fCategory').value = p.category;
+document.getElementById('fDescription').value = p.description || '';
+document.getElementById('saveBtn').textContent = 'Save Changes';
+document.getElementById('cancelEditBtn').classList.remove('hidden');
+clearColorRows();
+(p.colors || []).forEach(c => addColorRow(c));
+switchTab('listings');
+window.scrollTo({top:0, behavior:'smooth'});
+}
 
-    // ============ Leads / CRM ============
-    let allLeads = [];
-    let currentActivityEmail = '';
+function cancelEdit(){
+editingId = null;
+document.getElementById('formTitle').textContent = 'Add a New Listing';
+document.getElementById('fName').value = '';
+document.getElementById('fPrice').value = '';
+document.getElementById('fStatus').value = 'in-stock';
+document.getElementById('fCategory').value = 'Bags';
+document.getElementById('fDescription').value = '';
+document.getElementById('fImage').value = '';
+document.getElementById('saveBtn').textContent = 'Add Listing';
+document.getElementById('cancelEditBtn').classList.add('hidden');
+clearColorRows();
+}
 
-    async function loadLeads(){
-      const wrap = document.getElementById('leadsList');
-      wrap.innerHTML = '<p class="empty">Loading…</p>';
-      try{
-        const snap = await db.collection('leads').get();
-        allLeads = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        allLeads.sort((a,b) => (b.createdAt?.toMillis?.()||0) - (a.createdAt?.toMillis?.()||0));
-        renderLeads();
-      }catch(err){
-        wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
-      }
-    }
+async function deleteProduct(id){
+const p = products.find(x => x.id === id);
+if(!p) return;
+if(!confirm(`Delete "${p.name}"? This can't be undone.`)) return;
+try{
+const filtered = products.filter(x => x.id !== id);
+const data = await callAdmin('save', {
+products: filtered,
+sha: productsSha,
+message: `Delete listing: ${p.name}`
+});
+products = filtered;
+productsSha = data.sha;
+showStatus('Deleted.');
+renderListings();
+}catch(err){
+showStatus(err.message, true);
+}
+}
 
-    function renderLeads(){
-      const wrap = document.getElementById('leadsList');
-      if(!allLeads.length){ wrap.innerHTML = '<p class="empty">No leads yet.</p>'; return; }
-      wrap.innerHTML = allLeads.map(l => `
-        <div class="lead-row">
-          <div class="info">
-            <h4>${escapeHtml(l.name||'(no name)')} <span class="pill-badge pill-${l.status||'requested'}">${l.status||'requested'}</span></h4>
-            <span>${escapeHtml(l.email||'')} ${l.phone ? '&middot; ' + escapeHtml(l.phone) : ''} &middot; ${fmtDate(l.createdAt)}${l.password ? ' &middot; pw: ' : ''}${l.password ? `<span class="password-chip">${escapeHtml(l.password)}</span>` : ''}</span>
-          </div>
-          <div class="actions">
-            <button onclick="toggleLeadDetail('${l.id}')">Notes</button>
-            <button onclick="openActivity('${escapeAttr(l.email)}','${escapeAttr(l.name)}')">Activity</button>
-            ${l.status !== 'approved' ? `<button onclick="approveAndGenerate('${l.id}','${escapeAttr(l.email)}','${escapeAttr(l.name)}')">Approve</button>` : `<button onclick="sendPasswordEmail('${escapeAttr(l.email)}','${escapeAttr(l.name)}','${escapeAttr(l.password||'')}')">Resend Password</button>`}
-          </div>
-          <div class="lead-detail" id="detail-${l.id}">
-            <label style="font-size:.8rem;font-weight:700;">Notes &amp; follow-up</label>
-            <textarea id="notes-${l.id}">${escapeHtml(l.notes||'')}</textarea>
-            <div class="field" style="margin-top:10px;max-width:220px;">
-              <label>Status</label>
-              <select id="status-${l.id}">
-                <option value="requested" ${l.status==='requested'?'selected':''}>Requested</option>
-                <option value="approved" ${l.status==='approved'?'selected':''}>Approved</option>
-                <option value="denied" ${l.status==='denied'?'selected':''}>Denied</option>
-                <option value="customer" ${l.status==='customer'?'selected':''}>Customer</option>
-              </select>
-            </div>
-            <div class="btn-row">
-              <button class="btn primary" onclick="saveLeadDetail('${l.id}')">Save</button>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
+// ============ Access Requests ============
+async function loadRequests(){
+const wrap = document.getElementById('requestsList');
+wrap.innerHTML = '<p class="empty">Loading…</p>';
+try{
+const snap = await db.collection('leads').where('status','==','requested').get();
+let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+docs.sort((a,b) => (b.createdAt?.toMillis?.()||0) - (a.createdAt?.toMillis?.()||0));
+document.getElementById('reqCount').textContent = docs.length ? `(${docs.length})` : '';
+if(!docs.length){ wrap.innerHTML = '<p class="empty">No pending requests right now.</p>'; return; }
+wrap.innerHTML = docs.map(l => `
+<div class="req-card" id="req-${l.id}">
+<span class="pill-badge pill-requested">Requested</span>
+<h4>${escapeHtml(l.name||'(no name)')}</h4>
+<div class="meta">${escapeHtml(l.email||'')} ${l.phone ? '&middot; ' + escapeHtml(l.phone) : ''} &middot; ${fmtDate(l.createdAt)}</div>
+${l.message ? `<div class="msg">${escapeHtml(l.message)}</div>` : ''}
+<div class="btn-row">
+<button class="btn primary" onclick="approveAndGenerate('${l.id}','${escapeAttr(l.email)}','${escapeAttr(l.name)}')">Approve &amp; Generate Password</button>
+<button class="btn secondary" onclick="declineRequest('${l.id}')">Decline</button>
+</div>
+</div>
+`).join('');
+}catch(err){
+wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
+}
+}
 
-    function toggleLeadDetail(id){
-      document.getElementById('detail-' + id).classList.toggle('open');
-    }
+async function declineRequest(id){
+if(!confirm('Decline this request?')) return;
+await db.collection('leads').doc(id).update({ status: 'denied' });
+showStatus('Request declined.');
+loadRequests();
+loadLeads();
+}
 
-    async function saveLeadDetail(id){
-      const notes = document.getElementById('notes-' + id).value;
-      const status = document.getElementById('status-' + id).value;
-      try{
-        await db.collection('leads').doc(id).update({ notes, status });
-        showStatus('Saved.');
-        loadLeads();
-        loadRequests();
-      }catch(err){
-        showStatus(err.message, true);
-      }
-    }
+function generatePassword(){
+const words = ['chic','haute','blush','luxe','dainty','golden','pearl','velvet','rosy','sweet'];
+const w = words[Math.floor(Math.random()*words.length)];
+const n = Math.floor(100 + Math.random()*900);
+return `${w}-${n}`;
+}
 
-    function showAddLead(){ document.getElementById('addLeadForm').classList.remove('hidden'); }
-    function hideAddLead(){ document.getElementById('addLeadForm').classList.add('hidden'); }
+async function generateUniquePassword(){
+for(let i=0;i<8;i++){
+const pw = generatePassword();
+const doc = await db.collection('access_codes').doc(pw).get();
+if(!doc.exists) return pw;
+}
+return generatePassword() + '-' + Date.now().toString(36).slice(-3);
+}
 
-    async function addLeadManually(){
-      const name = document.getElementById('newLeadName').value.trim();
-      const email = document.getElementById('newLeadEmail').value.trim();
-      const phone = document.getElementById('newLeadPhone').value.trim();
-      const notes = document.getElementById('newLeadNotes').value.trim();
-      if(!name || !email){ showStatus('Name and email are required.', true); return; }
-      try{
-        await db.collection('leads').add({
-          name, email, phone, notes, message: '', status: 'requested',
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        showStatus('Lead added.');
-        document.getElementById('newLeadName').value = '';
-        document.getElementById('newLeadEmail').value = '';
-        document.getElementById('newLeadPhone').value = '';
-        document.getElementById('newLeadNotes').value = '';
-        hideAddLead();
-        loadLeads();
-        loadRequests();
-      }catch(err){
-        showStatus(err.message, true);
-      }
-    }
+async function approveAndGenerate(leadId, email, name){
+try{
+showStatus('Generating password…');
+const password = await generateUniquePassword();
+await db.collection('access_codes').doc(password).set({
+leadId: leadId, email: email, active: true,
+createdAt: firebase.firestore.FieldValue.serverTimestamp()
+});
+await db.collection('leads').doc(leadId).update({
+status: 'approved', password: password,
+approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+});
+showStatus('Password generated! Sending email…');
+await sendPasswordEmail(email, name, password);
+loadRequests();
+loadLeads();
+}catch(err){
+showStatus(err.message, true);
+}
+}
 
-    // ============ Activity ============
-    async function openActivity(email, name){
-      currentActivityEmail = email;
-      document.getElementById('activityLeadName').textContent = name || email;
-      document.getElementById('activityModal').classList.remove('hidden');
-      const content = document.getElementById('activityContent');
-      content.innerHTML = '<p class="empty">Loading…</p>';
-      try{
-        const snap = await db.collection('activity').where('leadEmail','==', email).get();
-        let docs = snap.docs.map(d => d.data());
-        docs.sort((a,b) => (b.timestamp?.toMillis?.()||0) - (a.timestamp?.toMillis?.()||0));
-        if(!docs.length){ content.innerHTML = '<p class="empty">No tracked activity yet for this email — activity is only linked once they unlock the site with their password.</p>'; return; }
-        content.innerHTML = docs.slice(0,50).map(a => `
-          <div class="activity-item">
-            <span class="a-type">${escapeHtml((a.type||'').replace(/_/g,' '))}</span>
-            <span class="a-time">${fmtDate(a.timestamp)}</span><br>
-            ${a.page ? `<span>page: ${escapeHtml(a.page)}</span>` : ''}
-            ${a.productName ? `<span> &middot; product: ${escapeHtml(a.productName)}</span>` : ''}
-            ${a.requestText ? `<div>"${escapeHtml(a.requestText)}"</div>` : ''}
-          </div>
-        `).join('');
-      }catch(err){
-        content.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
-      }
-    }
-    function closeActivity(){ document.getElementById('activityModal').classList.add('hidden'); }
-  </script>
+// ============ EmailJS ============
+function loadEmailSettings(){
+document.getElementById('emailjsPublicKey').value = localStorage.getItem('haychic_emailjs_public_key') || '';
+document.getElementById('emailjsServiceId').value = localStorage.getItem('haychic_emailjs_service_id') || '';
+document.getElementById('emailjsTemplateId').value = localStorage.getItem('haychic_emailjs_template_id') || '';
+}
+function saveEmailSettings(){
+localStorage.setItem('haychic_emailjs_public_key', document.getElementById('emailjsPublicKey').value.trim());
+localStorage.setItem('haychic_emailjs_service_id', document.getElementById('emailjsServiceId').value.trim());
+localStorage.setItem('haychic_emailjs_template_id', document.getElementById('emailjsTemplateId').value.trim());
+showStatus('Email settings saved in this browser.');
+}
+
+async function sendPasswordEmail(email, name, password){
+const publicKey = localStorage.getItem('haychic_emailjs_public_key');
+const serviceId = localStorage.getItem('haychic_emailjs_service_id');
+const templateId = localStorage.getItem('haychic_emailjs_template_id');
+if(!publicKey || !serviceId || !templateId){
+showStatus(`Password is ${password} — set up Email Settings tab to auto-send it.`, true);
+return;
+}
+try{
+emailjs.init(publicKey);
+await emailjs.send(serviceId, templateId, {
+to_email: email, to_name: name || 'there', password: password,
+site_url: 'https://haychicboutique.com'
+});
+showStatus(`Password emailed to ${email} ♡`);
+}catch(err){
+showStatus(`Password is ${password} but the email failed to send: ${err.text || err.message || err}`, true);
+}
+}
+
+// ============ Leads / CRM ============
+let allLeads = [];
+let currentActivityEmail = '';
+
+async function loadLeads(){
+const wrap = document.getElementById('leadsList');
+wrap.innerHTML = '<p class="empty">Loading…</p>';
+try{
+const snap = await db.collection('leads').get();
+allLeads = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+allLeads.sort((a,b) => (b.createdAt?.toMillis?.()||0) - (a.createdAt?.toMillis?.()||0));
+renderLeads();
+}catch(err){
+wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
+}
+}
+
+function renderLeads(){
+const wrap = document.getElementById('leadsList');
+if(!allLeads.length){ wrap.innerHTML = '<p class="empty">No leads yet.</p>'; return; }
+wrap.innerHTML = allLeads.map(l => `
+<div class="lead-row">
+<div class="info">
+<h4>${escapeHtml(l.name||'(no name)')} <span class="pill-badge pill-${l.status||'requested'}">${l.status||'requested'}</span></h4>
+<span>${escapeHtml(l.email||'')} ${l.phone ? '&middot; ' + escapeHtml(l.phone) : ''} &middot; ${fmtDate(l.createdAt)}${l.password ? ' &middot; pw: ' : ''}${l.password ? `<span class="password-chip">${escapeHtml(l.password)}</span>` : ''}</span>
+</div>
+<div class="actions">
+<button onclick="toggleLeadDetail('${l.id}')">Notes</button>
+<button onclick="openActivity('${escapeAttr(l.email)}','${escapeAttr(l.name)}')">Activity</button>
+${l.status !== 'approved' ? `<button onclick="approveAndGenerate('${l.id}','${escapeAttr(l.email)}','${escapeAttr(l.name)}')">Approve</button>` : `<button onclick="sendPasswordEmail('${escapeAttr(l.email)}','${escapeAttr(l.name)}','${escapeAttr(l.password||'')}')">Resend Password</button>`}
+</div>
+<div class="lead-detail" id="detail-${l.id}">
+<label style="font-size:.8rem;font-weight:700;">Notes &amp; follow-up</label>
+<textarea id="notes-${l.id}">${escapeHtml(l.notes||'')}</textarea>
+<div class="field" style="margin-top:10px;max-width:220px;">
+<label>Status</label>
+<select id="status-${l.id}">
+<option value="requested" ${l.status==='requested'?'selected':''}>Requested</option>
+<option value="approved" ${l.status==='approved'?'selected':''}>Approved</option>
+<option value="denied" ${l.status==='denied'?'selected':''}>Denied</option>
+<option value="customer" ${l.status==='customer'?'selected':''}>Customer</option>
+</select>
+</div>
+<div class="btn-row">
+<button class="btn primary" onclick="saveLeadDetail('${l.id}')">Save</button>
+</div>
+</div>
+</div>
+`).join('');
+}
+
+function toggleLeadDetail(id){
+document.getElementById('detail-' + id).classList.toggle('open');
+}
+
+async function saveLeadDetail(id){
+const notes = document.getElementById('notes-' + id).value;
+const status = document.getElementById('status-' + id).value;
+try{
+await db.collection('leads').doc(id).update({ notes, status });
+showStatus('Saved.');
+loadLeads();
+loadRequests();
+}catch(err){
+showStatus(err.message, true);
+}
+}
+
+function showAddLead(){ document.getElementById('addLeadForm').classList.remove('hidden'); }
+function hideAddLead(){ document.getElementById('addLeadForm').classList.add('hidden'); }
+
+async function addLeadManually(){
+const name = document.getElementById('newLeadName').value.trim();
+const email = document.getElementById('newLeadEmail').value.trim();
+const phone = document.getElementById('newLeadPhone').value.trim();
+const notes = document.getElementById('newLeadNotes').value.trim();
+if(!name || !email){ showStatus('Name and email are required.', true); return; }
+try{
+await db.collection('leads').add({
+name, email, phone, notes, message: '', status: 'requested',
+createdAt: firebase.firestore.FieldValue.serverTimestamp()
+});
+showStatus('Lead added.');
+document.getElementById('newLeadName').value = '';
+document.getElementById('newLeadEmail').value = '';
+document.getElementById('newLeadPhone').value = '';
+document.getElementById('newLeadNotes').value = '';
+hideAddLead();
+loadLeads();
+loadRequests();
+}catch(err){
+showStatus(err.message, true);
+}
+}
+
+// ============ Activity ============
+async function openActivity(email, name){
+currentActivityEmail = email;
+document.getElementById('activityLeadName').textContent = name || email;
+document.getElementById('activityModal').classList.remove('hidden');
+const content = document.getElementById('activityContent');
+content.innerHTML = '<p class="empty">Loading…</p>';
+try{
+const snap = await db.collection('activity').where('leadEmail','==', email).get();
+let docs = snap.docs.map(d => d.data());
+docs.sort((a,b) => (b.timestamp?.toMillis?.()||0) - (a.timestamp?.toMillis?.()||0));
+if(!docs.length){ content.innerHTML = '<p class="empty">No tracked activity yet for this email — activity is only linked once they unlock the site with their password.</p>'; return; }
+content.innerHTML = docs.slice(0,50).map(a => `
+<div class="activity-item">
+<span class="a-type">${escapeHtml((a.type||'').replace(/_/g,' '))}</span>
+<span class="a-time">${fmtDate(a.timestamp)}</span><br>
+${a.page ? `<span>page: ${escapeHtml(a.page)}</span>` : ''}
+${a.productName ? `<span> &middot; product: ${escapeHtml(a.productName)}</span>` : ''}
+${a.requestText ? `<div>"${escapeHtml(a.requestText)}"</div>` : ''}
+</div>
+`).join('');
+}catch(err){
+content.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
+}
+}
+function closeActivity(){ document.getElementById('activityModal').classList.add('hidden'); }
+</script>
 </body>
 </html>
