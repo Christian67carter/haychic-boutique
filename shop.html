@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop | HAYCHIC Boutique</title>
+  <meta name="description" content="Shop HAYCHIC Boutique's full collection of bags, clothing, shoes, beauty and accessories." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="announcement">♡ NEW ARRIVALS + PRE-ORDERS AVAILABLE ♡</div>
+
+  <header class="site-header">
+    <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
+    <a class="brand" href="index.html">HAYCHIC <span>Boutique</span></a>
+    <nav id="nav">
+      <a href="shop.html">Shop</a>
+      <a href="shop.html">New Arrivals</a>
+      <a href="preorders.html">Pre-Orders</a>
+      <a href="in-stock.html">In Stock</a>
+      <a href="request.html">Request an Item</a>
+      <a href="about.html">About</a>
+      <a href="pr.html">PR Team</a>
+      <a href="faq.html">FAQ</a>
+      <a class="nav-cta" href="shop.html">Shop Now</a>
+    </nav>
+    <div class="header-actions">
+      <button class="bag-btn" aria-label="Shopping bag">Bag ♡</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="shop">
+      <div class="section-heading">
+        <span class="eyebrow">shop by category</span>
+        <h2>Shop HAYCHIC ♡</h2>
+      </div>
+      <div class="category-grid">
+        <a class="category-card blush" href="#products" onclick="applyFilter('All')"><span>🎀</span><h3>All Items</h3><p>Shop the latest drops.</p></a>
+        <a class="category-card cream" href="#products" onclick="applyFilter('Bags')"><span>👜</span><h3>Bags</h3><p>Everyday + statement bags.</p></a>
+        <a class="category-card sage" href="#products" onclick="applyFilter('Clothing')"><span>👗</span><h3>Clothing</h3><p>Cute boutique-ready looks.</p></a>
+        <a class="category-card blue" href="#products" onclick="applyFilter('Shoes')"><span>👟</span><h3>Shoes</h3><p>Trendy pairs you’ll love.</p></a>
+        <a class="category-card blush" href="#products" onclick="applyFilter('Beauty')"><span>💄</span><h3>Beauty</h3><p>Little luxuries + favorites.</p></a>
+        <a class="category-card cream" href="#products" onclick="applyFilter('Accessories')"><span>✨</span><h3>Accessories</h3><p>The finishing touches.</p></a>
+      </div>
+    </section>
+
+    <section class="section products-section" id="new">
+      <div class="filter-pills" id="filterPills">
+        <button class="filter-pill active" data-cat="All" onclick="applyFilter('All')">All</button>
+        <button class="filter-pill" data-cat="Bags" onclick="applyFilter('Bags')">Bags</button>
+        <button class="filter-pill" data-cat="Clothing" onclick="applyFilter('Clothing')">Clothing</button>
+        <button class="filter-pill" data-cat="Shoes" onclick="applyFilter('Shoes')">Shoes</button>
+        <button class="filter-pill" data-cat="Beauty" onclick="applyFilter('Beauty')">Beauty</button>
+        <button class="filter-pill" data-cat="Accessories" onclick="applyFilter('Accessories')">Accessories</button>
+      </div>
+
+      <div class="product-grid" id="products">
+        <p style="grid-column:1/-1;text-align:center;color:var(--muted);">Loading products…</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand footer-brand" href="index.html">HAYCHIC <span>Boutique</span></a>
+    <div class="footer-links">
+      <a href="shop.html">Shop</a><a href="preorders.html">Pre-Orders</a><a href="request.html">Request an Item</a>
+      <a href="about.html">About</a><a href="pr.html">PR Team</a><a href="faq.html">FAQ</a>
+    </div>
+    <p>© 2026 HAYCHIC Boutique. All rights reserved.</p>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/gate.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
