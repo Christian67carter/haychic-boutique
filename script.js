@@ -10,7 +10,7 @@ function renderProductCard(p){
   const statusLabel = p.status === 'in-stock' ? 'IN STOCK' : 'PRE-ORDER';
   const bg = p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : '';
   const inner = p.image ? '' : '<span>HAYCHIC</span>';
-  const href = `product.html?id=${encodeURIComponent(p.id)}`;
+  const href = `/${encodeURIComponent(p.id)}`;
   return `
     <article class="product-card">
       <a class="product-link" href="${href}">
@@ -99,12 +99,26 @@ function getQueryParam(name){
   return new URLSearchParams(location.search).get(name);
 }
 
+// Resolves the product id for the current page. Prefers the old
+// ?id=slug query param (so any previously-shared links keep working),
+// then falls back to reading it from a clean URL like /the-tiffany or
+// /the-tiffany.html (a static per-product page that GitHub Pages serves
+// via extensionless resolution).
+function getProductId(){
+  const q = getQueryParam('id');
+  if(q) return q;
+  let path = location.pathname.replace(/\/+$/, '').split('/').pop() || '';
+  path = path.replace(/\.html$/i, '');
+  if(!path || path === 'product' || path === 'index') return null;
+  return decodeURIComponent(path);
+}
+
 async function loadProductDetail(){
   const wrap = document.getElementById('productDetail');
   if(!wrap) return;
-  const id = getQueryParam('id');
+  const id = getProductId();
   try{
-    const res = await fetch('products.json?_=' + Date.now());
+    const res = await fetch('/products.json?_=' + Date.now());
     const products = await res.json();
     const p = products.find(x => x.id === id);
     if(!p){
@@ -117,9 +131,13 @@ async function loadProductDetail(){
     const hasColors = colorList.length > 1; // only show a picker when there's an actual choice
     let selectedColor = colorList.length ? colorList[0] : null;
 
+    const sizeList = Array.isArray(p.sizes) ? p.sizes : [];
+    const hasSizes = sizeList.length > 1; // only show a picker when there's an actual choice
+    let selectedSize = sizeList.length ? sizeList[0] : null;
+
     function render(){
-      const activeStatus = selectedColor ? (selectedColor.status || p.status) : p.status;
-      const activeImage = selectedColor ? (selectedColor.image || p.image) : p.image;
+      const activeStatus = (selectedSize && selectedSize.status) || (selectedColor && selectedColor.status) || p.status;
+      const activeImage = (selectedColor && selectedColor.image) || p.image;
       const statusClass = activeStatus === 'in-stock' ? 'in-stock' : 'preorder';
       const statusLabel = activeStatus === 'in-stock' ? 'IN STOCK' : 'PRE-ORDER';
       const bg = activeImage ? `background-image:url('${activeImage}');background-size:cover;background-position:center;` : '';
@@ -128,12 +146,22 @@ async function loadProductDetail(){
       const preorderNote = activeStatus === 'preorder'
         ? `<div class="pdp-note">This is a pre-order item — typical turnaround is about 2–3 weeks. <a href="index.html#preorders">Learn how pre-orders work →</a></div>`
         : '';
-      const displayName = hasColors ? `${p.name} — ${selectedColor.name}` : p.name;
+      const nameParts = [p.name];
+      if(hasColors) nameParts.push(selectedColor.name);
+      if(hasSizes) nameParts.push(selectedSize.name);
+      const displayName = nameParts.join(' — ');
       const swatches = hasColors ? `
         <div class="pdp-colors">
           <span class="pdp-colors-label">Color: <strong>${escapeHtml(selectedColor.name)}</strong></span>
           <div class="swatch-row">
             ${p.colors.map((c, i) => `<button type="button" class="color-swatch ${c === selectedColor ? 'active' : ''}" data-idx="${i}" style="${c.image ? `background-image:url('${c.image}')` : ''}" title="${escapeHtml(c.name)}"></button>`).join('')}
+          </div>
+        </div>` : '';
+      const sizePicker = hasSizes ? `
+        <div class="pdp-sizes">
+          <span class="pdp-sizes-label">Size: <strong>${escapeHtml(selectedSize.name)}</strong></span>
+          <div class="size-row">
+            ${p.sizes.map((s, i) => `<button type="button" class="size-pill ${s === selectedSize ? 'active' : ''} ${s.status === 'preorder' ? 'is-preorder' : ''}" data-idx="${i}">${escapeHtml(s.name)}</button>`).join('')}
           </div>
         </div>` : '';
       wrap.innerHTML = `
@@ -144,6 +172,7 @@ async function loadProductDetail(){
           <p class="pdp-category">${escapeHtml(p.category || '')}</p>
           <p class="pdp-price">${escapeHtml(p.price)}</p>
           ${swatches}
+          ${sizePicker}
           <p class="pdp-desc">${desc}</p>
           ${preorderNote}
           <div class="hero-actions">
@@ -155,6 +184,14 @@ async function loadProductDetail(){
         wrap.querySelectorAll('.color-swatch').forEach(btn => {
           btn.addEventListener('click', () => {
             selectedColor = p.colors[parseInt(btn.dataset.idx, 10)];
+            render();
+          });
+        });
+      }
+      if(hasSizes){
+        wrap.querySelectorAll('.size-pill').forEach(btn => {
+          btn.addEventListener('click', () => {
+            selectedSize = p.sizes[parseInt(btn.dataset.idx, 10)];
             render();
           });
         });
