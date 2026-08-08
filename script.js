@@ -48,14 +48,20 @@ function applyFilter(cat){
 
 async function loadProducts(){
   const grid = document.getElementById('products');
-  if(!grid) return;
+  const preorderGrid = document.getElementById('preorder-products');
+  const instockGrid = document.getElementById('instock-products');
+  if(!grid && !preorderGrid && !instockGrid) return;
   try{
     const res = await fetch('products.json?_=' + Date.now());
     ALL_PRODUCTS = await res.json();
-    applyFilter('All');
-    renderGrid(document.getElementById('preorder-products'), ALL_PRODUCTS.filter(p => p.status === 'preorder'), 'Pre-order picks coming soon ♡');
+    if(grid){
+      const catParam = getQueryParam('cat');
+      applyFilter(catParam || 'All');
+    }
+    if(preorderGrid) renderGrid(preorderGrid, ALL_PRODUCTS.filter(p => p.status === 'preorder'), 'Pre-order picks coming soon ♡');
+    if(instockGrid) renderGrid(instockGrid, ALL_PRODUCTS.filter(p => p.status === 'in-stock'), 'In-stock items coming soon ♡');
   }catch(err){
-    grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);">Could not load products right now.</p>';
+    if(grid) grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);">Could not load products right now.</p>';
   }
 }
 document.addEventListener('DOMContentLoaded', loadProducts);
@@ -130,7 +136,7 @@ async function loadProductDetail(){
     const products = await res.json();
     const p = products.find(x => x.id === id);
     if(!p){
-      wrap.innerHTML = '<p style="text-align:center;color:var(--muted);padding:60px 0;grid-column:1/-1;">Sorry, we couldn\'t find that item. <a href="index.html#shop">Back to shop →</a></p>';
+      wrap.innerHTML = '<p style="text-align:center;color:var(--muted);padding:60px 0;grid-column:1/-1;">Sorry, we couldn\'t find that item. <a href="shop.html">Back to shop →</a></p>';
       return;
     }
     document.title = `${p.name} | HAYCHIC Boutique`;
@@ -152,10 +158,10 @@ async function loadProductDetail(){
       const inner = activeImage ? '' : '<span>HAYCHIC</span>';
       const desc = p.description ? escapeHtml(p.description) : 'A HAYCHIC favorite, hand-picked for you. Reach out with any questions about sizing, color or availability before you order.';
       const preorderNote = activeStatus === 'preorder'
-        ? `<div class="pdp-note">This is a pre-order item — typical turnaround is about 2–3 weeks. <a href="index.html#preorders">Learn how pre-orders work →</a></div>`
+        ? `<div class="pdp-note">This is a pre-order item — typical turnaround is about 2–3 weeks. <a href="preorders.html">Learn how pre-orders work →</a></div>`
         : '';
       const soldOutNote = soldOut
-        ? `<div class="pdp-note pdp-note-soldout">This item is currently sold out. <a href="index.html#request">Ask to be notified when it's back →</a></div>`
+        ? `<div class="pdp-note pdp-note-soldout">This item is currently sold out. <a href="request.html">Ask to be notified when it's back →</a></div>`
         : '';
       const nameParts = [p.name];
       if(hasColors) nameParts.push(selectedColor.name);
@@ -189,7 +195,7 @@ async function loadProductDetail(){
           ${soldOutNote}
           <div class="hero-actions">
             <button class="btn primary add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(displayName)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(activeImage || '')}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
-            <a class="btn secondary" href="index.html#request">Ask a Question</a>
+            <a class="btn secondary" href="request.html">Ask a Question</a>
           </div>
         </div>`;
       if(hasColors){
