@@ -34,14 +34,5 @@
     "category": "Bags",
     "image": "assets/products/everyday-sneaker.jpg",
     "description": ""
-  },
-  {
-    "id": "the-cutie-set-msjuvfpd",
-    "image": "assets/products/the-cutie-set-msjuvfpd.jpg",
-    "name": "The Cutie Set - Black",
-    "price": "$105.00",
-    "status": "in-stock",
-    "category": "Clothing",
-    "description": ""
   }
 ]
