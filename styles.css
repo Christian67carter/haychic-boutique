@@ -235,6 +235,7 @@ footer .brand{display:inline-block;margin-bottom:6px}
 .about-hero .wordmark-divider .line{flex:1;height:1px;background:var(--line);}
 .about-hero .wordmark-divider .bow{width:22px;height:14px;color:var(--pink-dark);}
 .about-hero .wordmark .sub{display:block;font-family:"DM Sans",sans-serif;font-size:.8rem;letter-spacing:.5em;padding-left:.5em;text-transform:uppercase;color:var(--muted);}
+.about-hero .wordmark-logo{width:240px;height:240px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;box-shadow:var(--shadow);}
 .about-hero .pill{display:inline-block;background:var(--pink);color:var(--pink-dark);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;padding:9px 20px;border-radius:999px;margin-top:6px;font-weight:700}
 .about-wrap{max-width:1080px;margin:0 auto;padding:50px 7vw 90px;display:grid;grid-template-columns:.85fr 1.15fr;gap:70px;align-items:center;}
 .polaroid{background:#fff;padding:14px 14px 46px;border-radius:6px;box-shadow:var(--shadow);transform:rotate(-3deg);position:relative;max-width:380px;margin:0 auto;}
@@ -262,6 +263,7 @@ footer .brand{display:inline-block;margin-bottom:6px}
   .about-wrap{grid-template-columns:1fr;gap:36px;}
   .value-grid{grid-template-columns:1fr 1fr;}
   .about-hero .wordmark h1{font-size:2.5rem;}
+  .about-hero .wordmark-logo{width:180px;height:180px;}
 }
 /* Shopping bag / cart */
 .bag-btn{position:relative}
