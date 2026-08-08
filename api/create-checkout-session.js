@@ -79,8 +79,8 @@ module.exports = async (req, res) => {
         {
           shipping_rate_data: {
             type: 'fixed_amount',
-            fixed_amount: { amount: 699, currency: 'usd' },
-            display_name: 'Standard Shipping',
+            fixed_amount: { amount: 899, currency: 'usd' },
+            display_name: 'Regular Shipping',
             delivery_estimate: {
               minimum: { unit: 'business_day', value: 5 },
               maximum: { unit: 'business_day', value: 7 },
@@ -90,7 +90,18 @@ module.exports = async (req, res) => {
         {
           shipping_rate_data: {
             type: 'fixed_amount',
-            fixed_amount: { amount: 1499, currency: 'usd' },
+            fixed_amount: { amount: 699, currency: 'usd' },
+            display_name: 'Local Delivery',
+            delivery_estimate: {
+              minimum: { unit: 'business_day', value: 1 },
+              maximum: { unit: 'business_day', value: 2 },
+            },
+          },
+        },
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: { amount: 1399, currency: 'usd' },
             display_name: 'Express Shipping',
             delivery_estimate: {
               minimum: { unit: 'business_day', value: 2 },
