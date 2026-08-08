@@ -50,7 +50,8 @@ async function loadProducts(){
   const grid = document.getElementById('products');
   const preorderGrid = document.getElementById('preorder-products');
   const instockGrid = document.getElementById('instock-products');
-  if(!grid && !preorderGrid && !instockGrid) return;
+  const newArrivalsGrid = document.getElementById('newarrivals-products');
+  if(!grid && !preorderGrid && !instockGrid && !newArrivalsGrid) return;
   try{
     const res = await fetch('products.json?_=' + Date.now());
     ALL_PRODUCTS = await res.json();
@@ -60,6 +61,9 @@ async function loadProducts(){
     }
     if(preorderGrid) renderGrid(preorderGrid, ALL_PRODUCTS.filter(p => p.status === 'preorder'), 'Pre-order picks coming soon ♡');
     if(instockGrid) renderGrid(instockGrid, ALL_PRODUCTS.filter(p => p.status === 'in-stock'), 'In-stock items coming soon ♡');
+    // Newest-added items first — products are appended to products.json
+    // as they're created, so reversing the list surfaces the latest ones.
+    if(newArrivalsGrid) renderGrid(newArrivalsGrid, [...ALL_PRODUCTS].reverse(), 'New arrivals coming soon ♡');
   }catch(err){
     if(grid) grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);">Could not load products right now.</p>';
   }
