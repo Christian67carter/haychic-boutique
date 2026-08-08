@@ -112,28 +112,56 @@ async function loadProductDetail(){
       return;
     }
     document.title = `${p.name} | HAYCHIC Boutique`;
-    const statusClass = p.status === 'in-stock' ? 'in-stock' : 'preorder';
-    const statusLabel = p.status === 'in-stock' ? 'IN STOCK' : 'PRE-ORDER';
-    const bg = p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : '';
-    const inner = p.image ? '' : '<span>HAYCHIC</span>';
-    const desc = p.description ? escapeHtml(p.description) : 'A HAYCHIC favorite, hand-picked for you. Reach out with any questions about sizing, color or availability before you order.';
-    const preorderNote = p.status === 'preorder'
-      ? `<div class="pdp-note">This is a pre-order item — typical turnaround is about 2–3 weeks. <a href="index.html#preorders">Learn how pre-orders work →</a></div>`
-      : '';
-    wrap.innerHTML = `
-      <div class="pdp-image placeholder" style="${bg}">${inner}</div>
-      <div class="pdp-info">
-        <span class="badge ${statusClass}">${statusLabel}</span>
-        <h1>${escapeHtml(p.name)}</h1>
-        <p class="pdp-category">${escapeHtml(p.category || '')}</p>
-        <p class="pdp-price">${escapeHtml(p.price)}</p>
-        <p class="pdp-desc">${desc}</p>
-        ${preorderNote}
-        <div class="hero-actions">
-          <button class="btn primary add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}">Add to Bag</button>
-          <a class="btn secondary" href="index.html#request">Ask a Question</a>
-        </div>
-      </div>`;
+
+    const colorList = Array.isArray(p.colors) ? p.colors : [];
+    const hasColors = colorList.length > 1; // only show a picker when there's an actual choice
+    let selectedColor = colorList.length ? colorList[0] : null;
+
+    function render(){
+      const activeStatus = selectedColor ? (selectedColor.status || p.status) : p.status;
+      const activeImage = selectedColor ? (selectedColor.image || p.image) : p.image;
+      const statusClass = activeStatus === 'in-stock' ? 'in-stock' : 'preorder';
+      const statusLabel = activeStatus === 'in-stock' ? 'IN STOCK' : 'PRE-ORDER';
+      const bg = activeImage ? `background-image:url('${activeImage}');background-size:cover;background-position:center;` : '';
+      const inner = activeImage ? '' : '<span>HAYCHIC</span>';
+      const desc = p.description ? escapeHtml(p.description) : 'A HAYCHIC favorite, hand-picked for you. Reach out with any questions about sizing, color or availability before you order.';
+      const preorderNote = activeStatus === 'preorder'
+        ? `<div class="pdp-note">This is a pre-order item — typical turnaround is about 2–3 weeks. <a href="index.html#preorders">Learn how pre-orders work →</a></div>`
+        : '';
+      const displayName = hasColors ? `${p.name} — ${selectedColor.name}` : p.name;
+      const swatches = hasColors ? `
+        <div class="pdp-colors">
+          <span class="pdp-colors-label">Color: <strong>${escapeHtml(selectedColor.name)}</strong></span>
+          <div class="swatch-row">
+            ${p.colors.map((c, i) => `<button type="button" class="color-swatch ${c === selectedColor ? 'active' : ''}" data-idx="${i}" style="${c.image ? `background-image:url('${c.image}')` : ''}" title="${escapeHtml(c.name)}"></button>`).join('')}
+          </div>
+        </div>` : '';
+      wrap.innerHTML = `
+        <div class="pdp-image placeholder" style="${bg}">${inner}</div>
+        <div class="pdp-info">
+          <span class="badge ${statusClass}">${statusLabel}</span>
+          <h1>${escapeHtml(p.name)}</h1>
+          <p class="pdp-category">${escapeHtml(p.category || '')}</p>
+          <p class="pdp-price">${escapeHtml(p.price)}</p>
+          ${swatches}
+          <p class="pdp-desc">${desc}</p>
+          ${preorderNote}
+          <div class="hero-actions">
+            <button class="btn primary add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(displayName)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(activeImage || '')}">Add to Bag</button>
+            <a class="btn secondary" href="index.html#request">Ask a Question</a>
+          </div>
+        </div>`;
+      if(hasColors){
+        wrap.querySelectorAll('.color-swatch').forEach(btn => {
+          btn.addEventListener('click', () => {
+            selectedColor = p.colors[parseInt(btn.dataset.idx, 10)];
+            render();
+          });
+        });
+      }
+    }
+    render();
+
     if(window.HAYCHIC_logActivity){
       window.HAYCHIC_logActivity('product_view', { productId: p.id, productName: p.name });
     }
