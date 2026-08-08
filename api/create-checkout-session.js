@@ -100,7 +100,7 @@ module.exports = async (req, res) => {
         },
       ],
       success_url: `${SITE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${SITE_URL}/index.html#shop`,
+      cancel_url: `${SITE_URL}/shop.html`,
     });
 
     res.status(200).json({ url: session.url });
