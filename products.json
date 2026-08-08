@@ -34,5 +34,14 @@
     "category": "Bags",
     "image": "assets/products/everyday-sneaker.jpg",
     "description": ""
+  },
+  {
+    "id": "the-cutie-set-msjusuvq",
+    "image": "assets/products/the-cutie-set-msjusuvq.jpg",
+    "name": "The Cutie Set",
+    "price": "105",
+    "status": "in-stock",
+    "category": "Clothing",
+    "description": ""
   }
 ]
