@@ -3,11 +3,19 @@ function escapeHtml(str){
   return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
+// Central place that maps a status value to its badge class + label.
+// 'sold-out' items can be browsed but never added to the bag.
+function statusInfo(status){
+  if(status === 'sold-out') return { cls: 'sold-out', label: 'SOLD OUT' };
+  if(status === 'preorder') return { cls: 'preorder', label: 'PRE-ORDER' };
+  return { cls: 'in-stock', label: 'IN STOCK' };
+}
+
 let ALL_PRODUCTS = [];
 
 function renderProductCard(p){
-  const statusClass = p.status === 'in-stock' ? 'in-stock' : 'preorder';
-  const statusLabel = p.status === 'in-stock' ? 'IN STOCK' : 'PRE-ORDER';
+  const { cls: statusClass, label: statusLabel } = statusInfo(p.status);
+  const soldOut = p.status === 'sold-out';
   const bg = p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : '';
   const inner = p.image ? '' : '<span>HAYCHIC</span>';
   const href = `/${encodeURIComponent(p.id)}`;
@@ -19,7 +27,7 @@ function renderProductCard(p){
         <h3>${escapeHtml(p.name)}</h3>
         <p class="price">${escapeHtml(p.price)}</p>
       </a>
-      <button class="add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}">Add to Bag</button>
+      <button class="add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
     </article>`;
 }
 
@@ -138,13 +146,16 @@ async function loadProductDetail(){
     function render(){
       const activeStatus = (selectedSize && selectedSize.status) || (selectedColor && selectedColor.status) || p.status;
       const activeImage = (selectedColor && selectedColor.image) || p.image;
-      const statusClass = activeStatus === 'in-stock' ? 'in-stock' : 'preorder';
-      const statusLabel = activeStatus === 'in-stock' ? 'IN STOCK' : 'PRE-ORDER';
+      const { cls: statusClass, label: statusLabel } = statusInfo(activeStatus);
+      const soldOut = activeStatus === 'sold-out';
       const bg = activeImage ? `background-image:url('${activeImage}');background-size:cover;background-position:center;` : '';
       const inner = activeImage ? '' : '<span>HAYCHIC</span>';
       const desc = p.description ? escapeHtml(p.description) : 'A HAYCHIC favorite, hand-picked for you. Reach out with any questions about sizing, color or availability before you order.';
       const preorderNote = activeStatus === 'preorder'
         ? `<div class="pdp-note">This is a pre-order item — typical turnaround is about 2–3 weeks. <a href="index.html#preorders">Learn how pre-orders work →</a></div>`
+        : '';
+      const soldOutNote = soldOut
+        ? `<div class="pdp-note pdp-note-soldout">This item is currently sold out. <a href="index.html#request">Ask to be notified when it's back →</a></div>`
         : '';
       const nameParts = [p.name];
       if(hasColors) nameParts.push(selectedColor.name);
@@ -154,14 +165,14 @@ async function loadProductDetail(){
         <div class="pdp-colors">
           <span class="pdp-colors-label">Color: <strong>${escapeHtml(selectedColor.name)}</strong></span>
           <div class="swatch-row">
-            ${p.colors.map((c, i) => `<button type="button" class="color-swatch ${c === selectedColor ? 'active' : ''}" data-idx="${i}" style="${c.image ? `background-image:url('${c.image}')` : ''}" title="${escapeHtml(c.name)}"></button>`).join('')}
+            ${p.colors.map((c, i) => `<button type="button" class="color-swatch ${c === selectedColor ? 'active' : ''} ${c.status === 'sold-out' ? 'is-soldout' : ''}" data-idx="${i}" style="${c.image ? `background-image:url('${c.image}')` : ''}" title="${escapeHtml(c.name)}${c.status === 'sold-out' ? ' (Sold Out)' : ''}"></button>`).join('')}
           </div>
         </div>` : '';
       const sizePicker = hasSizes ? `
         <div class="pdp-sizes">
           <span class="pdp-sizes-label">Size: <strong>${escapeHtml(selectedSize.name)}</strong></span>
           <div class="size-row">
-            ${p.sizes.map((s, i) => `<button type="button" class="size-pill ${s === selectedSize ? 'active' : ''} ${s.status === 'preorder' ? 'is-preorder' : ''}" data-idx="${i}">${escapeHtml(s.name)}</button>`).join('')}
+            ${p.sizes.map((s, i) => `<button type="button" class="size-pill ${s === selectedSize ? 'active' : ''} ${s.status === 'preorder' ? 'is-preorder' : ''} ${s.status === 'sold-out' ? 'is-soldout' : ''}" data-idx="${i}" ${s.status === 'sold-out' ? 'disabled' : ''}>${escapeHtml(s.name)}</button>`).join('')}
           </div>
         </div>` : '';
       wrap.innerHTML = `
@@ -175,8 +186,9 @@ async function loadProductDetail(){
           ${sizePicker}
           <p class="pdp-desc">${desc}</p>
           ${preorderNote}
+          ${soldOutNote}
           <div class="hero-actions">
-            <button class="btn primary add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(displayName)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(activeImage || '')}">Add to Bag</button>
+            <button class="btn primary add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(displayName)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(activeImage || '')}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
             <a class="btn secondary" href="index.html#request">Ask a Question</a>
           </div>
         </div>`;
@@ -189,7 +201,10 @@ async function loadProductDetail(){
         });
       }
       if(hasSizes){
-        wrap.querySelectorAll('.size-pill').forEach(btn => {
+        // Sold-out sizes are rendered disabled and can't be selected — the
+        // browser skips click handlers on disabled buttons, but we also
+        // filter them out of the selector for clarity.
+        wrap.querySelectorAll('.size-pill:not([disabled])').forEach(btn => {
           btn.addEventListener('click', () => {
             selectedSize = p.sizes[parseInt(btn.dataset.idx, 10)];
             render();
@@ -372,6 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('click', (e) => {
   const addBtn = e.target.closest('.add-to-bag-btn');
   if(addBtn){
+    if(addBtn.disabled) return; // sold-out items can't be added to the bag
     const { id, name, price, image } = addBtn.dataset;
     addToCart(id, name, price, image);
     showToast(`${name} added to bag`);
