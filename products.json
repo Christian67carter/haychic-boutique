@@ -8,7 +8,11 @@
     "image": "assets/products/the-tiffany.jpg",
     "description": "",
     "colors": [
-      { "name": "Original", "image": "assets/products/the-tiffany.jpg", "status": "in-stock" }
+      {
+        "name": "Original",
+        "image": "assets/products/the-tiffany.jpg",
+        "status": "in-stock"
+      }
     ]
   },
   {
@@ -20,7 +24,11 @@
     "image": "assets/products/the-gabriella-bag.jpg",
     "description": "",
     "colors": [
-      { "name": "Original", "image": "assets/products/the-gabriella-bag.jpg", "status": "in-stock" }
+      {
+        "name": "Original",
+        "image": "assets/products/the-gabriella-bag.jpg",
+        "status": "in-stock"
+      }
     ]
   },
   {
@@ -32,7 +40,11 @@
     "image": "assets/products/the-cutie-set.jpg",
     "description": "",
     "colors": [
-      { "name": "Original", "image": "assets/products/the-cutie-set.jpg", "status": "in-stock" }
+      {
+        "name": "Original",
+        "image": "assets/products/the-cutie-set.jpg",
+        "status": "in-stock"
+      }
     ]
   },
   {
@@ -44,7 +56,11 @@
     "image": "assets/products/everyday-sneaker.jpg",
     "description": "",
     "colors": [
-      { "name": "Original", "image": "assets/products/everyday-sneaker.jpg", "status": "in-stock" }
+      {
+        "name": "Original",
+        "image": "assets/products/everyday-sneaker.jpg",
+        "status": "in-stock"
+      }
     ]
   }
 ]
