@@ -16,22 +16,6 @@
     ]
   },
   {
-    "id": "the-gabriella-bag",
-    "name": "The Candice",
-    "price": "$75.00",
-    "status": "in-stock",
-    "category": "Bags",
-    "image": "assets/products/the-gabriella-bag.jpg",
-    "description": "",
-    "colors": [
-      {
-        "name": "Original",
-        "image": "assets/products/the-gabriella-bag.jpg",
-        "status": "in-stock"
-      }
-    ]
-  },
-  {
     "id": "the-cutie-set",
     "name": "The Lucy",
     "price": "$63.00",
