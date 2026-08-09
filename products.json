@@ -30,7 +30,8 @@
         "image": "assets/products/the-cutie-set.jpg",
         "status": "in-stock"
       }
-    ]
+    ],
+    "qty": 1
   },
   {
     "id": "the-cutie-set-mskpheqd",
