@@ -158,5 +158,14 @@
     "status": "in-stock",
     "category": "Bags",
     "description": ""
+  },
+  {
+    "id": "the-chelsey-msl8jhez",
+    "image": "assets/products/the-chelsey-msl8jhez.jpg",
+    "name": "The Chelsey",
+    "price": "$25.00",
+    "status": "in-stock",
+    "category": "Bags",
+    "description": ""
   }
 ]
