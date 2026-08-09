@@ -7,6 +7,17 @@
 // Pirate Ship's "Import Orders" CSV, so buying a label is close to a single
 // click. See SHIPPING-SETUP.md for the full walkthrough.
 //
+// Also handles checkout.session.expired (fires automatically ~24h after a
+// shopper starts checkout without paying) to forward an "abandoned cart"
+// alert to the same Make webhook, tagged type: "cart_abandoned", so a
+// recovery email can go out. Reuses MAKE_WEBHOOK_URL — no new credentials.
+//
+// ONE MANUAL STEP still needed for abandoned-cart alerts to actually fire:
+// in the Stripe Dashboard under Developers > Webhooks, open this endpoint
+// and add the "checkout.session.expired" event (it's probably only sending
+// checkout.session.completed right now). Everything else — the code here,
+// and reusing the existing Make webhook — is already wired up.
+//
 // Required environment variables (set in the Vercel dashboard):
 //   STRIPE_SECRET_KEY      — same key already used for checkout
 //   STRIPE_WEBHOOK_SECRET  — from Stripe Dashboard > Developers > Webhooks
@@ -208,6 +219,57 @@ module.exports = async (req, res) => {
       // Stripe will keep retrying this webhook if we return an error, and
       // the payment itself already succeeded either way. Just log it.
       console.error('order-notify: failed to build/send notification:', err.message);
+    }
+  }
+
+  if (event.type === 'checkout.session.expired') {
+    try {
+      const session = event.data.object;
+
+      // Only worth a recovery email if we actually have a way to reach them.
+      const email = session.customer_details?.email || session.customer_email || '';
+      if (!email) {
+        res.status(200).json({ received: true });
+        return;
+      }
+
+      // Line items aren't included on the expired-session payload itself,
+      // so fetch them separately — this works even though the session was
+      // never completed, since items are attached at creation time.
+      let items = [];
+      try {
+        const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 50 });
+        items = (lineItems.data || []).map((li) => ({
+          name: li.description,
+          quantity: li.quantity,
+          amount: (li.amount_total / 100).toFixed(2),
+        }));
+      } catch (err) {
+        console.error('order-notify: could not list line items for abandoned cart:', err.message);
+      }
+
+      const payload = {
+        type: 'cart_abandoned',
+        sessionId: session.id,
+        email,
+        customerName: session.customer_details?.name || '',
+        amountTotal: session.amount_total != null ? (session.amount_total / 100).toFixed(2) : '',
+        items,
+        checkoutUrl: session.url || '',
+        expiredAt: new Date().toISOString(),
+      };
+
+      if (process.env.MAKE_WEBHOOK_URL) {
+        await fetch(process.env.MAKE_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        console.error('order-notify: MAKE_WEBHOOK_URL not set, abandoned cart not forwarded.', payload);
+      }
+    } catch (err) {
+      console.error('order-notify: failed to build/send abandoned-cart notification:', err.message);
     }
   }
 
