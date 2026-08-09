@@ -57,11 +57,14 @@ body{background:var(--cream);}
 .lead-detail.open{display:block;}
 .lead-detail textarea{min-height:70px;}
 .password-chip{font-family:monospace;background:var(--brown);color:white;border-radius:8px;padding:6px 10px;font-size:.85rem;}
-.activity-list{max-height:260px;overflow:auto;margin-top:10px;}
-.activity-item{font-size:.82rem;padding:8px 0;border-top:1px dashed var(--line);}
+.activity-list{max-height:320px;overflow:auto;margin-top:10px;}
+.activity-item{font-size:.82rem;padding:10px 0;border-top:1px dashed var(--line);display:flex;gap:10px;align-items:flex-start;}
 .activity-item:first-child{border-top:none;}
+.activity-thumb{width:40px;height:40px;border-radius:8px;background:var(--cream) center/cover no-repeat;border:1px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--muted);overflow:hidden;}
+.activity-body{flex:1;min-width:0;}
 .activity-item .a-type{font-weight:700;text-transform:capitalize;}
 .activity-item .a-time{color:var(--muted);float:right;}
+.activity-item .a-quote{margin-top:4px;color:var(--muted);font-style:italic;}
 
 #loginScreen{max-width:440px;margin:80px auto;text-align:center;}
 #loginScreen .field{text-align:left;}
@@ -249,7 +252,6 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <div class="field"><label>EmailJS Template ID</label><input type="text" id="emailjsTemplateId" placeholder="e.g. template_xxxxxxx"></div>
 <div class="btn-row">
 <button class="btn primary" onclick="saveEmailSettings()">Save Settings</button>
-</div>
 </div>
 </div>
 </div>
@@ -991,15 +993,28 @@ const snap = await db.collection('activity').where('leadEmail','==', email).get(
 let docs = snap.docs.map(d => d.data());
 docs.sort((a,b) => (b.timestamp?.toMillis?.()||0) - (a.timestamp?.toMillis?.()||0));
 if(!docs.length){ content.innerHTML = '<p class="empty">No tracked activity yet for this email — activity is only linked once they unlock the site with their password.</p>'; return; }
-content.innerHTML = docs.slice(0,50).map(a => `
+content.innerHTML = docs.slice(0,50).map(a => {
+// Thumbnail: look up the matching product's image for anything tied to a
+// productId (product_interest, product_view). Falls back to a plain
+// placeholder box for activity that isn't about a specific product.
+const product = a.productId ? products.find(p => p.id === a.productId) : null;
+const thumbImg = product && product.image ? `style="background-image:url('../${escapeAttr(product.image)}')"` : '';
+const thumbInner = product && product.image ? '' : '💐';
+const quoteText = a.requestText || a.message || '';
+return `
 <div class="activity-item">
+<div class="activity-thumb" ${thumbImg}>${thumbInner}</div>
+<div class="activity-body">
 <span class="a-type">${escapeHtml((a.type||'').replace(/_/g,' '))}</span>
 <span class="a-time">${fmtDate(a.timestamp)}</span><br>
 ${a.page ? `<span>page: ${escapeHtml(a.page)}</span>` : ''}
 ${a.productName ? `<span> &middot; product: ${escapeHtml(a.productName)}</span>` : ''}
-${a.requestText ? `<div>"${escapeHtml(a.requestText)}"</div>` : ''}
+${a.topic ? `<span> &middot; ${escapeHtml(a.topic)}</span>` : ''}
+${quoteText ? `<div class="a-quote">"${escapeHtml(quoteText)}"</div>` : ''}
 </div>
-`).join('');
+</div>
+`;
+}).join('');
 }catch(err){
 content.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
 }
