@@ -125,6 +125,20 @@
     "price": "$85.00",
     "status": "preorder",
     "category": "Clothing",
-    "description": ""
+    "description": "",
+    "sizes": [
+      {
+        "name": "Small",
+        "status": "preorder"
+      },
+      {
+        "name": "Medium",
+        "status": "preorder"
+      },
+      {
+        "name": "Large",
+        "status": "preorder"
+      }
+    ]
   }
 ]
