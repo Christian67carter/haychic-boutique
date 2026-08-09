@@ -151,6 +151,13 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 </select>
 </div>
 </div>
+<div class="field-row">
+<div class="field">
+<label>Quantity in stock (optional)</label>
+<input type="number" id="fQty" min="0" step="1" placeholder="Leave blank to manage status manually">
+<p class="hint" style="margin:6px 0 0;">If set, hitting 0 auto-switches this item to Pre-Order, and low stock shows an "only X left" warning on the site.</p>
+</div>
+</div>
 <div class="field">
 <label>Category</label>
 <select id="fCategory">
@@ -269,6 +276,9 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <script>
 // ============ Shared ============
 const ADMIN_API = 'https://haychic-boutique.vercel.app/api/admin';
+// Below this many units left, the site shows a red "only X left" warning.
+// Keep in sync with LOW_STOCK_THRESHOLD in script.js.
+const LOW_STOCK_THRESHOLD = 3;
 
 // Verbatim copy of product.html — used to create a brand-new product's own
 // clean-URL page (e.g. "the-tiffany.html") the first time it's saved.
@@ -464,12 +474,17 @@ wrap.innerHTML = products.map(p => {
 const thumbImage = (p.colors && p.colors.length && p.colors[0].image) ? p.colors[0].image : p.image;
 const colorNote = (p.colors && p.colors.length) ? ` &middot; ${p.colors.length} color${p.colors.length===1?'':'s'}` : '';
 const sizeNote = (p.sizes && p.sizes.length) ? ` &middot; ${p.sizes.length} size${p.sizes.length===1?'':'s'}` : '';
+const qtyNote = typeof p.qty === 'number'
+  ? (p.qty <= LOW_STOCK_THRESHOLD
+    ? ` &middot; <strong style="color:#B3261E;">only ${p.qty} left</strong>`
+    : ` &middot; ${p.qty} in stock`)
+  : '';
 return `
 <div class="listing">
 <div class="thumb" style="${thumbImage ? `background-image:url('../${thumbImage}')` : ''}">${thumbImage ? '' : 'HAYCHIC'}</div>
 <div class="info">
 <h4>${escapeHtml(p.name)}</h4>
-<span>${escapeHtml(p.price)} &middot; ${escapeHtml(p.category)} &middot; ${p.status === 'sold-out' ? 'Sold Out' : (p.status === 'preorder' ? 'Pre-Order' : 'In Stock')}${colorNote}${sizeNote}</span>
+<span>${escapeHtml(p.price)} &middot; ${escapeHtml(p.category)} &middot; ${p.status === 'sold-out' ? 'Sold Out' : (p.status === 'preorder' ? 'Pre-Order' : 'In Stock')}${colorNote}${sizeNote}${qtyNote}</span>
 </div>
 <div class="actions">
 <button onclick="editProduct('${p.id}')">Edit</button>
@@ -532,6 +547,10 @@ ${hasExisting ? `<span class="existing-note">Current photo saved ✓ (choose a f
 <option value="sold-out" ${color.status === 'sold-out' ? 'selected' : ''}>Sold Out</option>
 </select>
 </div>
+<div class="field field-stock">
+<label>Qty (optional)</label>
+<input type="number" class="colorQty" min="0" step="1" value="${typeof color.qty === 'number' ? color.qty : ''}">
+</div>
 <button type="button" class="color-remove-btn" onclick="this.closest('.color-row').remove()" aria-label="Remove color">✕</button>
 </div>`;
 }
@@ -551,7 +570,12 @@ const images = [];
 for(const row of rows){
 const name = row.querySelector('.colorName').value.trim();
 if(!name) continue;
-const status = row.querySelector('.colorStatus').value;
+let status = row.querySelector('.colorStatus').value;
+const qtyRaw = row.querySelector('.colorQty').value.trim();
+const qty = qtyRaw === '' ? null : Math.max(0, parseInt(qtyRaw, 10) || 0);
+// Quantity hit zero — auto-switch from In Stock to Pre-Order so it stays
+// sellable instead of silently blocking orders.
+if(qty === 0 && status === 'in-stock') status = 'preorder';
 const file = row.querySelector('.colorImage').files[0];
 let imagePath = row.dataset.existingImage || '';
 if(file){
@@ -560,7 +584,9 @@ const base64 = await resizeImage(file, 1200);
 images.push({ id: imgId, base64 });
 imagePath = `assets/products/${imgId}.jpg`;
 }
-colors.push({ name, image: imagePath, status });
+const entry = { name, image: imagePath, status };
+if(qty !== null) entry.qty = qty;
+colors.push(entry);
 }
 return { colors, images };
 }
@@ -582,6 +608,10 @@ return `
 <option value="sold-out" ${size.status === 'sold-out' ? 'selected' : ''}>Sold Out</option>
 </select>
 </div>
+<div class="field field-stock">
+<label>Qty (optional)</label>
+<input type="number" class="sizeQty" min="0" step="1" value="${typeof size.qty === 'number' ? size.qty : ''}">
+</div>
 <button type="button" class="size-remove-btn" onclick="this.closest('.size-admin-row').remove()" aria-label="Remove size">✕</button>
 </div>`;
 }
@@ -600,8 +630,13 @@ const sizes = [];
 for(const row of rows){
 const name = row.querySelector('.sizeName').value.trim();
 if(!name) continue;
-const status = row.querySelector('.sizeStatus').value;
-sizes.push({ name, status });
+let status = row.querySelector('.sizeStatus').value;
+const qtyRaw = row.querySelector('.sizeQty').value.trim();
+const qty = qtyRaw === '' ? null : Math.max(0, parseInt(qtyRaw, 10) || 0);
+if(qty === 0 && status === 'in-stock') status = 'preorder';
+const entry = { name, status };
+if(qty !== null) entry.qty = qty;
+sizes.push(entry);
 }
 return sizes;
 }
@@ -609,7 +644,10 @@ return sizes;
 async function saveProduct(){
 const name = document.getElementById('fName').value.trim();
 const price = document.getElementById('fPrice').value.trim();
-const status = document.getElementById('fStatus').value;
+let status = document.getElementById('fStatus').value;
+const qtyRaw = document.getElementById('fQty').value.trim();
+const qty = qtyRaw === '' ? null : Math.max(0, parseInt(qtyRaw, 10) || 0);
+if(qty === 0 && status === 'in-stock') status = 'preorder';
 const category = document.getElementById('fCategory').value;
 const description = document.getElementById('fDescription').value.trim();
 const fileInput = document.getElementById('fImage');
@@ -633,6 +671,7 @@ products.push(entry);
 entry.name = name;
 entry.price = price;
 entry.status = status;
+if(qty !== null){ entry.qty = qty; } else { delete entry.qty; }
 entry.category = category;
 entry.description = description;
 
@@ -691,6 +730,7 @@ document.getElementById('formTitle').textContent = 'Edit Listing';
 document.getElementById('fName').value = p.name;
 document.getElementById('fPrice').value = p.price;
 document.getElementById('fStatus').value = p.status;
+document.getElementById('fQty').value = typeof p.qty === 'number' ? p.qty : '';
 document.getElementById('fCategory').value = p.category;
 document.getElementById('fDescription').value = p.description || '';
 document.getElementById('saveBtn').textContent = 'Save Changes';
@@ -709,6 +749,7 @@ document.getElementById('formTitle').textContent = 'Add a New Listing';
 document.getElementById('fName').value = '';
 document.getElementById('fPrice').value = '';
 document.getElementById('fStatus').value = 'in-stock';
+document.getElementById('fQty').value = '';
 document.getElementById('fCategory').value = 'Bags';
 document.getElementById('fDescription').value = '';
 document.getElementById('fImage').value = '';
