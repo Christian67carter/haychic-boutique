@@ -96,7 +96,8 @@
     "price": "$65.00",
     "status": "in-stock",
     "category": "Bags",
-    "description": ""
+    "description": "",
+    "qty": 1
   },
   {
     "id": "the-veronica-msl8d4xu",
