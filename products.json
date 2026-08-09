@@ -13,7 +13,8 @@
         "image": "assets/products/the-tiffany.jpg",
         "status": "in-stock"
       }
-    ]
+    ],
+    "qty": 1
   },
   {
     "id": "the-cutie-set",
