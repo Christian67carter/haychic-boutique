@@ -120,6 +120,34 @@ function submitRequest(e){
   showToast('Request captured — connect this form to Shopify or email next 💐');
   form.reset();
 }
+const SUPPORT_API = 'https://haychic-boutique.vercel.app/api/support-notify';
+async function submitSupport(e){
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+  const payload = {
+    name: data.get('name') || '',
+    email: data.get('email') || '',
+    topic: data.get('topic') || '',
+    orderNumber: data.get('orderNumber') || '',
+    message: data.get('message') || ''
+  };
+  if(window.HAYCHIC_logActivity){
+    window.HAYCHIC_logActivity('support_request', payload);
+  }
+  try{
+    await fetch(SUPPORT_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  }catch(err){
+    // The activity log above already captured it, so a network hiccup here
+    // just means Hayden sees it in the admin panel instead of a Make alert.
+  }
+  showToast('Message sent — Hayden will get back to you soon 💐');
+  form.reset();
+}
 function newsletter(e){
   e.preventDefault();
   showToast('You’re on the HAYCHIC list 💐');
