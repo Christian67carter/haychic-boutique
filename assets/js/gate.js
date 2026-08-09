@@ -57,7 +57,7 @@
     overlay.innerHTML = `
       <div class="gate-box">
         <div class="gate-logo">HAYCHIC <span>Boutique</span></div>
-        <p class="gate-tag">This site is currently by invite only ♡ Enter your access password below, or request one.</p>
+        <p class="gate-tag">This site is currently by invite only 💐 Enter your access password below, or request one.</p>
         <form id="gate-unlock-form">
           <input type="password" id="gate-password" placeholder="Access password" required autocomplete="off">
           <button type="submit" class="btn primary">Enter Site</button>
@@ -69,7 +69,7 @@
           <input type="text" id="gate-name" placeholder="Your name" required>
           <input type="email" id="gate-email" placeholder="Your email" required>
           <textarea id="gate-message" placeholder="Anything you'd like Hayden to know? (optional)" rows="3"></textarea>
-          <button type="submit" class="btn secondary">Send Request ♡</button>
+          <button type="submit" class="btn secondary">Send Request 💐</button>
           <p id="gate-request-status" class="gate-error"></p>
         </form>
       </div>`;
@@ -120,7 +120,7 @@
           notes: '',
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-        statusEl.textContent = 'Request sent! Hayden will email you a password soon ♡';
+        statusEl.textContent = 'Request sent! Hayden will email you a password soon 💐';
         statusEl.classList.add('gate-success');
         e.target.reset();
       } catch (err) {
