@@ -113,35 +113,5 @@
     "status": "in-stock",
     "category": "Bags",
     "description": ""
-  },
-  {
-    "id": "test-msktn4g7",
-    "image": "",
-    "name": "Test",
-    "price": "60",
-    "status": "preorder",
-    "category": "Shoes",
-    "description": "I love testing",
-    "colors": [
-      {
-        "name": "green",
-        "image": "",
-        "status": "in-stock"
-      }
-    ],
-    "sizes": [
-      {
-        "name": "Small",
-        "status": "in-stock"
-      },
-      {
-        "name": "Medium",
-        "status": "in-stock"
-      },
-      {
-        "name": "Large",
-        "status": "in-stock"
-      }
-    ]
   }
 ]
