@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Item | HAYCHIC Boutique</title>
+  <meta name="description" content="Shop this item from HAYCHIC Boutique." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="announcement">♡ NEW ARRIVALS + PRE-ORDERS AVAILABLE ♡</div>
+
+  <header class="site-header">
+    <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
+    <a class="brand" href="index.html">HAYCHIC <span>Boutique</span></a>
+    <nav id="nav">
+      <a href="shop.html">Shop</a>
+      <a href="new-arrivals.html">New Arrivals</a>
+      <a href="preorders.html">Pre-Orders</a>
+      <a href="in-stock.html">In Stock</a>
+      <a href="request.html">Request an Item</a>
+      <a href="about.html">About</a>
+      <a href="pr.html">PR Team</a>
+      <a href="faq.html">FAQ</a>
+      <a class="nav-cta" href="shop.html">Shop Now</a>
+    </nav>
+    <div class="header-actions">
+      <button class="bag-btn" aria-label="Shopping bag">Bag ♡</button>
+    </div>
+  </header>
+
+  <main>
+    <a class="back-link" href="shop.html">← Back to Shop</a>
+    <div class="pdp-wrap" id="productDetail">
+      <p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:60px 0;">Loading item…</p>
+    </div>
+  </main>
+
+  <footer>
+    <a class="brand footer-brand" href="index.html">HAYCHIC <span>Boutique</span></a>
+    <div class="footer-links">
+      <a href="shop.html">Shop</a><a href="preorders.html">Pre-Orders</a><a href="request.html">Request an Item</a>
+      <a href="about.html">About</a><a href="pr.html">PR Team</a><a href="faq.html">FAQ</a>
+    </div>
+    <p>© 2026 HAYCHIC Boutique. All rights reserved.</p>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/gate.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
