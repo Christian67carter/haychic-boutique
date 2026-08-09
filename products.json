@@ -213,7 +213,7 @@
   },
   {
     "id": "the-faye-msl8qdv7",
-    "image": "",
+    "image": "assets/products/the-faye-msl8qdv7-brown.jpg",
     "name": "The FAYE",
     "price": "$88.00",
     "status": "preorder",
@@ -222,7 +222,7 @@
     "colors": [
       {
         "name": "Brown",
-        "image": "",
+        "image": "assets/products/the-faye-msl8qdv7-brown.jpg",
         "status": "preorder"
       }
     ]
