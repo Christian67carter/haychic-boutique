@@ -99,5 +99,14 @@
     "status": "in-stock",
     "category": "Bags",
     "description": ""
+  },
+  {
+    "id": "the-gigi-msl8ek07",
+    "image": "assets/products/the-gigi-msl8ek07.jpg",
+    "name": "The Gigi",
+    "price": "$75.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": ""
   }
 ]
