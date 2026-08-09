@@ -192,5 +192,14 @@
     "status": "preorder",
     "category": "Beauty",
     "description": ""
+  },
+  {
+    "id": "the-bianca-msl8nxlx",
+    "image": "assets/products/the-bianca-msl8nxlx.jpg",
+    "name": "The Bianca",
+    "price": "$62.00",
+    "status": "in-stock",
+    "category": "Bags",
+    "description": ""
   }
 ]
