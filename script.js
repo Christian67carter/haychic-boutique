@@ -25,10 +25,17 @@ function urgencyHtml(qty){
 
 let ALL_PRODUCTS = [];
 
+// A product's status field can lag behind its tracked quantity (e.g. an
+// order dropped it to 0 but nothing re-saved the record) — this treats
+// "in-stock with 0 left" as pre-order everywhere a product's status is
+// used, so the badge, the Pre-Order/In-Stock pages, and the bag button
+// all agree with each other.
+function effectiveProductStatus(p){
+  return (p.status === 'in-stock' && p.qty === 0) ? 'preorder' : p.status;
+}
+
 function renderProductCard(p){
-  // Defensive fallback: if a product's status somehow says "in-stock" but
-  // its tracked quantity is 0, treat it as pre-order rather than sellable.
-  const effectiveStatus = (p.status === 'in-stock' && p.qty === 0) ? 'preorder' : p.status;
+  const effectiveStatus = effectiveProductStatus(p);
   const { cls: statusClass, label: statusLabel } = statusInfo(effectiveStatus);
   const soldOut = effectiveStatus === 'sold-out';
   const bg = p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : '';
@@ -74,8 +81,8 @@ async function loadProducts(){
       const catParam = getQueryParam('cat');
       applyFilter(catParam || 'All');
     }
-    if(preorderGrid) renderGrid(preorderGrid, ALL_PRODUCTS.filter(p => p.status === 'preorder'), 'Pre-order picks coming soon ♡');
-    if(instockGrid) renderGrid(instockGrid, ALL_PRODUCTS.filter(p => p.status === 'in-stock'), 'In-stock items coming soon ♡');
+    if(preorderGrid) renderGrid(preorderGrid, ALL_PRODUCTS.filter(p => effectiveProductStatus(p) === 'preorder'), 'Pre-order picks coming soon ♡');
+    if(instockGrid) renderGrid(instockGrid, ALL_PRODUCTS.filter(p => effectiveProductStatus(p) === 'in-stock'), 'In-stock items coming soon ♡');
     // Newest-added items first — products are appended to products.json
     // as they're created, so reversing the list surfaces the latest ones.
     if(newArrivalsGrid) renderGrid(newArrivalsGrid, [...ALL_PRODUCTS].reverse(), 'New arrivals coming soon ♡');
