@@ -61,10 +61,21 @@ module.exports = async (req, res) => {
         throw new Error(`"${name}" doesn't have a valid price yet. Ask Hayden to update it in the admin panel before this item can be sold online.`);
       }
 
+      // Carry the product/variant identity through Stripe so the order
+      // webhook can match purchased line items back to products.json and
+      // decrement inventory automatically. Stripe metadata values must be
+      // strings and are capped at 500 chars, so these are trimmed/short.
+      const productId = String(item.productId || '').slice(0, 200);
+      const colorName = String(item.colorName || '').slice(0, 200);
+      const sizeName = String(item.sizeName || '').slice(0, 200);
+
       return {
         price_data: {
           currency: 'usd',
-          product_data: { name },
+          product_data: {
+            name,
+            metadata: { productId, colorName, sizeName },
+          },
           unit_amount: unitAmount,
         },
         quantity,
@@ -125,6 +136,10 @@ module.exports = async (req, res) => {
       line_items,
       shipping_address_collection: { allowed_countries: ['US'] },
       shipping_options,
+      // Lets shoppers enter a discount code Hayden creates in the Stripe
+      // Dashboard (Product catalog > Coupons / Promotion codes) — no extra
+      // backend code needed to validate or apply them.
+      allow_promotion_codes: true,
       success_url: `${SITE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/shop.html`,
     });
