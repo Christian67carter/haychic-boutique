@@ -210,5 +210,21 @@
     "status": "preorder",
     "category": "Beauty",
     "description": ""
+  },
+  {
+    "id": "the-faye-msl8qdv7",
+    "image": "",
+    "name": "The FAYE",
+    "price": "$88.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Brown",
+        "image": "",
+        "status": "preorder"
+      }
+    ]
   }
 ]
