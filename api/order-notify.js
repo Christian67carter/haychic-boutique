@@ -30,9 +30,6 @@
 
 const Stripe = require('stripe');
 
-// Stripe needs the raw, unparsed request body to verify the webhook
-// signature, so we turn off Vercel's automatic JSON body parsing for this
-// function only.
 module.exports.config = { api: { bodyParser: false } };
 
 const OWNER = 'Christian67carter';
@@ -58,10 +55,6 @@ function ghHeaders() {
   };
 }
 
-// Subtracts `qtyPurchased` from a product/color/size entry's `qty`, floored
-// at 0, and flips it from "in-stock" to "preorder" the same way the admin
-// panel does when qty hits 0. Returns true if it actually changed anything
-// (entries without a tracked qty are left alone).
 function decrementEntryQty(entry, qtyPurchased) {
   if (!entry || typeof entry.qty !== 'number') return false;
   const next = Math.max(0, entry.qty - qtyPurchased);
@@ -71,10 +64,6 @@ function decrementEntryQty(entry, qtyPurchased) {
   return true;
 }
 
-// Reads products.json, decrements qty for each purchased product/variant,
-// and writes it back via the GitHub Contents API — same read-sha-write
-// pattern used by api/admin.js. Throws on failure; callers should catch so
-// a GitHub hiccup never breaks the Stripe webhook response.
 async function decrementInventory(purchasedItems, orderId) {
   if (!process.env.GITHUB_TOKEN || purchasedItems.length === 0) return;
 
@@ -97,9 +86,6 @@ async function decrementInventory(purchasedItems, orderId) {
       const size = product.sizes.find((s) => s.name === item.sizeName);
       if (size) touched = decrementEntryQty(size, item.quantity) || touched;
     }
-    // Only fall back to the top-level product qty when no variant-level qty
-    // was tracked, so buying one colorway doesn't also decrement the base
-    // product count when they're meant to be tracked separately.
     if (!touched) touched = decrementEntryQty(product, item.quantity) || touched;
     if (touched) changed = true;
   }
@@ -129,8 +115,6 @@ module.exports = async (req, res) => {
   }
 
   if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
-    // Stripe still needs a 200-ish response or it'll keep retrying, but log
-    // clearly so this is easy to spot in Vercel's function logs.
     console.error('order-notify: STRIPE_SECRET_KEY or STRIPE_WEBHOOK_SECRET missing.');
     res.status(200).json({ received: true, warning: 'Webhook not fully configured yet.' });
     return;
@@ -150,11 +134,6 @@ module.exports = async (req, res) => {
 
   if (event.type === 'checkout.session.completed') {
     try {
-      // Re-fetch with line items + shipping rate expanded — the webhook
-      // event payload alone doesn't include these. Also expand each line
-      // item's underlying product so we can read back the productId/
-      // colorName/sizeName metadata attached at checkout time (see
-      // create-checkout-session.js) for the inventory auto-decrement below.
       const session = await stripe.checkout.sessions.retrieve(event.data.object.id, {
         expand: ['line_items.data.price.product', 'shipping_cost.shipping_rate'],
       });
@@ -163,6 +142,7 @@ module.exports = async (req, res) => {
       const address = shipping.address || {};
 
       const payload = {
+        type: 'order',
         orderId: session.id,
         orderUrl: `https://dashboard.stripe.com/payments/${session.payment_intent}`,
         customerName: shipping.name || session.customer_details?.name || '',
@@ -193,10 +173,6 @@ module.exports = async (req, res) => {
         console.error('order-notify: MAKE_WEBHOOK_URL not set, order not forwarded.', payload);
       }
 
-      // Auto-decrement inventory for whatever was actually purchased. This
-      // runs in its own try/catch below (not this one) so a GitHub hiccup
-      // here can never take down the order notification above, or vice
-      // versa — the payment already succeeded either way.
       const purchasedItems = (session.line_items?.data || [])
         .map((li) => {
           const meta = (li.price && li.price.product && li.price.product.metadata) || {};
@@ -215,9 +191,6 @@ module.exports = async (req, res) => {
         console.error('order-notify: failed to auto-decrement inventory:', err.message);
       }
     } catch (err) {
-      // Don't fail the Stripe webhook response over a notification hiccup —
-      // Stripe will keep retrying this webhook if we return an error, and
-      // the payment itself already succeeded either way. Just log it.
       console.error('order-notify: failed to build/send notification:', err.message);
     }
   }
@@ -226,16 +199,12 @@ module.exports = async (req, res) => {
     try {
       const session = event.data.object;
 
-      // Only worth a recovery email if we actually have a way to reach them.
       const email = session.customer_details?.email || session.customer_email || '';
       if (!email) {
         res.status(200).json({ received: true });
         return;
       }
 
-      // Line items aren't included on the expired-session payload itself,
-      // so fetch them separately — this works even though the session was
-      // never completed, since items are attached at creation time.
       let items = [];
       try {
         const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 50 });
