@@ -290,6 +290,11 @@ footer .brand{display:inline-block;margin-bottom:6px}
 .cart-remove-btn:hover{color:var(--pink-dark)}
 .cart-drawer-footer{padding:18px 22px 26px;border-top:1px solid var(--line)}
 .cart-subtotal{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:1.05rem;color:var(--brown)}
+.cart-zip{margin-bottom:14px}
+.cart-zip label{display:block;font-size:.76rem;font-weight:700;color:var(--brown);margin-bottom:6px}
+.cart-zip input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:.9rem;color:var(--brown);background:var(--cream)}
+.cart-zip input:focus{outline:none;border-color:var(--pink-dark)}
+.cart-zip-note{font-size:.72rem;color:var(--muted);margin:6px 0 0}
 .cart-note{font-size:.76rem;color:var(--muted);text-align:center;margin-top:10px}
 @media (max-width:600px){
   .cart-drawer{width:100%;max-width:100%}
