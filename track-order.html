@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>In Stock | HAYCHIC Boutique</title>
+  <title>Track My Order | HAYCHIC Boutique</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16.png" />
   <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png" />
-  <meta name="description" content="Shop HAYCHIC Boutique items that are on hand and ready now — no pre-order wait." />
+  <meta name="description" content="Look up the status and tracking number for your HAYCHIC Boutique order." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
@@ -33,16 +33,21 @@
   </header>
 
   <main>
-    <section class="section in-stock-callout" id="instock">
-      <span class="eyebrow">ready sooner</span>
-      <h2>Shop what’s in stock now <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h2>
-      <p>Perfect for shoppers who don’t want to wait for a pre-order.</p>
-    </section>
-
-    <section class="section products-section">
-      <div class="product-grid" id="instock-products">
-        <p style="grid-column:1/-1;text-align:center;color:var(--muted);">Loading in-stock items…</p>
+    <section class="request-section" id="track">
+      <div>
+        <span class="eyebrow">where's my order?</span>
+        <h2>Track my order</h2>
+        <p>Enter your order number and the email you checked out with. Your order number is on your confirmation page and email — it starts with "cs_".</p>
       </div>
+      <form id="trackForm" onsubmit="trackOrder(event)">
+        <div class="form-row">
+          <label>Order number<input required name="orderId" id="trackOrderId" placeholder="cs_..."></label>
+          <label>Email<input required type="email" name="email" placeholder="you@email.com"></label>
+        </div>
+        <button class="btn primary" type="submit">Track Order <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></button>
+        <p id="trackError" class="gate-error" style="color:#a05f70;"></p>
+      </form>
+      <div id="trackResult" class="track-result" style="display:none;"></div>
     </section>
   </main>
 
@@ -62,5 +67,15 @@
   <script src="assets/js/firebase-config.js"></script>
   <script src="assets/js/gate.js"></script>
   <script src="script.js"></script>
+  <script>
+    // Prefill from a link like track-order.html?orderId=cs_...&email=...
+    // (used by the success page right after checkout).
+    const params = new URLSearchParams(location.search);
+    if (params.get('orderId')) document.getElementById('trackOrderId').value = params.get('orderId');
+    if (params.get('email')) document.querySelector('input[name="email"]').value = params.get('email');
+    if (params.get('orderId') && params.get('email')) {
+      document.addEventListener('DOMContentLoaded', () => trackOrder(new Event('submit'), true));
+    }
+  </script>
 </body>
 </html>

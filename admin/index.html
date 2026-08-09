@@ -135,6 +135,7 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <button class="tab-btn active" data-tab="listings" onclick="switchTab('listings')">Listings</button>
 <button class="tab-btn" data-tab="requests" onclick="switchTab('requests')">Access Requests <span id="reqCount"></span></button>
 <button class="tab-btn" data-tab="tickets" onclick="switchTab('tickets')">Support Tickets <span id="ticketCount"></span></button>
+<button class="tab-btn" data-tab="orders" onclick="switchTab('orders')">Orders</button>
 <button class="tab-btn" data-tab="leads" onclick="switchTab('leads')">All Leads / CRM</button>
 <button class="tab-btn" data-tab="settings" onclick="switchTab('settings')">Email Settings</button>
 </div>
@@ -232,6 +233,15 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 </div>
 </div>
 
+<!-- ---------- Orders / Tracking ---------- -->
+<div class="tab-panel" id="panel-orders">
+<div class="admin-card">
+<h2>Orders &amp; Tracking</h2>
+<p class="hint">Every completed order, saved automatically when a customer checks out. Paste in a tracking number after you buy the shipping label to mark it shipped and email the customer — they can also look up their own order any time on the Track My Order page.</p>
+<div id="ordersList"><p class="empty">Loading…</p></div>
+</div>
+</div>
+
 <!-- ---------- Leads / CRM ---------- -->
 <div class="tab-panel" id="panel-leads">
 <div class="admin-card">
@@ -265,7 +275,9 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <p class="hint">These connect the "Send Password" button to your real inbox via EmailJS. Set up a free EmailJS account, connect your email as a Service, and create a template with variables <code>{{to_name}}</code>, <code>{{to_email}}</code>, <code>{{password}}</code>, <code>{{site_url}}</code>. Paste the IDs below (saved only in this browser).</p>
 <div class="field"><label>EmailJS Public Key</label><input type="text" id="emailjsPublicKey" placeholder="e.g. AbCdEfGhIjKlMnOp"></div>
 <div class="field"><label>EmailJS Service ID</label><input type="text" id="emailjsServiceId" placeholder="e.g. service_xxxxxxx"></div>
-<div class="field"><label>EmailJS Template ID</label><input type="text" id="emailjsTemplateId" placeholder="e.g. template_xxxxxxx"></div>
+<div class="field"><label>EmailJS Template ID (password email)</label><input type="text" id="emailjsTemplateId" placeholder="e.g. template_xxxxxxx"></div>
+<div class="field"><label>EmailJS Template ID (tracking email)</label><input type="text" id="emailjsTrackingTemplateId" placeholder="e.g. template_yyyyyyy"></div>
+<p class="hint">The tracking template is a separate one — create a second EmailJS template with variables <code>{{to_name}}</code>, <code>{{to_email}}</code>, <code>{{order_id}}</code>, <code>{{tracking_number}}</code>, <code>{{tracking_carrier}}</code>, <code>{{site_url}}</code>. See ORDER-TRACKING-SETUP.md.</p>
 <div class="btn-row">
 <button class="btn primary" onclick="saveEmailSettings()">Save Settings</button>
 </div>
@@ -452,6 +464,7 @@ document.getElementById('adminApp').classList.remove('hidden');
 loadListings();
 loadRequests();
 loadTickets();
+loadOrders();
 loadLeads();
 loadEmailSettings();
 } else {
@@ -884,6 +897,101 @@ await db.collection('activity').doc(id).update({ handled });
 loadTickets();
 }
 
+// ============ Orders / Tracking ============
+// Orders are written to Firestore by the Stripe webhook (api/order-notify.js
+// -> saveOrderToFirestore), not by this page — this just reads and updates
+// them. See ORDER-TRACKING-SETUP.md for the Firestore rule this needs.
+let allOrders = [];
+
+async function loadOrders(){
+const wrap = document.getElementById('ordersList');
+wrap.innerHTML = '<p class="empty">Loading…</p>';
+try{
+const snap = await db.collection('orders').get();
+allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+allOrders.sort((a,b) => new Date(b.createdAt||0) - new Date(a.createdAt||0));
+renderOrders();
+}catch(err){
+wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
+}
+}
+
+function renderOrders(){
+const wrap = document.getElementById('ordersList');
+if(!allOrders.length){ wrap.innerHTML = '<p class="empty">No orders yet.</p>'; return; }
+wrap.innerHTML = allOrders.map(o => `
+<div class="lead-row">
+<div class="info">
+<h4>${escapeHtml(o.customerName||'(no name)')} <span class="pill-badge pill-${o.status==='shipped'?'approved':o.status==='delivered'?'approved':'requested'}">${escapeHtml(o.status||'processing')}</span></h4>
+<span>${escapeHtml(o.email||'')} ${o.instagram ? '&middot; ' + igLink(o.instagram) : ''} &middot; $${escapeHtml(o.amountTotal||'0.00')} &middot; ${fmtDate(o.createdAt)}</span>
+<div style="font-size:.8rem;color:var(--muted);margin-top:4px;">Order ${escapeHtml(o.id)}${o.shippingMethod ? ' &middot; ' + escapeHtml(o.shippingMethod) : ''}</div>
+</div>
+<div class="actions">
+<button onclick="toggleLeadDetail('order-${o.id}')">Tracking</button>
+</div>
+<div class="lead-detail" id="detail-order-${o.id}">
+<div class="field-row">
+<div class="field"><label>Tracking number</label><input type="text" id="tracknum-${o.id}" value="${escapeAttr(o.trackingNumber||'')}" placeholder="e.g. 9400... "></div>
+<div class="field"><label>Carrier</label><input type="text" id="trackcarrier-${o.id}" value="${escapeAttr(o.trackingCarrier||'')}" placeholder="e.g. USPS"></div>
+</div>
+<div class="field" style="max-width:220px;margin-top:10px;">
+<label>Status</label>
+<select id="trackstatus-${o.id}">
+<option value="processing" ${o.status==='processing'||!o.status?'selected':''}>Processing</option>
+<option value="shipped" ${o.status==='shipped'?'selected':''}>Shipped</option>
+<option value="delivered" ${o.status==='delivered'?'selected':''}>Delivered</option>
+</select>
+</div>
+<div class="btn-row" style="margin-top:10px;">
+<button class="btn primary" onclick="saveOrderTracking('${o.id}')">Save &amp; Notify Customer</button>
+</div>
+</div>
+</div>
+`).join('');
+}
+
+async function saveOrderTracking(id){
+const trackingNumber = document.getElementById(`tracknum-${id}`).value.trim();
+const trackingCarrier = document.getElementById(`trackcarrier-${id}`).value.trim();
+const status = document.getElementById(`trackstatus-${id}`).value;
+const order = allOrders.find(o => o.id === id);
+try{
+await db.collection('orders').doc(id).update({
+trackingNumber, trackingCarrier, status,
+updatedAt: new Date().toISOString()
+});
+showStatus('Order updated.');
+if(order && order.email && trackingNumber){
+showStatus('Order updated — sending tracking email…');
+await sendTrackingEmail(order.email, order.customerName, id, trackingNumber, trackingCarrier);
+}
+loadOrders();
+}catch(err){
+showStatus(err.message, true);
+}
+}
+
+async function sendTrackingEmail(email, name, orderId, trackingNumber, trackingCarrier){
+const publicKey = localStorage.getItem('haychic_emailjs_public_key');
+const serviceId = localStorage.getItem('haychic_emailjs_service_id');
+const templateId = localStorage.getItem('haychic_emailjs_tracking_template_id');
+if(!publicKey || !serviceId || !templateId){
+showStatus(`Tracking is ${trackingNumber} — set up the Tracking Email Template in Email Settings to auto-send it.`, true);
+return;
+}
+try{
+emailjs.init(publicKey);
+await emailjs.send(serviceId, templateId, {
+to_email: email, to_name: name || 'there',
+order_id: orderId, tracking_number: trackingNumber, tracking_carrier: trackingCarrier || '',
+site_url: 'https://haychicboutique.com'
+});
+showStatus(`Tracking emailed to ${email} <img src="/assets/flower-icon.png" class="flower-emoji" alt="">`);
+}catch(err){
+showStatus(`Tracking is ${trackingNumber} but the email failed to send: ${err.text || err.message || err}`, true);
+}
+}
+
 function generatePassword(){
 const words = ['chic','haute','blush','luxe','dainty','golden','pearl','velvet','rosy','sweet'];
 const w = words[Math.floor(Math.random()*words.length)];
@@ -926,11 +1034,13 @@ function loadEmailSettings(){
 document.getElementById('emailjsPublicKey').value = localStorage.getItem('haychic_emailjs_public_key') || '';
 document.getElementById('emailjsServiceId').value = localStorage.getItem('haychic_emailjs_service_id') || '';
 document.getElementById('emailjsTemplateId').value = localStorage.getItem('haychic_emailjs_template_id') || '';
+document.getElementById('emailjsTrackingTemplateId').value = localStorage.getItem('haychic_emailjs_tracking_template_id') || '';
 }
 function saveEmailSettings(){
 localStorage.setItem('haychic_emailjs_public_key', document.getElementById('emailjsPublicKey').value.trim());
 localStorage.setItem('haychic_emailjs_service_id', document.getElementById('emailjsServiceId').value.trim());
 localStorage.setItem('haychic_emailjs_template_id', document.getElementById('emailjsTemplateId').value.trim());
+localStorage.setItem('haychic_emailjs_tracking_template_id', document.getElementById('emailjsTrackingTemplateId').value.trim());
 showStatus('Email settings saved in this browser.');
 }
 

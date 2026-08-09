@@ -30,6 +30,53 @@
 
 const Stripe = require('stripe');
 
+// Same public Firebase Web API key already embedded client-side in
+// assets/js/firebase-config.js — Firestore access is governed by security
+// rules, not this key, so reusing it here needs no new secret. Used to save
+// a copy of each order so the admin panel can attach a tracking number and
+// customers can look up their order status (see api/track-order.js).
+const FIREBASE_PROJECT_ID = 'haychic-boutique';
+const FIREBASE_API_KEY = 'AIzaSyAoHJvYgKl0Z6Gok71OCmyoFPmFLHTXOJw';
+const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
+
+// Converts a plain JS value into Firestore's typed REST JSON format.
+function toFirestoreValue(v) {
+  if (v === null || v === undefined) return { nullValue: null };
+  if (typeof v === 'string') return { stringValue: v };
+  if (typeof v === 'boolean') return { booleanValue: v };
+  if (typeof v === 'number') return { doubleValue: v };
+  if (Array.isArray(v)) return { arrayValue: { values: v.map(toFirestoreValue) } };
+  if (typeof v === 'object') return { mapValue: { fields: toFirestoreFields(v) } };
+  return { stringValue: String(v) };
+}
+function toFirestoreFields(obj) {
+  const fields = {};
+  for (const key of Object.keys(obj)) fields[key] = toFirestoreValue(obj[key]);
+  return fields;
+}
+
+// Creates (or overwrites) the orders/{orderId} doc. Runs in its own
+// try/catch wherever it's called so a Firestore hiccup can never take down
+// the order notification itself — the payment already succeeded either way.
+async function saveOrderToFirestore(orderId, data) {
+  const url = `${FIRESTORE_BASE}/orders/${encodeURIComponent(orderId)}?key=${FIREBASE_API_KEY}`;
+  const body = JSON.stringify({
+    fields: toFirestoreFields({
+      ...data,
+      status: 'processing',
+      trackingNumber: '',
+      trackingCarrier: '',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }),
+  });
+  const res = await fetch(url, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body });
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`Firestore order save failed: ${res.status} ${text}`.slice(0, 300));
+  }
+}
+
 // Stripe needs the raw, unparsed request body to verify the webhook
 // signature, so we turn off Vercel's automatic JSON body parsing for this
 // function only.
@@ -193,6 +240,29 @@ module.exports = async (req, res) => {
         });
       } else {
         console.error('order-notify: MAKE_WEBHOOK_URL not set, order not forwarded.', payload);
+      }
+
+      // Save a copy of the order to Firestore so the admin panel can attach
+      // a tracking number once a label's bought, and so customers can look
+      // up their own order status/tracking on track-order.html. Own
+      // try/catch so a Firestore hiccup never blocks the notification above.
+      try {
+        await saveOrderToFirestore(session.id, {
+          customerName: payload.customerName,
+          email: payload.email,
+          instagram: payload.instagram,
+          addressLine1: payload.addressLine1,
+          addressLine2: payload.addressLine2,
+          city: payload.city,
+          state: payload.state,
+          zip: payload.zip,
+          country: payload.country,
+          shippingMethod: payload.shippingMethod,
+          amountTotal: payload.amountTotal,
+          items: payload.items,
+        });
+      } catch (err) {
+        console.error('order-notify: failed to save order to Firestore:', err.message);
       }
 
       // Auto-decrement inventory for whatever was actually purchased. This

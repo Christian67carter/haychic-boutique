@@ -154,6 +154,50 @@ function newsletter(e){
   showToast('You’re on the HAYCHIC list <img src="/assets/flower-icon.png" class="flower-emoji" alt="">');
   e.target.reset();
 }
+
+/* ---------- Order Tracking ---------- */
+const TRACK_ORDER_API = 'https://haychic-boutique.vercel.app/api/track-order';
+const TRACK_STATUS_LABELS = { processing: 'Processing', shipped: 'Shipped', delivered: 'Delivered' };
+
+async function trackOrder(e, silent){
+  if(e && e.preventDefault) e.preventDefault();
+  const form = document.getElementById('trackForm');
+  if(!form) return;
+  const orderId = document.getElementById('trackOrderId').value.trim();
+  const email = form.querySelector('input[name="email"]').value.trim();
+  const errEl = document.getElementById('trackError');
+  const resultEl = document.getElementById('trackResult');
+  errEl.textContent = '';
+  resultEl.style.display = 'none';
+  if(!orderId || !email) return;
+  const btn = form.querySelector('button[type="submit"]');
+  const originalBtnHtml = btn ? btn.innerHTML : '';
+  if(btn){ btn.disabled = true; btn.textContent = 'Looking up…'; }
+  try{
+    const res = await fetch(`${TRACK_ORDER_API}?orderId=${encodeURIComponent(orderId)}&email=${encodeURIComponent(email)}`);
+    const data = await res.json();
+    if(!res.ok){
+      errEl.textContent = data.error || "Could not find that order — double-check the order number and email.";
+      return;
+    }
+    const statusLabel = TRACK_STATUS_LABELS[data.status] || data.status || 'Processing';
+    resultEl.innerHTML = `
+      <h3>Order ${escapeHtml(data.orderId)}</h3>
+      <p class="track-status track-status-${escapeHtml(data.status || 'processing')}">${escapeHtml(statusLabel)}</p>
+      ${data.trackingNumber
+        ? `<p><strong>Tracking number:</strong> ${escapeHtml(data.trackingNumber)}${data.trackingCarrier ? ' via ' + escapeHtml(data.trackingCarrier) : ''}</p>`
+        : `<p class="track-note">A tracking number will appear here as soon as your order ships.</p>`}
+      ${data.shippingMethod ? `<p><strong>Shipping method:</strong> ${escapeHtml(data.shippingMethod)}</p>` : ''}
+      ${data.amountTotal ? `<p><strong>Order total:</strong> $${escapeHtml(data.amountTotal)}</p>` : ''}
+      ${Array.isArray(data.items) && data.items.length ? `<ul class="track-items">${data.items.map(i => `<li>${escapeHtml(i.quantity)} × ${escapeHtml(i.name)}</li>`).join('')}</ul>` : ''}
+    `;
+    resultEl.style.display = 'block';
+  }catch(err){
+    if(!silent) errEl.textContent = 'Something went wrong looking up your order. Please try again.';
+  }finally{
+    if(btn){ btn.disabled = false; btn.innerHTML = originalBtnHtml; }
+  }
+}
 function logProductInterest(id, name){
   if(window.HAYCHIC_logActivity){
     window.HAYCHIC_logActivity('product_interest', { productId: id, productName: name });

@@ -32,7 +32,7 @@
     </div>
   </header>
   <div class="trust-bar">
-    <a href="support.html?topic=Order%20status">Order Updates</a>
+    <a href="track-order.html">Order Updates</a>
     <a href="faq.html">Shipping &amp; Delivery</a>
     <a href="preorders.html">Pre-Order Info</a>
     <a href="support.html">Support</a>
@@ -45,7 +45,13 @@
       <p style="max-width:520px;margin:0 auto 28px;color:var(--muted);font-size:1.05rem;">
         Your order has been received and Hayden will have it ready soon. A confirmation was sent to your email — reach out any time if you have questions.
       </p>
-      <a class="btn primary" href="shop.html">Continue Shopping</a>
+      <p id="orderNumberNote" style="display:none;max-width:520px;margin:0 auto 28px;color:var(--muted);font-size:.92rem;">
+        Order number: <strong id="orderNumberText"></strong> — save this to track your order later.
+      </p>
+      <div class="hero-actions" style="justify-content:center;">
+        <a class="btn primary" href="shop.html">Continue Shopping</a>
+        <a class="btn secondary" id="trackThisOrderLink" href="track-order.html">Track My Order</a>
+      </div>
     </section>
   </main>
 
@@ -53,7 +59,7 @@
     <a class="brand footer-brand" href="index.html">HAYCHIC <span>Boutique</span></a>
     <div class="footer-links">
       <a href="shop.html">Shop</a><a href="new-arrivals.html">New Arrivals</a><a href="preorders.html">Pre-Orders</a><a href="in-stock.html">In Stock</a>
-      <a href="request.html">Request an Item</a><a href="about.html">About</a><a href="pr.html">PR Team</a><a href="faq.html">FAQ</a><a href="support.html">Support</a>
+      <a href="request.html">Request an Item</a><a href="about.html">About</a><a href="pr.html">PR Team</a><a href="faq.html">FAQ</a><a href="support.html">Support</a><a href="track-order.html">Track Order</a>
     </div>
     <p>© 2026 HAYCHIC Boutique. All rights reserved.</p>
   </footer>
@@ -71,6 +77,16 @@
     if(window.HAYCHIC_logActivity){
       window.HAYCHIC_logActivity('order_success', { sessionId: new URLSearchParams(location.search).get('session_id') || '' });
     }
+    // Show the order number and prefill the Track My Order link. Email
+    // isn't in this URL (Stripe doesn't return it here), so the tracking
+    // link still asks for it — this just saves re-typing the order number.
+    (function(){
+      const sessionId = new URLSearchParams(location.search).get('session_id');
+      if(!sessionId) return;
+      document.getElementById('orderNumberText').textContent = sessionId;
+      document.getElementById('orderNumberNote').style.display = 'block';
+      document.getElementById('trackThisOrderLink').href = 'track-order.html?orderId=' + encodeURIComponent(sessionId);
+    })();
   </script>
 </body>
 </html>
