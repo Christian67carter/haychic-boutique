@@ -106,7 +106,8 @@
     "price": "$65.00",
     "status": "in-stock",
     "category": "Bags",
-    "description": ""
+    "description": "",
+    "qty": 1
   },
   {
     "id": "the-gigi-msl8ek07",
