@@ -96,7 +96,7 @@ body{background:var(--cream);}
 <body>
 
 <div id="loginScreen">
-<h1 style="font-family:'Playfair Display',serif;">HAYCHIC Admin ♡</h1>
+<h1 style="font-family:'Playfair Display',serif;">HAYCHIC Admin 💐</h1>
 <p style="color:var(--muted);" id="loginTagline">Log in to manage listings, access requests and customers — all in one place.</p>
 <div class="field">
 <label>Email</label>
@@ -295,7 +295,7 @@ const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="announcement">♡ NEW ARRIVALS + PRE-ORDERS AVAILABLE ♡</div>
+  <div class="announcement">💐 NEW ARRIVALS + PRE-ORDERS AVAILABLE 💐</div>
 
   <header class="site-header">
     <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
@@ -312,7 +312,7 @@ const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
       <a class="nav-cta" href="shop.html">Shop Now</a>
     </nav>
     <div class="header-actions">
-      <button class="bag-btn" aria-label="Shopping bag">Bag ♡</button>
+      <button class="bag-btn" aria-label="Shopping bag">Bag 💐</button>
     </div>
   </header>
 
@@ -711,7 +711,7 @@ message: editingId ? `Update listing: ${name}` : `Add listing: ${name}`
 });
 productsSha = data.sha;
 
-showStatus('Saved! It will appear on the site in a minute ♡');
+showStatus('Saved! It will appear on the site in a minute 💐');
 cancelEdit();
 renderListings();
 }catch(err){
@@ -878,7 +878,7 @@ await emailjs.send(serviceId, templateId, {
 to_email: email, to_name: name || 'there', password: password,
 site_url: 'https://haychicboutique.com'
 });
-showStatus(`Password emailed to ${email} ♡`);
+showStatus(`Password emailed to ${email} 💐`);
 }catch(err){
 showStatus(`Password is ${password} but the email failed to send: ${err.text || err.message || err}`, true);
 }
