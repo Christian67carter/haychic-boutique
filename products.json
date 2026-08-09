@@ -183,5 +183,14 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-pricilla-msl8m3zy",
+    "image": "assets/products/the-pricilla-msl8m3zy.jpg",
+    "name": "The Pricilla",
+    "price": "$38.00",
+    "status": "preorder",
+    "category": "Beauty",
+    "description": ""
   }
 ]
