@@ -13,6 +13,9 @@
 //                             (created when you add this endpoint there)
 //   MAKE_WEBHOOK_URL       — the "Custom Webhook" trigger URL from your
 //                             Make scenario (see SHIPPING-SETUP.md)
+//   GITHUB_TOKEN           — same fine-grained token used by api/admin.js
+//                             (Contents: Read and write on this repo) — used
+//                             here to auto-decrement inventory on purchase
 
 const Stripe = require('stripe');
 
@@ -21,6 +24,11 @@ const Stripe = require('stripe');
 // function only.
 module.exports.config = { api: { bodyParser: false } };
 
+const OWNER = 'Christian67carter';
+const REPO = 'haychic-boutique';
+const BRANCH = 'main';
+const GITHUB_API = `https://api.github.com/repos/${OWNER}/${REPO}`;
+
 function buffer(readable) {
   return new Promise((resolve, reject) => {
     const chunks = [];
@@ -28,6 +36,79 @@ function buffer(readable) {
     readable.on('end', () => resolve(Buffer.concat(chunks)));
     readable.on('error', reject);
   });
+}
+
+function ghHeaders() {
+  return {
+    Authorization: `token ${process.env.GITHUB_TOKEN}`,
+    Accept: 'application/vnd.github+json',
+    'Content-Type': 'application/json',
+    'User-Agent': 'haychic-order-notify',
+  };
+}
+
+// Subtracts `qtyPurchased` from a product/color/size entry's `qty`, floored
+// at 0, and flips it from "in-stock" to "preorder" the same way the admin
+// panel does when qty hits 0. Returns true if it actually changed anything
+// (entries without a tracked qty are left alone).
+function decrementEntryQty(entry, qtyPurchased) {
+  if (!entry || typeof entry.qty !== 'number') return false;
+  const next = Math.max(0, entry.qty - qtyPurchased);
+  if (next === entry.qty) return false;
+  entry.qty = next;
+  if (next === 0 && entry.status === 'in-stock') entry.status = 'preorder';
+  return true;
+}
+
+// Reads products.json, decrements qty for each purchased product/variant,
+// and writes it back via the GitHub Contents API — same read-sha-write
+// pattern used by api/admin.js. Throws on failure; callers should catch so
+// a GitHub hiccup never breaks the Stripe webhook response.
+async function decrementInventory(purchasedItems, orderId) {
+  if (!process.env.GITHUB_TOKEN || purchasedItems.length === 0) return;
+
+  const r = await fetch(`${GITHUB_API}/contents/products.json?ref=${BRANCH}`, { headers: ghHeaders() });
+  if (!r.ok) throw new Error('Could not load products.json for inventory update.');
+  const data = await r.json();
+  const products = JSON.parse(Buffer.from(data.content, 'base64').toString('utf-8'));
+
+  let changed = false;
+  for (const item of purchasedItems) {
+    const product = products.find((p) => p.id === item.productId);
+    if (!product) continue;
+
+    let touched = false;
+    if (item.colorName && Array.isArray(product.colors)) {
+      const color = product.colors.find((c) => c.name === item.colorName);
+      if (color) touched = decrementEntryQty(color, item.quantity) || touched;
+    }
+    if (item.sizeName && Array.isArray(product.sizes)) {
+      const size = product.sizes.find((s) => s.name === item.sizeName);
+      if (size) touched = decrementEntryQty(size, item.quantity) || touched;
+    }
+    // Only fall back to the top-level product qty when no variant-level qty
+    // was tracked, so buying one colorway doesn't also decrement the base
+    // product count when they're meant to be tracked separately.
+    if (!touched) touched = decrementEntryQty(product, item.quantity) || touched;
+    if (touched) changed = true;
+  }
+
+  if (!changed) return;
+
+  const putRes = await fetch(`${GITHUB_API}/contents/products.json`, {
+    method: 'PUT',
+    headers: ghHeaders(),
+    body: JSON.stringify({
+      message: `Auto-update inventory from order ${orderId}`,
+      content: Buffer.from(JSON.stringify(products, null, 2)).toString('base64'),
+      sha: data.sha,
+      branch: BRANCH,
+    }),
+  });
+  if (!putRes.ok) {
+    const errData = await putRes.json().catch(() => ({}));
+    throw new Error(errData.message || 'Could not save inventory update.');
+  }
 }
 
 module.exports = async (req, res) => {
@@ -59,9 +140,12 @@ module.exports = async (req, res) => {
   if (event.type === 'checkout.session.completed') {
     try {
       // Re-fetch with line items + shipping rate expanded — the webhook
-      // event payload alone doesn't include these.
+      // event payload alone doesn't include these. Also expand each line
+      // item's underlying product so we can read back the productId/
+      // colorName/sizeName metadata attached at checkout time (see
+      // create-checkout-session.js) for the inventory auto-decrement below.
       const session = await stripe.checkout.sessions.retrieve(event.data.object.id, {
-        expand: ['line_items', 'shipping_cost.shipping_rate'],
+        expand: ['line_items.data.price.product', 'shipping_cost.shipping_rate'],
       });
 
       const shipping = session.shipping_details || session.customer_details || {};
@@ -96,6 +180,28 @@ module.exports = async (req, res) => {
         });
       } else {
         console.error('order-notify: MAKE_WEBHOOK_URL not set, order not forwarded.', payload);
+      }
+
+      // Auto-decrement inventory for whatever was actually purchased. This
+      // runs in its own try/catch below (not this one) so a GitHub hiccup
+      // here can never take down the order notification above, or vice
+      // versa — the payment already succeeded either way.
+      const purchasedItems = (session.line_items?.data || [])
+        .map((li) => {
+          const meta = (li.price && li.price.product && li.price.product.metadata) || {};
+          return {
+            productId: meta.productId || '',
+            colorName: meta.colorName || '',
+            sizeName: meta.sizeName || '',
+            quantity: li.quantity || 0,
+          };
+        })
+        .filter((i) => i.productId);
+
+      try {
+        await decrementInventory(purchasedItems, session.id);
+      } catch (err) {
+        console.error('order-notify: failed to auto-decrement inventory:', err.message);
       }
     } catch (err) {
       // Don't fail the Stripe webhook response over a notification hiccup —
