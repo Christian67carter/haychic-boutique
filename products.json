@@ -167,5 +167,21 @@
     "status": "in-stock",
     "category": "Bags",
     "description": ""
+  },
+  {
+    "id": "the-lucia-msl8kixe",
+    "image": "",
+    "name": "The Lucia",
+    "price": "$58.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Black",
+        "image": "",
+        "status": "preorder"
+      }
+    ]
   }
 ]
