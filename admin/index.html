@@ -53,6 +53,7 @@ body{background:var(--cream);}
 .lead-row .info span{font-size:.8rem;color:var(--muted);}
 .lead-row .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
 .lead-row .actions button{border:1px solid var(--line);background:var(--cream);border-radius:999px;padding:7px 13px;font-size:.76rem;cursor:pointer;}
+.lead-row .actions button.danger{border-color:#c98a7b;color:#a05f70;}
 .lead-detail{grid-column:1/-1;background:var(--cream);border-radius:14px;padding:16px;margin-top:10px;display:none;}
 .lead-detail.open{display:block;}
 .lead-detail textarea{min-height:70px;}
@@ -60,7 +61,7 @@ body{background:var(--cream);}
 .activity-list{max-height:320px;overflow:auto;margin-top:10px;}
 .activity-item{font-size:.82rem;padding:10px 0;border-top:1px dashed var(--line);display:flex;gap:10px;align-items:flex-start;}
 .activity-item:first-child{border-top:none;}
-.activity-thumb{width:40px;height:40px;border-radius:8px;background:var(--cream) center/cover no-repeat;border:1px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--muted);overflow:hidden;}
+.activity-thumb{width:40px;height:40px;border-radius:8px;background:var(--cream) center/cover no-repeat;border:1px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;font-size:1.15rem;color:var(--muted);overflow:hidden;}
 .activity-body{flex:1;min-width:0;}
 .activity-item .a-type{font-weight:700;text-transform:capitalize;}
 .activity-item .a-time{color:var(--muted);float:right;}
@@ -252,6 +253,7 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <div class="field"><label>EmailJS Template ID</label><input type="text" id="emailjsTemplateId" placeholder="e.g. template_xxxxxxx"></div>
 <div class="btn-row">
 <button class="btn primary" onclick="saveEmailSettings()">Save Settings</button>
+</div>
 </div>
 </div>
 </div>
@@ -916,6 +918,7 @@ wrap.innerHTML = allLeads.map(l => `
 <button onclick="toggleLeadDetail('${l.id}')">Notes</button>
 <button onclick="openActivity('${escapeAttr(l.email)}','${escapeAttr(l.name)}')">Activity</button>
 ${l.status !== 'approved' ? `<button onclick="approveAndGenerate('${l.id}','${escapeAttr(l.email)}','${escapeAttr(l.name)}')">Approve</button>` : `<button onclick="sendPasswordEmail('${escapeAttr(l.email)}','${escapeAttr(l.name)}','${escapeAttr(l.password||'')}')">Resend Password</button>`}
+<button class="danger" onclick="deleteLead('${l.id}')">Remove</button>
 </div>
 <div class="lead-detail" id="detail-${l.id}">
 <label style="font-size:.8rem;font-weight:700;">Notes &amp; follow-up</label>
@@ -954,6 +957,25 @@ showStatus(err.message, true);
 }
 }
 
+async function deleteLead(id){
+const l = allLeads.find(x => x.id === id);
+if(!l) return;
+if(!confirm(`Remove ${l.name || l.email || 'this lead'}? This can't be undone.`)) return;
+try{
+// If they had an active password, deactivate it too — removing someone
+// as a lead should also cut off their site access.
+if(l.password){
+try{ await db.collection('access_codes').doc(l.password).update({ active: false }); }catch(e){ /* code may not exist — fine */ }
+}
+await db.collection('leads').doc(id).delete();
+showStatus('Lead removed.');
+loadLeads();
+loadRequests();
+}catch(err){
+showStatus(err.message, true);
+}
+}
+
 function showAddLead(){ document.getElementById('addLeadForm').classList.remove('hidden'); }
 function hideAddLead(){ document.getElementById('addLeadForm').classList.add('hidden'); }
 
@@ -982,6 +1004,19 @@ showStatus(err.message, true);
 }
 
 // ============ Activity ============
+// Distinct icon per activity type, so the feed reads at a glance instead of
+// showing the same flower for everything. Falls back to a neutral dot for
+// any type not listed here.
+const ACTIVITY_ICONS = {
+item_request: '📝',
+support_request: '💬',
+product_interest: '🛍️',
+product_view: '👁️',
+cart_abandoned: '🛒',
+page_view: '📄',
+access_request: '🔑'
+};
+
 async function openActivity(email, name){
 currentActivityEmail = email;
 document.getElementById('activityLeadName').textContent = name || email;
@@ -999,7 +1034,7 @@ content.innerHTML = docs.slice(0,50).map(a => {
 // placeholder box for activity that isn't about a specific product.
 const product = a.productId ? products.find(p => p.id === a.productId) : null;
 const thumbImg = product && product.image ? `style="background-image:url('../${escapeAttr(product.image)}')"` : '';
-const thumbInner = product && product.image ? '' : '💐';
+const thumbInner = product && product.image ? '' : (ACTIVITY_ICONS[a.type] || '•');
 const quoteText = a.requestText || a.message || '';
 return `
 <div class="activity-item">
