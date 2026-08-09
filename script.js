@@ -65,7 +65,7 @@ function renderGrid(el, products, emptyMsg){
 function applyFilter(cat){
   document.querySelectorAll('.filter-pill').forEach(p => p.classList.toggle('active', p.dataset.cat === cat));
   const filtered = cat === 'All' ? ALL_PRODUCTS : ALL_PRODUCTS.filter(p => p.category === cat);
-  renderGrid(document.getElementById('products'), filtered, 'New arrivals coming soon ♡');
+  renderGrid(document.getElementById('products'), filtered, 'New arrivals coming soon 💐');
 }
 
 async function loadProducts(){
@@ -81,11 +81,11 @@ async function loadProducts(){
       const catParam = getQueryParam('cat');
       applyFilter(catParam || 'All');
     }
-    if(preorderGrid) renderGrid(preorderGrid, ALL_PRODUCTS.filter(p => effectiveProductStatus(p) === 'preorder'), 'Pre-order picks coming soon ♡');
-    if(instockGrid) renderGrid(instockGrid, ALL_PRODUCTS.filter(p => effectiveProductStatus(p) === 'in-stock'), 'In-stock items coming soon ♡');
+    if(preorderGrid) renderGrid(preorderGrid, ALL_PRODUCTS.filter(p => effectiveProductStatus(p) === 'preorder'), 'Pre-order picks coming soon 💐');
+    if(instockGrid) renderGrid(instockGrid, ALL_PRODUCTS.filter(p => effectiveProductStatus(p) === 'in-stock'), 'In-stock items coming soon 💐');
     // Newest-added items first — products are appended to products.json
     // as they're created, so reversing the list surfaces the latest ones.
-    if(newArrivalsGrid) renderGrid(newArrivalsGrid, [...ALL_PRODUCTS].reverse(), 'New arrivals coming soon ♡');
+    if(newArrivalsGrid) renderGrid(newArrivalsGrid, [...ALL_PRODUCTS].reverse(), 'New arrivals coming soon 💐');
   }catch(err){
     if(grid) grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);">Could not load products right now.</p>';
   }
@@ -117,12 +117,12 @@ function submitRequest(e){
       requestText: data.get('request') || ''
     });
   }
-  showToast('Request captured — connect this form to Shopify or email next ♡');
+  showToast('Request captured — connect this form to Shopify or email next 💐');
   form.reset();
 }
 function newsletter(e){
   e.preventDefault();
-  showToast('You’re on the HAYCHIC list ♡');
+  showToast('You’re on the HAYCHIC list 💐');
   e.target.reset();
 }
 function logProductInterest(id, name){
@@ -326,7 +326,7 @@ function injectCartDrawer(){
     <div id="cartOverlay" class="cart-overlay"></div>
     <aside id="cartDrawer" class="cart-drawer">
       <div class="cart-drawer-header">
-        <h3>Your Bag ♡</h3>
+        <h3>Your Bag 💐</h3>
         <button class="cart-close-btn" aria-label="Close bag">✕</button>
       </div>
       <div id="cartItems" class="cart-items"></div>
@@ -350,7 +350,7 @@ function renderCartDrawer(){
   if(!itemsWrap || !subtotalEl) return;
   const cart = loadCart();
   if(!cart.length){
-    itemsWrap.innerHTML = '<p class="cart-empty">Your bag is empty ♡<br>Go find something you love!</p>';
+    itemsWrap.innerHTML = '<p class="cart-empty">Your bag is empty 💐<br>Go find something you love!</p>';
     subtotalEl.textContent = '$0.00';
     return;
   }
@@ -391,7 +391,7 @@ async function checkout(){
   const cart = loadCart();
   if(!cart.length) return;
   if(!CHECKOUT_API){
-    showToast('Online checkout is almost ready — message Hayden to complete your order for now ♡');
+    showToast('Online checkout is almost ready — message Hayden to complete your order for now 💐');
     return;
   }
   const checkoutBtn = document.querySelector('.cart-checkout-btn');
