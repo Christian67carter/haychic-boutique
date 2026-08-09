@@ -86,7 +86,8 @@
     "price": "$75.00",
     "status": "in-stock",
     "category": "Bags",
-    "description": ""
+    "description": "",
+    "qty": 1
   },
   {
     "id": "the-candace-msl8cgbc",
