@@ -149,5 +149,14 @@
     "status": "in-stock",
     "category": "Bags",
     "description": ""
+  },
+  {
+    "id": "the-tiffany-msl8iu37",
+    "image": "assets/products/the-tiffany-msl8iu37.jpg",
+    "name": "The Tiffany",
+    "price": "$56.00",
+    "status": "in-stock",
+    "category": "Bags",
+    "description": ""
   }
 ]
