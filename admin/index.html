@@ -4,6 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>HAYCHIC Admin</title>
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16.png" />
+  <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
@@ -100,7 +104,7 @@ body{background:var(--cream);}
 <body>
 
 <div id="loginScreen">
-<h1 style="font-family:'Playfair Display',serif;">HAYCHIC Admin 💐</h1>
+<h1 style="font-family:'Playfair Display',serif;">HAYCHIC Admin <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h1>
 <p style="color:var(--muted);" id="loginTagline">Log in to manage listings, access requests and customers — all in one place.</p>
 <div class="field">
 <label>Email</label>
@@ -129,6 +133,7 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <div class="tabs">
 <button class="tab-btn active" data-tab="listings" onclick="switchTab('listings')">Listings</button>
 <button class="tab-btn" data-tab="requests" onclick="switchTab('requests')">Access Requests <span id="reqCount"></span></button>
+<button class="tab-btn" data-tab="tickets" onclick="switchTab('tickets')">Support Tickets <span id="ticketCount"></span></button>
 <button class="tab-btn" data-tab="leads" onclick="switchTab('leads')">All Leads / CRM</button>
 <button class="tab-btn" data-tab="settings" onclick="switchTab('settings')">Email Settings</button>
 </div>
@@ -217,6 +222,15 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 </div>
 </div>
 
+<!-- ---------- Support Tickets ---------- -->
+<div class="tab-panel" id="panel-tickets">
+<div class="admin-card">
+<h2>Support Tickets</h2>
+<p class="hint">Every message submitted through the Support form on the site, straight from Firestore — so it's here even if the email alert never arrives.</p>
+<div id="ticketsList"><p class="empty">Loading…</p></div>
+</div>
+</div>
+
 <!-- ---------- Leads / CRM ---------- -->
 <div class="tab-panel" id="panel-leads">
 <div class="admin-card">
@@ -299,7 +313,7 @@ const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="announcement">💐 NEW ARRIVALS + PRE-ORDERS AVAILABLE 💐</div>
+  <div class="announcement"><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> NEW ARRIVALS + PRE-ORDERS AVAILABLE <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></div>
 
   <header class="site-header">
     <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
@@ -316,7 +330,7 @@ const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
       <a class="nav-cta" href="shop.html">Shop Now</a>
     </nav>
     <div class="header-actions">
-      <button class="bag-btn" aria-label="Shopping bag">Bag 💐</button>
+      <button class="bag-btn" aria-label="Shopping bag">Bag <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></button>
     </div>
   </header>
 
@@ -352,7 +366,7 @@ let ghSession = localStorage.getItem('haychic_admin_session') || '';
 
 function showStatus(msg, isError){
 const el = document.getElementById('status');
-el.textContent = msg;
+el.innerHTML = msg;
 el.style.background = isError ? '#a05f70' : 'var(--brown)';
 el.classList.add('show');
 setTimeout(()=>el.classList.remove('show'), 3400);
@@ -423,6 +437,7 @@ document.getElementById('loginScreen').classList.add('hidden');
 document.getElementById('adminApp').classList.remove('hidden');
 loadListings();
 loadRequests();
+loadTickets();
 loadLeads();
 loadEmailSettings();
 } else {
@@ -715,7 +730,7 @@ message: editingId ? `Update listing: ${name}` : `Add listing: ${name}`
 });
 productsSha = data.sha;
 
-showStatus('Saved! It will appear on the site in a minute 💐');
+showStatus('Saved! It will appear on the site in a minute <img src="/assets/flower-icon.png" class="flower-emoji" alt="">');
 cancelEdit();
 renderListings();
 }catch(err){
@@ -818,6 +833,43 @@ loadRequests();
 loadLeads();
 }
 
+// ============ Support Tickets ============
+// Pulls every support_request activity doc straight from Firestore — this
+// is the backstop for the Make -> Gmail email alert, so a submission still
+// shows up here even if that email never arrives or Make hiccups.
+async function loadTickets(){
+const wrap = document.getElementById('ticketsList');
+wrap.innerHTML = '<p class="empty">Loading…</p>';
+try{
+const snap = await db.collection('activity').where('type','==','support_request').get();
+let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+docs.sort((a,b) => (b.timestamp?.toMillis?.()||0) - (a.timestamp?.toMillis?.()||0));
+const openDocs = docs.filter(t => !t.handled);
+document.getElementById('ticketCount').textContent = openDocs.length ? `(${openDocs.length})` : '';
+if(!docs.length){ wrap.innerHTML = '<p class="empty">No support messages yet.</p>'; return; }
+wrap.innerHTML = docs.map(t => `
+<div class="req-card" id="ticket-${t.id}" style="${t.handled ? 'opacity:.55;' : ''}">
+<span class="pill-badge ${t.handled ? 'pill-approved' : 'pill-requested'}">${t.handled ? 'Handled' : 'New'}</span>
+<h4>${escapeHtml(t.name || '(no name)')}</h4>
+<div class="meta">${escapeHtml(t.email || '')} ${t.topic ? '&middot; ' + escapeHtml(t.topic) : ''}${t.orderNumber ? ' &middot; order ' + escapeHtml(t.orderNumber) : ''} &middot; ${fmtDate(t.timestamp)}</div>
+${t.message ? `<div class="msg">${escapeHtml(t.message)}</div>` : ''}
+<div class="btn-row">
+${t.email ? `<a class="btn secondary" href="mailto:${escapeAttr(t.email)}?subject=${encodeURIComponent('Re: your HAYCHIC support message')}">Reply by Email</a>` : ''}
+${!t.handled ? `<button class="btn primary" onclick="markTicketHandled('${t.id}')">Mark Handled</button>` : `<button class="btn secondary" onclick="markTicketHandled('${t.id}', false)">Mark Unhandled</button>`}
+</div>
+</div>
+`).join('');
+}catch(err){
+wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
+}
+}
+
+async function markTicketHandled(id, handled){
+handled = handled === undefined ? true : handled;
+await db.collection('activity').doc(id).update({ handled });
+loadTickets();
+}
+
 function generatePassword(){
 const words = ['chic','haute','blush','luxe','dainty','golden','pearl','velvet','rosy','sweet'];
 const w = words[Math.floor(Math.random()*words.length)];
@@ -882,7 +934,7 @@ await emailjs.send(serviceId, templateId, {
 to_email: email, to_name: name || 'there', password: password,
 site_url: 'https://haychicboutique.com'
 });
-showStatus(`Password emailed to ${email} 💐`);
+showStatus(`Password emailed to ${email} <img src="/assets/flower-icon.png" class="flower-emoji" alt="">`);
 }catch(err){
 showStatus(`Password is ${password} but the email failed to send: ${err.text || err.message || err}`, true);
 }
