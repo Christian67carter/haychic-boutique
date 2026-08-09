@@ -149,7 +149,7 @@ h2{font-size:clamp(2.2rem,4vw,4rem)}
 /* Full-bleed gradient banner */
 .banner{min-height:420px;display:flex;align-items:center;padding:0 8vw;position:relative;overflow:hidden;
   background:linear-gradient(135deg,var(--pink-dark),var(--gold));color:#fff}
-.banner::before{content:"♡";position:absolute;right:4vw;top:50%;transform:translateY(-50%);font-family:"Playfair Display",serif;font-size:22rem;line-height:1;opacity:.1;pointer-events:none}
+.banner::before{content:"💐";position:absolute;right:4vw;top:50%;transform:translateY(-50%);font-family:"Playfair Display",serif;font-size:22rem;line-height:1;opacity:.1;pointer-events:none}
 .banner-content{position:relative;max-width:520px}
 .banner h2{color:#fff;margin-top:.2em}
 .banner .eyebrow{color:#f7e9de}
