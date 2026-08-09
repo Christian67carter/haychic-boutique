@@ -90,5 +90,14 @@
     "status": "in-stock",
     "category": "Bags",
     "description": ""
+  },
+  {
+    "id": "the-veronica-msl8d4xu",
+    "image": "assets/products/the-veronica-msl8d4xu.jpg",
+    "name": "The Veronica",
+    "price": "$65.00",
+    "status": "in-stock",
+    "category": "Bags",
+    "description": ""
   }
 ]
