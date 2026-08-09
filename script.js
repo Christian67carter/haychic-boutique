@@ -298,6 +298,11 @@ function injectCartDrawer(){
       <div id="cartItems" class="cart-items"></div>
       <div class="cart-drawer-footer">
         <div class="cart-subtotal"><span>Subtotal</span><strong id="cartSubtotal">$0.00</strong></div>
+        <div class="cart-zip">
+          <label for="cartZip">ZIP code (for shipping)</label>
+          <input type="text" id="cartZip" inputmode="numeric" maxlength="5" placeholder="e.g. 79601" />
+          <p class="cart-zip-note">Abilene, TX ZIP codes unlock Local Delivery at checkout.</p>
+        </div>
         <button class="btn primary cart-checkout-btn" style="width:100%;text-align:center;">Checkout</button>
         <p class="cart-note">Shipping and any final adjustments are calculated at checkout.</p>
       </div>
@@ -357,6 +362,8 @@ async function checkout(){
   }
   const checkoutBtn = document.querySelector('.cart-checkout-btn');
   if(checkoutBtn){ checkoutBtn.disabled = true; checkoutBtn.textContent = 'Redirecting…'; }
+  const zipInput = document.getElementById('cartZip');
+  const zip = zipInput ? zipInput.value.trim() : '';
   try{
     const res = await fetch(CHECKOUT_API, {
       method: 'POST',
@@ -367,7 +374,8 @@ async function checkout(){
           unitAmount: parsePriceToCents(item.price),
           quantity: item.qty,
           image: item.image
-        }))
+        })),
+        zip
       })
     });
     const data = await res.json();
