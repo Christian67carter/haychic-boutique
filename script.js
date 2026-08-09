@@ -73,7 +73,8 @@ async function loadProducts(){
   const preorderGrid = document.getElementById('preorder-products');
   const instockGrid = document.getElementById('instock-products');
   const newArrivalsGrid = document.getElementById('newarrivals-products');
-  if(!grid && !preorderGrid && !instockGrid && !newArrivalsGrid) return;
+  const homeGrid = document.getElementById('home-newarrivals');
+  if(!grid && !preorderGrid && !instockGrid && !newArrivalsGrid && !homeGrid) return;
   try{
     const res = await fetch('products.json?_=' + Date.now());
     ALL_PRODUCTS = await res.json();
@@ -86,6 +87,9 @@ async function loadProducts(){
     // Newest-added items first — products are appended to products.json
     // as they're created, so reversing the list surfaces the latest ones.
     if(newArrivalsGrid) renderGrid(newArrivalsGrid, [...ALL_PRODUCTS].reverse(), 'New arrivals coming soon <img src="/assets/flower-icon.png" class="flower-emoji" alt="">');
+    // Homepage teaser — just the 4 newest, so the homepage shows real
+    // merchandise instead of only category tiles.
+    if(homeGrid) renderGrid(homeGrid, [...ALL_PRODUCTS].reverse().slice(0, 4), 'New arrivals coming soon <img src="/assets/flower-icon.png" class="flower-emoji" alt="">');
   }catch(err){
     if(grid) grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);">Could not load products right now.</p>';
   }

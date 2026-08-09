@@ -30,8 +30,8 @@ button,input,select,textarea{font:inherit}
   backdrop-filter:blur(12px);display:grid;grid-template-columns:auto 1fr auto;
   align-items:center;gap:24px;padding:18px 5vw;border-bottom:1px solid var(--line);
 }
-.brand{font-family:"Playfair Display",serif;font-size:1.7rem;font-weight:600;white-space:nowrap;color:var(--pink-dark)}
-.brand span{display:block;font-family:"DM Sans",sans-serif;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+.brand{font-family:"Playfair Display",serif;font-size:2.05rem;font-weight:600;white-space:nowrap;color:var(--pink-dark);line-height:1.05}
+.brand span{display:block;font-family:"DM Sans",sans-serif;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-top:2px}
 nav{display:flex;justify-content:center;align-items:center;gap:22px;font-size:.86rem}
 nav a:hover,.text-link:hover{color:var(--pink-dark)}
 .nav-cta{background:var(--pink-dark);color:#fff!important;border-radius:999px;padding:9px 18px;font-weight:700;font-size:.78rem;letter-spacing:.06em}
@@ -181,6 +181,15 @@ input,select,textarea{width:100%;margin-top:7px;border:1px solid var(--line);bac
 .about-section{padding:80px 7vw;background:var(--pink);text-align:center}.about-card{max-width:760px;margin:auto}
 .pr-section{background:white}.pr-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}
 .pr-box{background:var(--pink);padding:30px;border-radius:24px}.pr-box strong{font-family:"Playfair Display",serif;font-size:1.8rem;color:var(--pink-dark)}
+.home-shop-band{text-align:center;padding:30px 7vw 0}
+.request-band{background:linear-gradient(120deg,var(--pink-dark),var(--sage));padding:70px 7vw;text-align:center;color:#fff;border-radius:0}
+.request-band h2{color:#fff;font-size:2.1rem;margin:.2em 0}
+.request-band p{color:rgba(255,255,255,.92);max-width:520px;margin:0 auto;font-size:1.05rem}
+.request-band .eyebrow{color:#fbe7e0}
+.request-band .btn{background:#fff;color:var(--pink-dark);border-color:#fff;margin-top:24px;font-size:.95rem;padding:14px 30px}
+.request-band .btn:hover{background:#f7ece2}
+.pr-standalone{background:var(--pink);padding:40px 7vw;border-radius:28px;max-width:760px;margin:0 auto;text-align:center}
+.pr-standalone strong{font-family:"Playfair Display",serif;font-size:1.6rem;color:var(--pink-dark);display:block;margin-bottom:8px}
 
 /* FAQ */
 .faq{max-width:900px;margin:auto}
