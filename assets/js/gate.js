@@ -68,6 +68,7 @@
         <form id="gate-request-form" class="gate-request-form gate-hidden">
           <input type="text" id="gate-name" placeholder="Your name" required>
           <input type="email" id="gate-email" placeholder="Your email" required>
+          <input type="text" id="gate-social" placeholder="Instagram handle (optional)">
           <textarea id="gate-message" placeholder="Anything you'd like Hayden to know? (optional)" rows="3"></textarea>
           <button type="submit" class="btn secondary">Send Request <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></button>
           <p id="gate-request-status" class="gate-error"></p>
@@ -105,6 +106,7 @@
       e.preventDefault();
       const name = document.getElementById('gate-name').value.trim();
       const email = document.getElementById('gate-email').value.trim();
+      const social = document.getElementById('gate-social').value.trim();
       const message = document.getElementById('gate-message').value.trim();
       const statusEl = document.getElementById('gate-request-status');
       if (!name || !email) return;
@@ -115,6 +117,7 @@
           name: name,
           email: email,
           phone: '',
+          social: social,
           message: message,
           status: 'requested',
           notes: '',

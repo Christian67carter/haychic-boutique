@@ -377,6 +377,13 @@ return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&g
 function escapeAttr(str){
 return String(str||'').replace(/'/g, "\\'");
 }
+// Renders a lead's Instagram handle as a link to their profile, tolerating
+// whether they typed "@name", "instagram.com/name", or just "name".
+function igLink(social){
+const handle = String(social).trim().replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/^@/, '').replace(/\/$/, '');
+if(!handle) return '';
+return `<a href="https://instagram.com/${encodeURIComponent(handle)}" target="_blank" rel="noopener">@${escapeHtml(handle)}</a>`;
+}
 function switchTab(name){
 document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
 document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -812,7 +819,7 @@ wrap.innerHTML = docs.map(l => `
 <div class="req-card" id="req-${l.id}">
 <span class="pill-badge pill-requested">Requested</span>
 <h4>${escapeHtml(l.name||'(no name)')}</h4>
-<div class="meta">${escapeHtml(l.email||'')} ${l.phone ? '&middot; ' + escapeHtml(l.phone) : ''} &middot; ${fmtDate(l.createdAt)}</div>
+<div class="meta">${escapeHtml(l.email||'')} ${l.phone ? '&middot; ' + escapeHtml(l.phone) : ''} ${l.social ? '&middot; ' + igLink(l.social) : ''} &middot; ${fmtDate(l.createdAt)}</div>
 ${l.message ? `<div class="msg">${escapeHtml(l.message)}</div>` : ''}
 <div class="btn-row">
 <button class="btn primary" onclick="approveAndGenerate('${l.id}','${escapeAttr(l.email)}','${escapeAttr(l.name)}')">Approve &amp; Generate Password</button>
@@ -964,7 +971,7 @@ wrap.innerHTML = allLeads.map(l => `
 <div class="lead-row">
 <div class="info">
 <h4>${escapeHtml(l.name||'(no name)')} <span class="pill-badge pill-${l.status||'requested'}">${l.status||'requested'}</span></h4>
-<span>${escapeHtml(l.email||'')} ${l.phone ? '&middot; ' + escapeHtml(l.phone) : ''} &middot; ${fmtDate(l.createdAt)}${l.password ? ' &middot; pw: ' : ''}${l.password ? `<span class="password-chip">${escapeHtml(l.password)}</span>` : ''}</span>
+<span>${escapeHtml(l.email||'')} ${l.phone ? '&middot; ' + escapeHtml(l.phone) : ''} ${l.social ? '&middot; ' + igLink(l.social) : ''} &middot; ${fmtDate(l.createdAt)}${l.password ? ' &middot; pw: ' : ''}${l.password ? `<span class="password-chip">${escapeHtml(l.password)}</span>` : ''}</span>
 </div>
 <div class="actions">
 <button onclick="toggleLeadDetail('${l.id}')">Notes</button>
