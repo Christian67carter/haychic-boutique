@@ -58,7 +58,8 @@
     "sizes": [
       {
         "name": "Medium",
-        "status": "in-stock"
+        "status": "in-stock",
+        "qty": 2
       }
     ]
   },
