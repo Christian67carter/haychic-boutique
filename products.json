@@ -170,7 +170,7 @@
   },
   {
     "id": "the-lucia-msl8kixe",
-    "image": "",
+    "image": "assets/products/the-lucia-msl8kixe-black.jpg",
     "name": "The Lucia",
     "price": "$58.00",
     "status": "preorder",
@@ -179,7 +179,7 @@
     "colors": [
       {
         "name": "Black",
-        "image": "",
+        "image": "assets/products/the-lucia-msl8kixe-black.jpg",
         "status": "preorder"
       }
     ]
