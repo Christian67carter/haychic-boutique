@@ -164,7 +164,7 @@
     "image": "assets/products/the-chelsey-msl8jhez.jpg",
     "name": "The Chelsey",
     "price": "$25.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Bags",
     "description": ""
   },
