@@ -11,11 +11,26 @@ function statusInfo(status){
   return { cls: 'in-stock', label: 'IN STOCK' };
 }
 
+// Below this many units left, show a red "only X left" urgency note.
+// Keep in sync with LOW_STOCK_THRESHOLD in admin/index.html.
+const LOW_STOCK_THRESHOLD = 3;
+
+// Returns an "only X left" markup when qty is a low-but-nonzero number,
+// otherwise an empty string. qty === 0 is handled separately by flipping
+// the item's status to pre-order, not by an urgency note.
+function urgencyHtml(qty){
+  if(typeof qty !== 'number' || qty <= 0 || qty > LOW_STOCK_THRESHOLD) return '';
+  return `<span class="urgency-badge">Only ${qty} left!</span>`;
+}
+
 let ALL_PRODUCTS = [];
 
 function renderProductCard(p){
-  const { cls: statusClass, label: statusLabel } = statusInfo(p.status);
-  const soldOut = p.status === 'sold-out';
+  // Defensive fallback: if a product's status somehow says "in-stock" but
+  // its tracked quantity is 0, treat it as pre-order rather than sellable.
+  const effectiveStatus = (p.status === 'in-stock' && p.qty === 0) ? 'preorder' : p.status;
+  const { cls: statusClass, label: statusLabel } = statusInfo(effectiveStatus);
+  const soldOut = effectiveStatus === 'sold-out';
   const bg = p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : '';
   const inner = p.image ? '' : '<span>HAYCHIC</span>';
   const href = `/${encodeURIComponent(p.id)}`;
@@ -25,7 +40,7 @@ function renderProductCard(p){
         <div class="product-image placeholder" style="${bg}">${inner}</div>
         <div class="badges"><span class="badge ${statusClass}">${statusLabel}</span></div>
         <h3>${escapeHtml(p.name)}</h3>
-        <p class="price">${escapeHtml(p.price)}</p>
+        <p class="price">${escapeHtml(p.price)} ${urgencyHtml(p.qty)}</p>
       </a>
       <button class="add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
     </article>`;
@@ -154,7 +169,13 @@ async function loadProductDetail(){
     let selectedSize = sizeList.length ? sizeList[0] : null;
 
     function render(){
-      const activeStatus = (selectedSize && selectedSize.status) || (selectedColor && selectedColor.status) || p.status;
+      let activeStatus = (selectedSize && selectedSize.status) || (selectedColor && selectedColor.status) || p.status;
+      const activeQty = (selectedSize && typeof selectedSize.qty === 'number') ? selectedSize.qty
+        : (selectedColor && typeof selectedColor.qty === 'number') ? selectedColor.qty
+        : (typeof p.qty === 'number' ? p.qty : null);
+      // Defensive fallback: quantity tracked at 0 but status wasn't flipped —
+      // treat as pre-order rather than letting it look sellable.
+      if(activeStatus === 'in-stock' && activeQty === 0) activeStatus = 'preorder';
       const activeImage = (selectedColor && selectedColor.image) || p.image;
       const { cls: statusClass, label: statusLabel } = statusInfo(activeStatus);
       const soldOut = activeStatus === 'sold-out';
@@ -191,14 +212,14 @@ async function loadProductDetail(){
           <span class="badge ${statusClass}">${statusLabel}</span>
           <h1>${escapeHtml(p.name)}</h1>
           <p class="pdp-category">${escapeHtml(p.category || '')}</p>
-          <p class="pdp-price">${escapeHtml(p.price)}</p>
+          <p class="pdp-price">${escapeHtml(p.price)} ${urgencyHtml(activeQty)}</p>
           ${swatches}
           ${sizePicker}
           <p class="pdp-desc">${desc}</p>
           ${preorderNote}
           ${soldOutNote}
           <div class="hero-actions">
-            <button class="btn primary add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(displayName)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(activeImage || '')}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
+            <button class="btn primary add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(displayName)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(activeImage || '')}" data-color="${escapeHtml(selectedColor ? selectedColor.name : '')}" data-size="${escapeHtml(selectedSize ? selectedSize.name : '')}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
             <a class="btn secondary" href="request.html">Ask a Question</a>
           </div>
         </div>`;
@@ -264,11 +285,17 @@ function updateBagBadge(){
   });
 }
 
-function addToCart(id, name, priceStr, image){
+function addToCart(id, name, priceStr, image, colorName, sizeName){
   const cart = loadCart();
   const existing = cart.find(item => item.id === id);
-  if(existing){ existing.qty += 1; }
-  else { cart.push({ id, name, price: priceStr, image: image || '', qty: 1 }); }
+  if(existing){
+    existing.qty += 1;
+    // Keep the most recently selected variant tied to this line item.
+    if(colorName) existing.colorName = colorName;
+    if(sizeName) existing.sizeName = sizeName;
+  } else {
+    cart.push({ id, name, price: priceStr, image: image || '', qty: 1, colorName: colorName || '', sizeName: sizeName || '' });
+  }
   saveCart(cart);
 }
 
@@ -373,7 +400,10 @@ async function checkout(){
           name: item.name,
           unitAmount: parsePriceToCents(item.price),
           quantity: item.qty,
-          image: item.image
+          image: item.image,
+          productId: item.id,
+          colorName: item.colorName || '',
+          sizeName: item.sizeName || ''
         })),
         zip
       })
@@ -406,8 +436,8 @@ document.addEventListener('click', (e) => {
   const addBtn = e.target.closest('.add-to-bag-btn');
   if(addBtn){
     if(addBtn.disabled) return; // sold-out items can't be added to the bag
-    const { id, name, price, image } = addBtn.dataset;
-    addToCart(id, name, price, image);
+    const { id, name, price, image, color, size } = addBtn.dataset;
+    addToCart(id, name, price, image, color, size);
     showToast(`${name} added to bag`);
     logProductInterest(id, name);
     return;
