@@ -45,12 +45,14 @@
       {
         "name": "Blush Pink",
         "image": "assets/products/the-cutie-set-mskpheqd-blush-pink.jpg",
-        "status": "in-stock"
+        "status": "in-stock",
+        "qty": 1
       },
       {
         "name": "Black",
         "image": "assets/products/the-cutie-set-mskpheqd-black.jpg",
-        "status": "in-stock"
+        "status": "in-stock",
+        "qty": 1
       }
     ],
     "sizes": [
