@@ -32,22 +32,6 @@
     ]
   },
   {
-    "id": "everyday-sneaker",
-    "name": "The Veronica",
-    "price": "$65.00",
-    "status": "in-stock",
-    "category": "Bags",
-    "image": "assets/products/everyday-sneaker.jpg",
-    "description": "",
-    "colors": [
-      {
-        "name": "Original",
-        "image": "assets/products/everyday-sneaker.jpg",
-        "status": "in-stock"
-      }
-    ]
-  },
-  {
     "id": "the-cutie-set-mskpheqd",
     "image": "assets/products/the-cutie-set-mskpheqd-blush-pink.jpg",
     "name": "The Cutie Set",
