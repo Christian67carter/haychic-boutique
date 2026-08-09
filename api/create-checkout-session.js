@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
   const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
   try {
-    const { items } = req.body || {};
+    const { items, zip } = req.body || {};
 
     if (!Array.isArray(items) || items.length === 0) {
       res.status(400).json({ error: 'Your bag is empty.' });
@@ -71,45 +71,60 @@ module.exports = async (req, res) => {
       };
     });
 
+    // "Local Delivery" is only offered when the shopper's ZIP is inside
+    // Abilene, TX. This is self-reported at checkout (not verified against
+    // the address they type later in Stripe Checkout), so it's a soft gate,
+    // not a hard guarantee — but it's more accurate than guessing from IP.
+    const ABILENE_TX_ZIPS = new Set([
+      '79601', '79602', '79603', '79604', '79605',
+      '79606', '79607', '79608', '79697', '79698', '79699',
+    ]);
+    const isAbileneZip = ABILENE_TX_ZIPS.has(String(zip || '').trim());
+
+    const shipping_options = [
+      {
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: { amount: 899, currency: 'usd' },
+          display_name: 'Regular Shipping',
+          delivery_estimate: {
+            minimum: { unit: 'business_day', value: 5 },
+            maximum: { unit: 'business_day', value: 7 },
+          },
+        },
+      },
+      {
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: { amount: 1399, currency: 'usd' },
+          display_name: 'Express Shipping',
+          delivery_estimate: {
+            minimum: { unit: 'business_day', value: 2 },
+            maximum: { unit: 'business_day', value: 3 },
+          },
+        },
+      },
+    ];
+
+    if (isAbileneZip) {
+      shipping_options.splice(1, 0, {
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: { amount: 699, currency: 'usd' },
+          display_name: 'Local Delivery (Abilene, TX)',
+          delivery_estimate: {
+            minimum: { unit: 'business_day', value: 1 },
+            maximum: { unit: 'business_day', value: 2 },
+          },
+        },
+      });
+    }
+
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items,
       shipping_address_collection: { allowed_countries: ['US'] },
-      shipping_options: [
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: { amount: 899, currency: 'usd' },
-            display_name: 'Regular Shipping',
-            delivery_estimate: {
-              minimum: { unit: 'business_day', value: 5 },
-              maximum: { unit: 'business_day', value: 7 },
-            },
-          },
-        },
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: { amount: 699, currency: 'usd' },
-            display_name: 'Local Delivery',
-            delivery_estimate: {
-              minimum: { unit: 'business_day', value: 1 },
-              maximum: { unit: 'business_day', value: 2 },
-            },
-          },
-        },
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: { amount: 1399, currency: 'usd' },
-            display_name: 'Express Shipping',
-            delivery_estimate: {
-              minimum: { unit: 'business_day', value: 2 },
-              maximum: { unit: 'business_day', value: 3 },
-            },
-          },
-        },
-      ],
+      shipping_options,
       success_url: `${SITE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/shop.html`,
     });
