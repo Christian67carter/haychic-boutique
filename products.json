@@ -108,5 +108,14 @@
     "status": "preorder",
     "category": "Bags",
     "description": ""
+  },
+  {
+    "id": "the-charlie-msl8fged",
+    "image": "assets/products/the-charlie-msl8fged.jpg",
+    "name": "The Charlie",
+    "price": "$58",
+    "status": "in-stock",
+    "category": "Bags",
+    "description": ""
   }
 ]
