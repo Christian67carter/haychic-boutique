@@ -128,6 +128,7 @@ async function submitSupport(e){
   const payload = {
     name: data.get('name') || '',
     email: data.get('email') || '',
+    social: data.get('social') || '',
     topic: data.get('topic') || '',
     orderNumber: data.get('orderNumber') || '',
     message: data.get('message') || ''
@@ -220,6 +221,9 @@ async function loadProductDetail(){
       const preorderNote = activeStatus === 'preorder'
         ? `<div class="pdp-note">This is a pre-order item — typical turnaround is about 2–3 weeks. <a href="preorders.html">Learn how pre-orders work →</a></div>`
         : '';
+      const inStockNote = activeStatus === 'in-stock'
+        ? `<div class="pdp-note pdp-note-instock">On hand and ready to ship — usually ships within 1–2 business days.</div>`
+        : '';
       const soldOutNote = soldOut
         ? `<div class="pdp-note pdp-note-soldout">This item is currently sold out. <a href="request.html">Ask to be notified when it's back →</a></div>`
         : '';
@@ -251,6 +255,7 @@ async function loadProductDetail(){
           ${swatches}
           ${sizePicker}
           <p class="pdp-desc">${desc}</p>
+          ${inStockNote}
           ${preorderNote}
           ${soldOutNote}
           <div class="hero-actions">
@@ -365,6 +370,10 @@ function injectCartDrawer(){
           <input type="text" id="cartZip" inputmode="numeric" maxlength="5" placeholder="e.g. 79601" />
           <p class="cart-zip-note">Abilene, TX ZIP codes unlock Local Delivery at checkout.</p>
         </div>
+        <div class="cart-zip">
+          <label for="cartInstagram">Instagram / TikTok (optional)</label>
+          <input type="text" id="cartInstagram" placeholder="@username" />
+        </div>
         <button class="btn primary cart-checkout-btn" style="width:100%;text-align:center;">Checkout</button>
         <p class="cart-note">Shipping and any final adjustments are calculated at checkout.</p>
       </div>
@@ -426,6 +435,8 @@ async function checkout(){
   if(checkoutBtn){ checkoutBtn.disabled = true; checkoutBtn.textContent = 'Redirecting…'; }
   const zipInput = document.getElementById('cartZip');
   const zip = zipInput ? zipInput.value.trim() : '';
+  const instagramInput = document.getElementById('cartInstagram');
+  const instagram = instagramInput ? instagramInput.value.trim() : '';
   try{
     const res = await fetch(CHECKOUT_API, {
       method: 'POST',
@@ -440,7 +451,8 @@ async function checkout(){
           colorName: item.colorName || '',
           sizeName: item.sizeName || ''
         })),
-        zip
+        zip,
+        instagram
       })
     });
     const data = await res.json();
@@ -465,6 +477,13 @@ document.addEventListener('DOMContentLoaded', () => {
   injectCartDrawer();
   injectBagBadges();
   updateBagBadge();
+
+  const topicSelect = document.querySelector('select[name="topic"]');
+  const topicParam = new URLSearchParams(location.search).get('topic');
+  if(topicSelect && topicParam){
+    const match = Array.from(topicSelect.options).find(o => o.value === topicParam);
+    if(match) topicSelect.value = topicParam;
+  }
 });
 
 document.addEventListener('click', (e) => {

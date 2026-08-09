@@ -56,15 +56,9 @@
     overlay.id = 'haychic-gate';
     overlay.innerHTML = `
       <div class="gate-box">
-        <div class="gate-logo">HAYCHIC <span>Boutique</span></div>
-        <p class="gate-tag">This site is currently by invite only <img src="/assets/flower-icon.png" class="flower-emoji" alt=""> Enter your access password below, or request one.</p>
-        <form id="gate-unlock-form">
-          <input type="password" id="gate-password" placeholder="Access password" required autocomplete="off">
-          <button type="submit" class="btn primary">Enter Site</button>
-          <p id="gate-error" class="gate-error"></p>
-        </form>
-        <div class="gate-divider">or</div>
-        <button type="button" id="gate-request-toggle" class="gate-request-toggle">Request access →</button>
+        <div class="gate-logo">Welcome to HAYCHIC <span>Boutique</span></div>
+        <p class="gate-tag">Our boutique is currently available by approved access <img src="/assets/flower-icon.png" class="flower-emoji" alt="">. Don't have a password yet? Request one below.</p>
+        <button type="button" id="gate-request-toggle" class="btn primary gate-request-toggle-btn">Request Access</button>
         <form id="gate-request-form" class="gate-request-form gate-hidden">
           <input type="text" id="gate-name" placeholder="Your name" required>
           <input type="email" id="gate-email" placeholder="Your email" required>
@@ -72,6 +66,12 @@
           <textarea id="gate-message" placeholder="Anything you'd like Hayden to know? (optional)" rows="3"></textarea>
           <button type="submit" class="btn secondary">Send Request <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></button>
           <p id="gate-request-status" class="gate-error"></p>
+        </form>
+        <div class="gate-divider">already approved?</div>
+        <form id="gate-unlock-form">
+          <input type="password" id="gate-password" placeholder="Enter your personal password" required autocomplete="off">
+          <button type="submit" class="btn secondary">Enter Site</button>
+          <p id="gate-error" class="gate-error"></p>
         </form>
       </div>`;
     document.documentElement.appendChild(overlay);

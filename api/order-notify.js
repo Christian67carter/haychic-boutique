@@ -168,6 +168,7 @@ module.exports = async (req, res) => {
         orderUrl: `https://dashboard.stripe.com/payments/${session.payment_intent}`,
         customerName: shipping.name || session.customer_details?.name || '',
         email: session.customer_details?.email || '',
+        instagram: session.metadata?.instagram || '',
         addressLine1: address.line1 || '',
         addressLine2: address.line2 || '',
         city: address.city || '',
