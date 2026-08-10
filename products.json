@@ -3,7 +3,7 @@
     "id": "the-tiffany",
     "name": "The Gabriella",
     "price": "$77.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Bags",
     "image": "assets/products/the-tiffany.jpg",
     "description": "",
@@ -14,7 +14,7 @@
         "status": "in-stock"
       }
     ],
-    "qty": 1
+    "qty": 0
   },
   {
     "id": "the-cutie-set",
