@@ -163,7 +163,7 @@ module.exports = async (req, res) => {
   const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
   try {
-    const { items, zip } = req.body || {};
+    const { items, zip, instagram } = req.body || {};
 
     if (!Array.isArray(items) || items.length === 0) {
       res.status(400).json({ error: 'Your bag is empty.' });
@@ -292,9 +292,15 @@ module.exports = async (req, res) => {
       });
     }
 
+    // Optional — shown as "Instagram / TikTok" in the bag before checkout,
+    // captured so Hayden has one place to look up a customer's handle
+    // alongside their order, same as the access-request and support forms.
+    const instagramHandle = String(instagram || '').trim().slice(0, 100);
+
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items,
+      metadata: instagramHandle ? { instagram: instagramHandle } : undefined,
       shipping_address_collection: { allowed_countries: ['US'] },
       shipping_options,
       // Lets shoppers enter a discount code Hayden creates in the Stripe
