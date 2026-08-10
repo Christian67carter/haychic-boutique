@@ -225,7 +225,7 @@
     "image": "assets/products/the-faye-msl8qdv7-brown.jpg",
     "name": "The FAYE",
     "price": "$88.00",
-    "status": "preorder",
+    "status": "in-stock",
     "category": "Bags",
     "description": "",
     "colors": [
@@ -234,6 +234,7 @@
         "image": "assets/products/the-faye-msl8qdv7-brown.jpg",
         "status": "preorder"
       }
-    ]
+    ],
+    "qty": 1
   }
 ]
