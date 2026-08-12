@@ -272,7 +272,7 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <div class="tab-panel" id="panel-settings">
 <div class="admin-card">
 <h2>Email Sending Setup (EmailJS)</h2>
-<p class="hint">These connect the "Send Password" button to your real inbox via EmailJS. Set up a free EmailJS account, connect your email as a Service, and create a template with variables <code>{{to_name}}</code>, <code>{{to_email}}</code>, <code>{{password}}</code>, <code>{{site_url}}</code>. Paste the IDs below (saved only in this browser).</p>
+<p class="hint">These connect the "Send Password" button to your real inbox via EmailJS. Set up a free EmailJS account, connect your email as a Service, and create a template with variables <code>{{to_name}}</code>, <code>{{to_email}}</code>, <code>{{password}}</code>, <code>{{site_url}}</code>. Paste the IDs below (synced automatically across every device you log in from).</p>
 <div class="field"><label>EmailJS Public Key</label><input type="text" id="emailjsPublicKey" placeholder="e.g. AbCdEfGhIjKlMnOp"></div>
 <div class="field"><label>EmailJS Service ID</label><input type="text" id="emailjsServiceId" placeholder="e.g. service_xxxxxxx"></div>
 <div class="field"><label>EmailJS Template ID (password email)</label><input type="text" id="emailjsTemplateId" placeholder="e.g. template_xxxxxxx"></div>
@@ -976,24 +976,27 @@ showStatus(err.message, true);
 }
 
 async function sendTrackingEmail(email, name, orderId, trackingNumber, trackingCarrier){
-const publicKey = localStorage.getItem('haychic_emailjs_public_key');
-const serviceId = localStorage.getItem('haychic_emailjs_service_id');
-const templateId = localStorage.getItem('haychic_emailjs_tracking_template_id');
-if(!publicKey || !serviceId || !templateId){
-showStatus(`Tracking is ${trackingNumber} — set up the Tracking Email Template in Email Settings to auto-send it.`, true);
-return;
-}
-try{
-emailjs.init(publicKey);
-await emailjs.send(serviceId, templateId, {
-to_email: email, to_name: name || 'there',
-order_id: orderId, tracking_number: trackingNumber, tracking_carrier: trackingCarrier || '',
-site_url: 'https://haychicboutique.com'
-});
-showStatus(`Tracking emailed to ${email} <img src="/assets/flower-icon.png" class="flower-emoji" alt="">`);
-}catch(err){
-showStatus(`Tracking is ${trackingNumber} but the email failed to send: ${err.text || err.message || err}`, true);
-}
+  let publicKey, serviceId, templateId;
+  try{
+    const doc = await db.collection('settings').doc('emailjs').get();
+    const s = doc.exists ? doc.data() : {};
+    publicKey = s.publicKey; serviceId = s.serviceId; templateId = s.trackingTemplateId;
+  }catch(err){ /* falls into the missing-settings branch below */ }
+  if(!publicKey || !serviceId || !templateId){
+    showStatus(`Tracking is ${trackingNumber} — set up the Tracking Email Template in Email Settings to auto-send it.`, true);
+    return;
+  }
+  try{
+    emailjs.init(publicKey);
+    await emailjs.send(serviceId, templateId, {
+      to_email: email, to_name: name || 'there',
+      order_id: orderId, tracking_number: trackingNumber, tracking_carrier: trackingCarrier || '',
+      site_url: 'https://haychicboutique.com'
+    });
+    showStatus(`Tracking emailed to ${email} <img src="/assets/flower-icon.png" class="flower-emoji" alt="">`);
+  }catch(err){
+    showStatus(`Tracking is ${trackingNumber} but the email failed to send: ${err.text || err.message || err}`, true);
+  }
 }
 
 function generatePassword(){
@@ -1034,39 +1037,53 @@ showStatus(err.message, true);
 }
 
 // ============ EmailJS ============
-function loadEmailSettings(){
-document.getElementById('emailjsPublicKey').value = localStorage.getItem('haychic_emailjs_public_key') || '';
-document.getElementById('emailjsServiceId').value = localStorage.getItem('haychic_emailjs_service_id') || '';
-document.getElementById('emailjsTemplateId').value = localStorage.getItem('haychic_emailjs_template_id') || '';
-document.getElementById('emailjsTrackingTemplateId').value = localStorage.getItem('haychic_emailjs_tracking_template_id') || '';
+async function loadEmailSettings(){
+  try{
+  const doc = await db.collection('settings').doc('emailjs').get();
+    const s = doc.exists ? doc.data() : {};
+    document.getElementById('emailjsPublicKey').value = s.publicKey || '';
+    document.getElementById('emailjsServiceId').value = s.serviceId || '';
+    document.getElementById('emailjsTemplateId').value = s.templateId || '';
+    document.getElementById('emailjsTrackingTemplateId').value = s.trackingTemplateId || '';
+  }catch(err){
+    showStatus('Could not load Email Settings: ' + (err.message || err), true);
+  }
 }
-function saveEmailSettings(){
-localStorage.setItem('haychic_emailjs_public_key', document.getElementById('emailjsPublicKey').value.trim());
-localStorage.setItem('haychic_emailjs_service_id', document.getElementById('emailjsServiceId').value.trim());
-localStorage.setItem('haychic_emailjs_template_id', document.getElementById('emailjsTemplateId').value.trim());
-localStorage.setItem('haychic_emailjs_tracking_template_id', document.getElementById('emailjsTrackingTemplateId').value.trim());
-showStatus('Email settings saved in this browser.');
-}
+  async function saveEmailSettings(){
+    const publicKey = document.getElementById('emailjsPublicKey').value.trim();
+    const serviceId = document.getElementById('emailjsServiceId').value.trim();
+    const templateId = document.getElementById('emailjsTemplateId').value.trim();
+    const trackingTemplateId = document.getElementById('emailjsTrackingTemplateId').value.trim();
+    try{
+      await db.collection('settings').doc('emailjs').set({ publicKey, serviceId, templateId, trackingTemplateId }, { merge: true });
+      showStatus('Email settings saved — synced for every device.');
+    }catch(err){
+      showStatus('Could not save email settings: ' + (err.message || err), true);
+    }
+  }
 
-async function sendPasswordEmail(email, name, password){
-const publicKey = localStorage.getItem('haychic_emailjs_public_key');
-const serviceId = localStorage.getItem('haychic_emailjs_service_id');
-const templateId = localStorage.getItem('haychic_emailjs_template_id');
-if(!publicKey || !serviceId || !templateId){
-showStatus(`Password is ${password} — set up Email Settings tab to auto-send it.`, true);
-return;
-}
-try{
-emailjs.init(publicKey);
-await emailjs.send(serviceId, templateId, {
-to_email: email, to_name: name || 'there', password: password,
-site_url: 'https://haychicboutique.com'
-});
-showStatus(`Password emailed to ${email} <img src="/assets/flower-icon.png" class="flower-emoji" alt="">`);
-}catch(err){
-showStatus(`Password is ${password} but the email failed to send: ${err.text || err.message || err}`, true);
-}
-}
+  async function sendPasswordEmail(email, name, password){
+    let publicKey, serviceId, templateId;
+    try{
+      const doc = await db.collection('settings').doc('emailjs').get();
+      const s = doc.exists ? doc.data() : {};
+      publicKey = s.publicKey; serviceId = s.serviceId; templateId = s.templateId;
+    }catch(err){ /* falls into the missing-settings branch below */ }
+    if(!publicKey || !serviceId || !templateId){
+      showStatus(`Password is ${password} — set up Email Settings tab to auto-send it.`, true);
+      return;
+    }
+    try{
+      emailjs.init(publicKey);
+      await emailjs.send(serviceId, templateId, {
+        to_email: email, to_name: name || 'there', password: password,
+        site_url: 'https://haychicboutique.com'
+      });
+      showStatus(`Password emailed to ${email} <img src="/assets/flower-icon.png" class="flower-emoji" alt="">`);
+    }catch(err){
+      showStatus(`Password is ${password} but the email failed to send: ${err.text || err.message || err}`, true);
+    }
+  }
 
 // ============ Leads / CRM ============
 let allLeads = [];
