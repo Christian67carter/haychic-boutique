@@ -282,7 +282,7 @@ module.exports = async (req, res) => {
       shipping_options.splice(1, 0, {
         shipping_rate_data: {
           type: 'fixed_amount',
-          fixed_amount: { amount: 699, currency: 'usd' },
+          fixed_amount: { amount: 550, currency: 'usd' },
           display_name: 'Local Delivery (Abilene, TX)',
           delivery_estimate: {
             minimum: { unit: 'business_day', value: 1 },
