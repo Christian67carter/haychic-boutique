@@ -119,12 +119,35 @@
   },
   {
     "id": "the-charlie-msl8fged",
-    "image": "assets/products/the-charlie-msl8fged.jpg",
+    "image": "assets/products/the-charlie-msl8fged-white.jpg",
     "name": "The Charlie",
     "price": "$58.00",
     "status": "preorder",
     "category": "Bags",
-    "description": ""
+    "description": "",
+    "colors": [
+      {
+        "name": "White",
+        "image": "assets/products/the-charlie-msl8fged-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "assets/products/the-charlie-msl8fged-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Blush Pink",
+        "image": "assets/products/the-charlie-msl8fged-blush-pink.jpg",
+        "status": "preorder"
+      }
+    ],
+    "sizes": [
+      {
+        "name": "Small",
+        "status": "preorder"
+      }
+    ]
   },
   {
     "id": "the-court-side-set-msl8gv62",
