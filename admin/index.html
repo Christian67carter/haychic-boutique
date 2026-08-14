@@ -185,13 +185,14 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <textarea id="fDescription" rows="3" placeholder="A few sentences about this item — fit, material, why you love it..."></textarea>
 </div>
 <div class="field">
-<label>Cover Photo (used if this item has no colors below)</label>
+<label>Cover Photo (shown on the shop grid — use a photo showing all colors together if this item has variants)</label>
 <input type="file" id="fImage" accept="image/*">
+  <p class="hint" id="coverExistingNote" style="display:none;margin:6px 0 0;">Current cover photo saved ✓ (choose a file to replace it)</p>
 </div>
 
 <div class="field">
 <label>Colors / Variants (optional)</label>
-<p class="hint" style="margin:0 0 10px;">Add a row per color — each gets its own photo and its own stock status. If you add colors, shoppers will see a color picker on the item page and the cover photo above is skipped.</p>
+<p class="hint" style="margin:0 0 10px;">Add a row per color — each gets its own photo and its own stock status. If you add colors, shoppers will see a color picker on the item page. The Cover Photo above is used as the main shop-grid thumbnail.</p>
 <div id="colorRows"></div>
 <button type="button" class="btn secondary add-color-btn" onclick="addColorRow()">+ Add Color</button>
 </div>
@@ -732,15 +733,17 @@ images.push(...colorImages);
 
 if(colors.length){
 entry.colors = colors;
-entry.image = colors[0].image;
 } else {
 delete entry.colors;
+}
+
 if(file){
 showStatus('Uploading photo…');
 const base64 = await resizeImage(file, 1200);
 images.push({ id: entry.id, base64 });
 entry.image = `assets/products/${entry.id}.jpg`;
-}
+} else if(!entry.image && colors.length){
+entry.image = colors[0].image;
 }
 
 const sizes = collectSizes();
@@ -783,6 +786,7 @@ document.getElementById('fStatus').value = p.status;
 document.getElementById('fQty').value = typeof p.qty === 'number' ? p.qty : '';
 document.getElementById('fCategory').value = p.category;
 document.getElementById('fDescription').value = p.description || '';
+  document.getElementById('coverExistingNote').style.display = p.image ? 'block' : 'none';
 document.getElementById('saveBtn').textContent = 'Save Changes';
 document.getElementById('cancelEditBtn').classList.remove('hidden');
 clearColorRows();
@@ -803,6 +807,7 @@ document.getElementById('fQty').value = '';
 document.getElementById('fCategory').value = 'Bags';
 document.getElementById('fDescription').value = '';
 document.getElementById('fImage').value = '';
+  document.getElementById('coverExistingNote').style.display = 'none';
 document.getElementById('saveBtn').textContent = 'Add Listing';
 document.getElementById('cancelEditBtn').classList.add('hidden');
 clearColorRows();
