@@ -285,5 +285,31 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-minnie-mstlohrf",
+    "image": "assets/products/the-minnie-mstlohrf-brown.jpg",
+    "name": "The Minnie",
+    "price": "$68.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Brown",
+        "image": "assets/products/the-minnie-mstlohrf-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "assets/products/the-minnie-mstlohrf-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Light Brown",
+        "image": "assets/products/the-minnie-mstlohrf-light-brown.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
