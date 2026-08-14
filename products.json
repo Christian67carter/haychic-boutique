@@ -311,5 +311,14 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-molly-mstlq06p",
+    "image": "assets/products/the-molly-mstlq06p.jpg",
+    "name": "The Molly",
+    "price": "$68.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": ""
   }
 ]
