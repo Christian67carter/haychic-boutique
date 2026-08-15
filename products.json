@@ -188,6 +188,31 @@
         "name": "Black",
         "image": "assets/products/the-lucia-msl8kixe-black.jpg",
         "status": "preorder"
+      },
+      {
+        "name": "White",
+        "image": "assets/products/the-lucia-msl8kixe-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Tan",
+        "image": "assets/products/the-lucia-msl8kixe-tan.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Navy",
+        "image": "assets/products/the-lucia-msl8kixe-navy.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Red",
+        "image": "assets/products/the-lucia-msl8kixe-red.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Green",
+        "image": "assets/products/the-lucia-msl8kixe-green.jpg",
+        "status": "preorder"
       }
     ]
   },
