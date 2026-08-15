@@ -533,5 +533,41 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-terry-mstsmjst",
+    "image": "assets/products/the-terry-mstsmjst-black-with-gold-hardware.jpg",
+    "name": "The Terry",
+    "price": "$60.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Black with gold hardware",
+        "image": "assets/products/the-terry-mstsmjst-black-with-gold-hardware.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White with gold hardware",
+        "image": "assets/products/the-terry-mstsmjst-white-with-gold-hardware.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black with silver hardware",
+        "image": "assets/products/the-terry-mstsmjst-black-with-silver-hardware.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "C pattern white with gold hardware",
+        "image": "assets/products/the-terry-mstsmjst-c-pattern-white-with-gold-hardware.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "C pattern brown with gold hardware",
+        "image": "assets/products/the-terry-mstsmjst-c-pattern-brown-with-gold-hardware.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
