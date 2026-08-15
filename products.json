@@ -294,5 +294,31 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-jesse-mstmmk23",
+    "image": "assets/products/the-jesse-mstmmk23-brown.jpg",
+    "name": "The Jesse",
+    "price": "$75.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Brown",
+        "image": "assets/products/the-jesse-mstmmk23-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Hot Pink",
+        "image": "assets/products/the-jesse-mstmmk23-hot-pink.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Blush Pink",
+        "image": "assets/products/the-jesse-mstmmk23-blush-pink.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
