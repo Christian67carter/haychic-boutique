@@ -766,6 +766,16 @@
         "name": "Brown",
         "image": "assets/products/the-andy-tank-mstviytc-brown.jpg",
         "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "",
+        "status": "preorder"
+      },
+      {
+        "name": "Orange",
+        "image": "",
+        "status": "preorder"
       }
     ],
     "sizes": [
