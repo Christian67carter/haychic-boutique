@@ -320,26 +320,5 @@
         "status": "preorder"
       }
     ]
-  },
-  {
-    "id": "the-minnie-mstm0tef",
-    "image": "assets/products/the-minnie-mstm0tef-black.jpg",
-    "name": "The Minnie",
-    "price": "$68.00",
-    "status": "preorder",
-    "category": "Bags",
-    "description": "",
-    "colors": [
-      {
-        "name": "Black",
-        "image": "assets/products/the-minnie-mstm0tef-black.jpg",
-        "status": "preorder"
-      },
-      {
-        "name": "Brown",
-        "image": "assets/products/the-minnie-mstm0tef-brown.jpg",
-        "status": "preorder"
-      }
-    ]
   }
 ]
