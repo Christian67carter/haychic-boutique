@@ -650,5 +650,36 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-cindy-pouch-mstuy5ot",
+    "image": "assets/products/the-cindy-pouch-mstuy5ot-black.jpg",
+    "name": "The Cindy Pouch",
+    "price": "$27.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Black",
+        "image": "assets/products/the-cindy-pouch-mstuy5ot-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Pink",
+        "image": "assets/products/the-cindy-pouch-mstuy5ot-pink.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Denim",
+        "image": "assets/products/the-cindy-pouch-mstuy5ot-denim.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White",
+        "image": "assets/products/the-cindy-pouch-mstuy5ot-white.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
