@@ -594,5 +594,61 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-addison-msttkr2x",
+    "image": "assets/products/the-addison-msttkr2x-light-brown-suede.jpg",
+    "name": "The Addison",
+    "price": "$80.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Light Brown Suede",
+        "image": "assets/products/the-addison-msttkr2x-light-brown-suede.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown Suede",
+        "image": "assets/products/the-addison-msttkr2x-brown-suede.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown leather",
+        "image": "assets/products/the-addison-msttkr2x-brown-leather.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Red leather",
+        "image": "assets/products/the-addison-msttkr2x-red-leather.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Tan leather",
+        "image": "assets/products/the-addison-msttkr2x-tan-leather.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Light Brown Leather",
+        "image": "assets/products/the-addison-msttkr2x-light-brown-leather.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black leather",
+        "image": "assets/products/the-addison-msttkr2x-black-leather.jpg",
+        "status": "preorder"
+      }
+    ],
+    "sizes": [
+      {
+        "name": "28 cm",
+        "status": "preorder"
+      },
+      {
+        "name": "39 cm",
+        "status": "preorder"
+      }
+    ]
   }
 ]
