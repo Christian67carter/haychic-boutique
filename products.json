@@ -748,16 +748,6 @@
     "description": "",
     "colors": [
       {
-        "name": "Orange",
-        "image": "assets/products/the-andy-tank-mstviytc-orange.jpg",
-        "status": "preorder"
-      },
-      {
-        "name": "Black",
-        "image": "assets/products/the-andy-tank-mstviytc-black.jpg",
-        "status": "preorder"
-      },
-      {
         "name": "White",
         "image": "assets/products/the-andy-tank-mstviytc-white.jpg",
         "status": "preorder"
