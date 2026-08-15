@@ -293,7 +293,7 @@
     "id": "the-charlie-mstmp3as",
     "image": "assets/products/the-charlie-mstmp3as-black.jpg",
     "name": "The Charlie",
-    "price": "$58.00",
+    "price": "$60.00",
     "status": "preorder",
     "category": "Bags",
     "description": "",
@@ -306,6 +306,11 @@
       {
         "name": "White",
         "image": "assets/products/the-charlie-mstmp3as-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Pink",
+        "image": "assets/products/the-charlie-mstmp3as-pink.jpg",
         "status": "preorder"
       }
     ]
