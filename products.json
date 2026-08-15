@@ -679,6 +679,21 @@
         "name": "White",
         "image": "assets/products/the-cindy-pouch-mstuy5ot-white.jpg",
         "status": "preorder"
+      },
+      {
+        "name": "Brown",
+        "image": "assets/products/the-cindy-pouch-mstuy5ot-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown checker",
+        "image": "assets/products/the-cindy-pouch-mstuy5ot-brown-checker.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White checker",
+        "image": "assets/products/the-cindy-pouch-mstuy5ot-white-checker.jpg",
+        "status": "preorder"
       }
     ]
   },
