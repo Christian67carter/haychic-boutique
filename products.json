@@ -51,8 +51,8 @@
       {
         "name": "Black",
         "image": "assets/products/the-cutie-set-mskpheqd-black.jpg",
-        "status": "in-stock",
-        "qty": 1
+        "status": "preorder",
+        "qty": 0
       }
     ],
     "sizes": [
