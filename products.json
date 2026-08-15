@@ -288,5 +288,26 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-charlie-mstmp3as",
+    "image": "assets/products/the-charlie-mstmp3as-black.jpg",
+    "name": "The Charlie",
+    "price": "$58.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Black",
+        "image": "assets/products/the-charlie-mstmp3as-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White",
+        "image": "assets/products/the-charlie-mstmp3as-white.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
