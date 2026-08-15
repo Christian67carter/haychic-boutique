@@ -309,5 +309,14 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-pinkie-charlie-mstmqnlm",
+    "image": "assets/products/the-pinkie-charlie-mstmqnlm.jpg",
+    "name": "The Pinkie Charlie",
+    "price": "$62.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": ""
   }
 ]
