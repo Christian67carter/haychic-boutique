@@ -873,6 +873,20 @@
         "image": "assets/products/the-scarlet-sweats-and-shorts-msumy6l4-grey-shorts.jpg",
         "status": "preorder"
       }
+    ],
+    "sizes": [
+      {
+        "name": "Small",
+        "status": "preorder"
+      },
+      {
+        "name": "Medium",
+        "status": "preorder"
+      },
+      {
+        "name": "Large",
+        "status": "preorder"
+      }
     ]
   }
 ]
