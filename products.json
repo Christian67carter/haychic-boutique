@@ -681,5 +681,46 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-lindy-keychain-mstv9q8k",
+    "image": "assets/products/the-lindy-keychain-mstv9q8k-denim.jpg",
+    "name": "The Lindy Keychain",
+    "price": "$27.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Denim",
+        "image": "assets/products/the-lindy-keychain-mstv9q8k-denim.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "assets/products/the-lindy-keychain-mstv9q8k-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Pink",
+        "image": "assets/products/the-lindy-keychain-mstv9q8k-pink.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown",
+        "image": "assets/products/the-lindy-keychain-mstv9q8k-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black Leather",
+        "image": "assets/products/the-lindy-keychain-mstv9q8k-black-leather.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown Leather",
+        "image": "assets/products/the-lindy-keychain-mstv9q8k-brown-leather.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
