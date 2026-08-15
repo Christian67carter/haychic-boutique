@@ -417,5 +417,85 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-special-p-sweatshirts-mstqbi5o",
+    "image": "assets/products/the-special-p-sweatshirts-mstqbi5o-the-black-hoodie.jpg",
+    "name": "The Special P Sweatshirts!!",
+    "price": "$80.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "The Black Hoodie",
+        "image": "assets/products/the-special-p-sweatshirts-mstqbi5o-the-black-hoodie.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "The Grey Hoodie",
+        "image": "assets/products/the-special-p-sweatshirts-mstqbi5o-the-grey-hoodie.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Halloween Hoodie",
+        "image": "assets/products/the-special-p-sweatshirts-mstqbi5o-halloween-hoodie.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Cream With light blue letters",
+        "image": "assets/products/the-special-p-sweatshirts-mstqbi5o-cream-with-light-blue-letters.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Christmas Plaid",
+        "image": "assets/products/the-special-p-sweatshirts-mstqbi5o-christmas-plaid.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Burgundy",
+        "image": "assets/products/the-special-p-sweatshirts-mstqbi5o-burgundy.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Lolipop",
+        "image": "assets/products/the-special-p-sweatshirts-mstqbi5o-lolipop.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Yellow with red letters",
+        "image": "assets/products/the-special-p-sweatshirts-mstqbi5o-yellow-with-red-letters.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Christmas Tree",
+        "image": "assets/products/the-special-p-sweatshirts-mstqbi5o-christmas-tree.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Rainbow letters",
+        "image": "assets/products/the-special-p-sweatshirts-mstqbi5o-rainbow-letters.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown with brown letters",
+        "image": "assets/products/the-special-p-sweatshirts-mstqbi5o-brown-with-brown-letters.jpg",
+        "status": "preorder"
+      }
+    ],
+    "sizes": [
+      {
+        "name": "S/M",
+        "status": "preorder"
+      },
+      {
+        "name": "L/XL",
+        "status": "preorder"
+      },
+      {
+        "name": "XXL",
+        "status": "preorder"
+      }
+    ]
   }
 ]
