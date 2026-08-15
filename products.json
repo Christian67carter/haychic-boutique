@@ -837,6 +837,20 @@
         "image": "assets/products/the-scarlet-hoodies-zip-up-sweatshirts-msumcp9t-grey-sweatshirt.jpg",
         "status": "preorder"
       }
+    ],
+    "sizes": [
+      {
+        "name": "Small",
+        "status": "preorder"
+      },
+      {
+        "name": "Medium",
+        "status": "preorder"
+      },
+      {
+        "name": "Large",
+        "status": "preorder"
+      }
     ]
   },
   {
