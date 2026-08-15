@@ -492,5 +492,46 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-amanda-mstsj0g4",
+    "image": "assets/products/the-amanda-mstsj0g4-light-brown.jpg",
+    "name": "The Amanda",
+    "price": "$82.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Light Brown",
+        "image": "assets/products/the-amanda-mstsj0g4-light-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Reddish Brown",
+        "image": "assets/products/the-amanda-mstsj0g4-reddish-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown",
+        "image": "assets/products/the-amanda-mstsj0g4-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Colorful",
+        "image": "assets/products/the-amanda-mstsj0g4-colorful.jpg",
+        "status": "in-stock"
+      }
+    ],
+    "sizes": [
+      {
+        "name": "Small",
+        "status": "preorder"
+      },
+      {
+        "name": "Large",
+        "status": "preorder"
+      }
+    ]
   }
 ]
