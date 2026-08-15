@@ -59,6 +59,14 @@
       {
         "name": "Medium",
         "status": "in-stock"
+      },
+      {
+        "name": "Small",
+        "status": "preorder"
+      },
+      {
+        "name": "Large",
+        "status": "preorder"
       }
     ]
   },
