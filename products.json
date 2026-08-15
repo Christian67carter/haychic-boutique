@@ -838,5 +838,41 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-scarlet-sweats-and-shorts-msumy6l4",
+    "image": "assets/products/the-scarlet-sweats-and-shorts-msumy6l4-black-ankle-sweats.jpg",
+    "name": "The Scarlet Sweats, and Shorts",
+    "price": "$54.00",
+    "status": "in-stock",
+    "category": "Clothing",
+    "description": "",
+    "colors": [
+      {
+        "name": "Black Ankle Sweats",
+        "image": "assets/products/the-scarlet-sweats-and-shorts-msumy6l4-black-ankle-sweats.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black Flow Sweats",
+        "image": "assets/products/the-scarlet-sweats-and-shorts-msumy6l4-black-flow-sweats.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black Shorts",
+        "image": "assets/products/the-scarlet-sweats-and-shorts-msumy6l4-black-shorts.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Grey Ankle Sweats",
+        "image": "assets/products/the-scarlet-sweats-and-shorts-msumy6l4-grey-ankle-sweats.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Grey Shorts",
+        "image": "assets/products/the-scarlet-sweats-and-shorts-msumy6l4-grey-shorts.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
