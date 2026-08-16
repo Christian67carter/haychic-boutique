@@ -135,6 +135,12 @@ module.exports = async (req, res) => {
 
       for (const img of uploads) {
         const imagePath = `assets/products/${img.id}.jpg`;
+        let existingSha;
+        const existRes = await fetch(`${GITHUB_API}/contents/${imagePath}?ref=${BRANCH}`, { headers: ghHeaders() });
+        if (existRes.status === 200) {
+          const existData = await existRes.json();
+          existingSha = existData.sha;
+        }
         const imgRes = await fetch(`${GITHUB_API}/contents/${imagePath}`, {
           method: 'PUT',
           headers: ghHeaders(),
@@ -142,6 +148,7 @@ module.exports = async (req, res) => {
             message: `Add photo for ${img.id}`,
             content: img.base64,
             branch: BRANCH,
+            ...(existingSha ? { sha: existingSha } : {}),
           }),
         });
         if (!imgRes.ok) throw new Error(`Could not upload the photo for ${img.id}.`);
