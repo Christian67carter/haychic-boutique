@@ -768,13 +768,13 @@
         "status": "preorder"
       },
       {
-        "name": "Orange",
-        "image": "assets/products/the-andy-tank-mstviytc-orange.jpg",
+        "name": "Black",
+        "image": "assets/products/the-andy-tank-mstviytc-black.jpg",
         "status": "preorder"
       },
       {
-        "name": "Black",
-        "image": "assets/products/the-andy-tank-mstviytc-black.jpg",
+        "name": "Orange",
+        "image": "assets/products/the-andy-tank-mstviytc-orange.jpg",
         "status": "preorder"
       }
     ],
