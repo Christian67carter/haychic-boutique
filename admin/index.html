@@ -99,6 +99,9 @@ body{background:var(--cream);}
 .size-admin-row .field-stock{flex:0 0 130px;}
 .size-remove-btn{border:1px solid var(--line);background:white;border-radius:999px;width:38px;height:38px;cursor:pointer;font-size:.9rem;color:#a05f70;flex-shrink:0;}
 .size-remove-btn:hover{background:#f1d3cf;}
+  .color-drag-handle{flex:0 0 auto;align-self:center;cursor:grab;font-size:1.1rem;line-height:1;color:var(--muted);padding:4px 6px;user-select:none;}
+  .color-drag-handle:active{cursor:grabbing;}
+  .color-row.dragging{opacity:.4;}
 #sizeRows:empty + .add-size-btn{margin-top:0;}
 </style>
 </head>
@@ -193,7 +196,7 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <div class="field">
 <label>Colors / Variants (optional)</label>
 <p class="hint" style="margin:0 0 10px;">Add a row per color — each gets its own photo and its own stock status. If you add colors, shoppers will see a color picker on the item page. The Cover Photo above is used as the main shop-grid thumbnail.</p>
-<div id="colorRows"></div>
+<div id="colorRows" ondragover="colorRowsContainerDragOver(event)"></div>
 <button type="button" class="btn secondary add-color-btn" onclick="addColorRow()">+ Add Color</button>
 </div>
 
@@ -580,7 +583,8 @@ function colorRowHtml(color){
 color = color || {};
 const hasExisting = !!color.image;
 return `
-<div class="color-row" data-existing-image="${escapeAttr(color.image || '')}">
+<div class="color-row" data-existing-image="${escapeAttr(color.image || '')}" ondragover="colorRowDragOver(event)">
+<span class="color-drag-handle" draggable="true" ondragstart="colorRowDragStart(event)" ondragend="colorRowDragEnd(event)" title="Drag to reorder" aria-label="Drag to reorder">⋮⋮</span>
 <div class="field">
 <label>Color Name</label>
 <input type="text" class="colorName" value="${escapeAttr(color.name || '')}" placeholder="e.g. Blush Pink">
@@ -604,6 +608,35 @@ ${hasExisting ? `<span class="existing-note">Current photo saved ✓ (choose a f
 </div>
 <button type="button" class="color-remove-btn" onclick="this.closest('.color-row').remove()" aria-label="Remove color">✕</button>
 </div>`;
+}
+
+let draggedColorRow = null;
+
+function colorRowDragStart(event){
+draggedColorRow = event.target.closest('.color-row');
+draggedColorRow.classList.add('dragging');
+event.dataTransfer.effectAllowed = 'move';
+}
+
+function colorRowDragEnd(event){
+if(draggedColorRow) draggedColorRow.classList.remove('dragging');
+draggedColorRow = null;
+}
+
+function colorRowDragOver(event){
+event.preventDefault();
+if(!draggedColorRow) return;
+const row = event.currentTarget;
+if(row === draggedColorRow) return;
+const rect = row.getBoundingClientRect();
+const isAfter = (event.clientY - rect.top) > rect.height / 2;
+row.parentNode.insertBefore(draggedColorRow, isAfter ? row.nextSibling : row);
+}
+
+function colorRowsContainerDragOver(event){
+event.preventDefault();
+if(!draggedColorRow) return;
+if(event.target.id === 'colorRows') event.target.appendChild(draggedColorRow);
 }
 
 function addColorRow(color){
