@@ -896,6 +896,26 @@
         "name": "Grey Shorts",
         "image": "assets/products/the-scarlet-sweats-and-shorts-msumy6l4-grey-shorts.jpg",
         "status": "preorder"
+      },
+      {
+        "name": "Grey Flow Sweats",
+        "image": "assets/products/the-scarlet-sweats-and-shorts-msumy6l4-grey-flow-sweats.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Pink Ankle Sweats",
+        "image": "assets/products/the-scarlet-sweats-and-shorts-msumy6l4-pink-ankle-sweats.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Pink Flow Sweats",
+        "image": "assets/products/the-scarlet-sweats-and-shorts-msumy6l4-pink-flow-sweats.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Pink Shorts",
+        "image": "assets/products/the-scarlet-sweats-and-shorts-msumy6l4-pink-shorts.jpg",
+        "status": "preorder"
       }
     ],
     "sizes": [
