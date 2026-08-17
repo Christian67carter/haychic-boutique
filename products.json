@@ -963,5 +963,37 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-on-the-go-duffles-mswmxbcr",
+    "image": "assets/products/the-on-the-go-duffles-mswmxbcr-brown.jpg",
+    "name": "The ON-THE-GO Duffles",
+    "price": "$105.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Brown",
+        "image": "assets/products/the-on-the-go-duffles-mswmxbcr-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown Checkered",
+        "image": "assets/products/the-on-the-go-duffles-mswmxbcr-brown-checkered.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White Checkered",
+        "image": "assets/products/the-on-the-go-duffles-mswmxbcr-white-checkered.jpg",
+        "status": "preorder"
+      }
+    ],
+    "sizes": [
+      {
+        "name": "Large",
+        "status": "preorder"
+      }
+    ]
   }
 ]
