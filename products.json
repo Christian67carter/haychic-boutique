@@ -1071,5 +1071,26 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-gianna-mswo0jgj",
+    "image": "assets/products/the-gianna-mswo0jgj-white.jpg",
+    "name": "The Gianna",
+    "price": "$58.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "White",
+        "image": "assets/products/the-gianna-mswo0jgj-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown",
+        "image": "assets/products/the-gianna-mswo0jgj-brown.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
