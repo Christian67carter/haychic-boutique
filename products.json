@@ -164,7 +164,24 @@
     "price": "$70.00",
     "status": "preorder",
     "category": "Bags",
-    "description": ""
+    "description": "",
+    "colors": [
+      {
+        "name": "Brown",
+        "image": "",
+        "status": "preorder"
+      },
+      {
+        "name": "White",
+        "image": "assets/products/the-gigi-msl8ek07-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "assets/products/the-gigi-msl8ek07-black.jpg",
+        "status": "preorder"
+      }
+    ]
   },
   {
     "id": "the-court-side-set-msl8gv62",
