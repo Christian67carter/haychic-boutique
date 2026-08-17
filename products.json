@@ -932,5 +932,36 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-becca-mswmrrz2",
+    "image": "assets/products/the-becca-mswmrrz2-brown.jpg",
+    "name": "The Becca",
+    "price": "$72.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Brown",
+        "image": "assets/products/the-becca-mswmrrz2-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "assets/products/the-becca-mswmrrz2-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown Pattern",
+        "image": "assets/products/the-becca-mswmrrz2-brown-pattern.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Light brown patter",
+        "image": "assets/products/the-becca-mswmrrz2-light-brown-patter.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
