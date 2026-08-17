@@ -257,6 +257,41 @@
         "name": "Brown",
         "image": "assets/products/the-faye-msl8qdv7-brown.jpg",
         "status": "preorder"
+      },
+      {
+        "name": "Tan",
+        "image": "assets/products/the-faye-msl8qdv7-tan.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White",
+        "image": "assets/products/the-faye-msl8qdv7-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "assets/products/the-faye-msl8qdv7-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Light Brown",
+        "image": "assets/products/the-faye-msl8qdv7-light-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Pink Denim",
+        "image": "assets/products/the-faye-msl8qdv7-pink-denim.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Denim",
+        "image": "assets/products/the-faye-msl8qdv7-denim.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black Denim",
+        "image": "assets/products/the-faye-msl8qdv7-black-denim.jpg",
+        "status": "preorder"
       }
     ],
     "qty": 1
