@@ -3,18 +3,59 @@
     "id": "the-tiffany",
     "name": "The Gabriella",
     "price": "$70.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Bags",
     "image": "assets/products/the-tiffany.jpg",
     "description": "",
     "colors": [
       {
-        "name": "Original",
+        "name": "Pink",
         "image": "assets/products/the-tiffany.jpg",
-        "status": "in-stock"
+        "status": "in-stock",
+        "qty": 1
+      },
+      {
+        "name": "Green",
+        "image": "assets/products/the-tiffany-green.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black with brown accents",
+        "image": "assets/products/the-tiffany-black-with-brown-accents.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Gray",
+        "image": "assets/products/the-tiffany-gray.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White",
+        "image": "assets/products/the-tiffany-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Red",
+        "image": "assets/products/the-tiffany-red.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Navy",
+        "image": "assets/products/the-tiffany-navy.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Burgundy",
+        "image": "assets/products/the-tiffany-burgundy.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "assets/products/the-tiffany-black.jpg",
+        "status": "preorder"
       }
     ],
-    "qty": 1
+    "qty": 0
   },
   {
     "id": "the-cutie-set",
