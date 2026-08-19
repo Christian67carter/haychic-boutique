@@ -1202,5 +1202,46 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-samantha-wallet-mszibedx",
+    "image": "assets/products/the-samantha-wallet-mszibedx.jpg",
+    "name": "The Samantha Wallet",
+    "price": "$50.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Black",
+        "image": "assets/products/the-samantha-wallet-mszibedx-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White",
+        "image": "assets/products/the-samantha-wallet-mszibedx-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown",
+        "image": "assets/products/the-samantha-wallet-mszibedx-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Red",
+        "image": "assets/products/the-samantha-wallet-mszibedx-red.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Pink",
+        "image": "assets/products/the-samantha-wallet-mszibedx-pink.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Floral",
+        "image": "assets/products/the-samantha-wallet-mszibedx-floral.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
