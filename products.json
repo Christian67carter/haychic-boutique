@@ -1176,5 +1176,31 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-gloria-mszhk3xt",
+    "image": "assets/products/the-gloria-mszhk3xt-brown.jpg",
+    "name": "The Gloria",
+    "price": "$70.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Brown",
+        "image": "assets/products/the-gloria-mszhk3xt-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "assets/products/the-gloria-mszhk3xt-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Grey/Brown",
+        "image": "assets/products/the-gloria-mszhk3xt-grey-brown.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
