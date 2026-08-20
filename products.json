@@ -67,9 +67,90 @@
     "description": "",
     "colors": [
       {
-        "name": "Original",
+        "name": "Brown",
         "image": "assets/products/the-cutie-set.jpg",
-        "status": "in-stock"
+        "status": "in-stock",
+        "qty": 1
+      },
+      {
+        "name": "Grey",
+        "image": "assets/products/the-cutie-set-grey.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Tan",
+        "image": "assets/products/the-cutie-set-tan.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "assets/products/the-cutie-set-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Green",
+        "image": "assets/products/the-cutie-set-green.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White",
+        "image": "assets/products/the-cutie-set-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Full Army Green",
+        "image": "assets/products/the-cutie-set-full-army-green.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Maroon",
+        "image": "assets/products/the-cutie-set-maroon.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "All Maroon",
+        "image": "assets/products/the-cutie-set-all-maroon.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "All Navy",
+        "image": "assets/products/the-cutie-set-all-navy.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Forest Green",
+        "image": "assets/products/the-cutie-set-forest-green.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Navy",
+        "image": "assets/products/the-cutie-set-navy.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Army Green",
+        "image": "assets/products/the-cutie-set-army-green.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Pink",
+        "image": "assets/products/the-cutie-set-pink.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Mint",
+        "image": "assets/products/the-cutie-set-mint.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Sea Blue",
+        "image": "assets/products/the-cutie-set-sea-blue.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Full Pink",
+        "image": "assets/products/the-cutie-set-full-pink.jpg",
+        "status": "preorder"
       }
     ],
     "qty": 1
