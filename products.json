@@ -446,6 +446,26 @@
         "name": "Green",
         "image": "assets/products/the-lucia-msl8kixe-green.jpg",
         "status": "preorder"
+      },
+      {
+        "name": "Forest Green",
+        "image": "assets/products/the-lucia-msl8kixe-forest-green.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Grey",
+        "image": "assets/products/the-lucia-msl8kixe-grey.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown",
+        "image": "assets/products/the-lucia-msl8kixe-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Light peach",
+        "image": "assets/products/the-lucia-msl8kixe-light-peach.jpg",
+        "status": "preorder"
       }
     ]
   },
