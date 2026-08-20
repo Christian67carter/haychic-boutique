@@ -222,7 +222,34 @@
     "price": "$56.00",
     "status": "preorder",
     "category": "Bags",
-    "description": ""
+    "description": "",
+    "colors": [
+      {
+        "name": "Brown",
+        "image": "",
+        "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "assets/products/the-tiffany-msl8iu37-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Grey",
+        "image": "assets/products/the-tiffany-msl8iu37-grey.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Pink",
+        "image": "assets/products/the-tiffany-msl8iu37-pink.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White",
+        "image": "assets/products/the-tiffany-msl8iu37-white.jpg",
+        "status": "preorder"
+      }
+    ]
   },
   {
     "id": "the-chelsey-msl8jhez",
