@@ -619,6 +619,61 @@
         "name": "Blush Pink",
         "image": "assets/products/the-jesse-mstmmk23-blush-pink.jpg",
         "status": "preorder"
+      },
+      {
+        "name": "Sage Denim",
+        "image": "assets/products/the-jesse-mstmmk23-sage-denim.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Light Blue Denim",
+        "image": "assets/products/the-jesse-mstmmk23-light-blue-denim.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Matte Brown",
+        "image": "assets/products/the-jesse-mstmmk23-matte-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Orange/Brown",
+        "image": "assets/products/the-jesse-mstmmk23-orange-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "assets/products/the-jesse-mstmmk23-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Light Blue",
+        "image": "assets/products/the-jesse-mstmmk23-light-blue.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Mint",
+        "image": "assets/products/the-jesse-mstmmk23-mint.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White",
+        "image": "assets/products/the-jesse-mstmmk23-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Carol Pink",
+        "image": "assets/products/the-jesse-mstmmk23-carol-pink.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Denim",
+        "image": "assets/products/the-jesse-mstmmk23-denim.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Matte Black",
+        "image": "assets/products/the-jesse-mstmmk23-matte-black.jpg",
+        "status": "preorder"
       }
     ]
   },
