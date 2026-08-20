@@ -385,7 +385,19 @@
     "price": "$62.00",
     "status": "preorder",
     "category": "Bags",
-    "description": ""
+    "description": "",
+    "colors": [
+      {
+        "name": "Pink",
+        "image": "",
+        "status": "preorder"
+      },
+      {
+        "name": "Denim",
+        "image": "assets/products/the-bianca-msl8nxlx-denim.jpg",
+        "status": "preorder"
+      }
+    ]
   },
   {
     "id": "the-perfect-purse-need-msl8p4br",
