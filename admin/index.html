@@ -138,6 +138,7 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <button class="tab-btn active" data-tab="listings" onclick="switchTab('listings')">Listings</button>
 <button class="tab-btn" data-tab="requests" onclick="switchTab('requests')">Access Requests <span id="reqCount"></span></button>
 <button class="tab-btn" data-tab="tickets" onclick="switchTab('tickets')">Support Tickets <span id="ticketCount"></span></button>
+  <button class="tab-btn" data-tab="itemrequests" onclick="switchTab('itemrequests')">Item Requests <span id="itemReqCount"></span></button>
 <button class="tab-btn" data-tab="orders" onclick="switchTab('orders')">Orders</button>
 <button class="tab-btn" data-tab="leads" onclick="switchTab('leads')">All Leads / CRM</button>
 <button class="tab-btn" data-tab="settings" onclick="switchTab('settings')">Email Settings</button>
@@ -236,6 +237,15 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <div id="ticketsList"><p class="empty">Loading…</p></div>
 </div>
 </div>
+<!-- ----------- Item Requests ----------- -->
+<div class="tab-panel" id="panel-itemrequests">
+<div class="admin-card">
+<h2>Item Requests</h2>
+<p class="hint">Every "Request an Item" submission from the site, straight from Firestore — so it's here even if the email alert never arrives.</p>
+<div id="itemRequestsList"><p class="empty">Loading…</p></div>
+</div>
+</div>
+
 
 <!-- ---------- Orders / Tracking ---------- -->
 <div class="tab-panel" id="panel-orders">
@@ -475,6 +485,7 @@ loadTickets();
 loadOrders();
 loadLeads();
 loadEmailSettings();
+  loadItemRequests();
 } else {
 document.getElementById('loginScreen').classList.remove('hidden');
 document.getElementById('adminApp').classList.add('hidden');
@@ -938,6 +949,43 @@ handled = handled === undefined ? true : handled;
 await db.collection('activity').doc(id).update({ handled });
 loadTickets();
 }
+// ============ Item Requests ============
+// Pulls every item_request activity doc straight from Firestore — this is
+// the backstop for the Make -> Gmail email alert, so a submission still
+// shows up here even if that email never arrives or Make hiccups.
+async function loadItemRequests(){
+const wrap = document.getElementById('itemRequestsList');
+wrap.innerHTML = '<p class="empty">Loading…</p>';
+try{
+const snap = await db.collection('activity').where('type','==','item_request').get();
+let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+docs.sort((a,b) => (b.timestamp?.toMillis?.()||0) - (a.timestamp?.toMillis?.()||0));
+const openDocs = docs.filter(t => !t.handled);
+document.getElementById('itemReqCount').textContent = openDocs.length ? `(${openDocs.length})` : '';
+if(!docs.length){ wrap.innerHTML = '<p class="empty">No item requests yet.</p>'; return; }
+wrap.innerHTML = docs.map(t => `
+<div class="req-card" id="itemreq-${t.id}" style="${t.handled ? 'opacity:.55;' : ''}">
+<span class="pill-badge ${t.handled ? 'pill-approved' : 'pill-requested'}">${t.handled ? 'Handled' : 'New'}</span>
+<h4>${escapeHtml(t.requestName || '(no name)')}</h4>
+<div class="meta">${t.requestSocial ? igLink(t.requestSocial) + ' &middot; ' : ''}${t.requestType ? escapeHtml(t.requestType) : ''} &middot; ${fmtDate(t.timestamp)}</div>
+${t.requestDetails ? `<div class="msg"><strong>Details:</strong> ${escapeHtml(t.requestDetails)}</div>` : ''}
+${t.requestText ? `<div class="msg">${escapeHtml(t.requestText)}</div>` : ''}
+<div class="btn-row">
+${!t.handled ? `<button class="btn primary" onclick="markItemRequestHandled('${t.id}')">Mark Handled</button>` : `<button class="btn secondary" onclick="markItemRequestHandled('${t.id}', false)">Mark Unhandled</button>`}
+</div>
+</div>
+`).join('');
+}catch(err){
+wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
+}
+}
+
+async function markItemRequestHandled(id, handled){
+handled = handled === undefined ? true : handled;
+await db.collection('activity').doc(id).update({ handled });
+loadItemRequests();
+}
+
 
 // ============ Orders / Tracking ============
 // Orders are written to Firestore by the Stripe webhook (api/order-notify.js
