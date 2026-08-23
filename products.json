@@ -226,7 +226,25 @@
     "status": "in-stock",
     "category": "Bags",
     "description": "",
-    "qty": 1
+    "qty": 1,
+    "colors": [
+      {
+        "name": "Brown Checkered",
+        "image": "",
+        "status": "in-stock",
+        "qty": 1
+      },
+      {
+        "name": "White checkered pink inside",
+        "image": "assets/products/the-candace-msl8cgbc-white-checkered-pink-inside.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White checkered tan inside",
+        "image": "assets/products/the-candace-msl8cgbc-white-checkered-tan-inside.jpg",
+        "status": "preorder"
+      }
+    ]
   },
   {
     "id": "the-veronica-msl8d4xu",
