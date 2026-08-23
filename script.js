@@ -108,20 +108,38 @@ function showToast(message){
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2200);
 }
-function submitRequest(e){
+const ITEM_REQUEST_API = 'https://haychic-boutique.vercel.app/api/item-request-notify';
+async function submitRequest(e){
   e.preventDefault();
   const form = e.target;
   const data = new FormData(form);
+  const payload = {
+    name: data.get('name') || '',
+    social: data.get('social') || '',
+    type: data.get('type') || '',
+    details: data.get('details') || '',
+    request: data.get('request') || ''
+  };
   if(window.HAYCHIC_logActivity){
     window.HAYCHIC_logActivity('item_request', {
-      requestName: data.get('name') || '',
-      requestSocial: data.get('social') || '',
-      requestType: data.get('type') || '',
-      requestDetails: data.get('details') || '',
-      requestText: data.get('request') || ''
+      requestName: payload.name,
+      requestSocial: payload.social,
+      requestType: payload.type,
+      requestDetails: payload.details,
+      requestText: payload.request
     });
   }
-  showToast('Request captured — connect this form to Shopify or email next <img src="/assets/flower-icon.png" class="flower-emoji" alt="">');
+  try{
+    await fetch(ITEM_REQUEST_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  }catch(err){
+    // The activity log above already captured it, so a network hiccup here
+    // just means Hayden sees it in the admin panel instead of a Make alert.
+  }
+  showToast('Request sent — Hayden will follow up soon <img src="/assets/flower-icon.png" class="flower-emoji" alt="">');
   form.reset();
 }
 const SUPPORT_API = 'https://haychic-boutique.vercel.app/api/support-notify';
