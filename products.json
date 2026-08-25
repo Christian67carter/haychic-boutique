@@ -939,7 +939,8 @@
       {
         "name": "Black with gold hardware",
         "image": "assets/products/the-terry-mstsmjst-black-with-gold-hardware.jpg",
-        "status": "preorder"
+        "status": "in-stock",
+        "qty": 1
       },
       {
         "name": "White with gold hardware",
