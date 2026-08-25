@@ -491,10 +491,9 @@
     "image": "assets/products/the-pricilla-msl8m3zy.jpg",
     "name": "The Pricilla",
     "price": "$38.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Beauty",
-    "description": "",
-    "qty": 2
+    "description": ""
   },
   {
     "id": "the-bianca-msl8nxlx",
