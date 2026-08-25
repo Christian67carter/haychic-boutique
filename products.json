@@ -251,10 +251,9 @@
     "image": "assets/products/the-veronica-msl8d4xu.jpg",
     "name": "The Veronica",
     "price": "$62.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Bags",
-    "description": "",
-    "qty": 1
+    "description": ""
   },
   {
     "id": "the-gigi-msl8ek07",
