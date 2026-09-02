@@ -1016,7 +1016,7 @@ wrap.innerHTML = allOrders.map(o => `
 <span>${escapeHtml(o.email||'')} ${o.instagram ? '&middot; ' + igLink(o.instagram) : ''} &middot; $${escapeHtml(o.amountTotal||'0.00')} &middot; ${fmtDate(o.createdAt)}</span>
 <div style="font-size:.8rem;color:var(--muted);margin-top:4px;">Order ${escapeHtml(o.id)}${o.shippingMethod ? ' &middot; ' + escapeHtml(o.shippingMethod) : ''}</div>
 </div>
-${o.items && o.items.length ? `<div style="font-size:.82rem;color:var(--muted);margin-top:6px;">${o.items.map(it => `${escapeHtml(String(it.quantity))}&times; ${escapeHtml(it.name||'')} &mdash; $${escapeHtml(it.amount||'0.00')}`).join('<br>')}</div>` : ''}
+${o.items && o.items.length ? `<div style="font-size:.82rem;color:var(--muted);margin-top:6px;">${o.items.map(it => `${escapeHtml(String(it.quantity))}&times; ${escapeHtml(it.name||'')}${it.colorName ? ' — ' + escapeHtml(it.colorName) : ''}${it.sizeName ? ' (' + escapeHtml(it.sizeName) + ')' : ''} &mdash; $${escapeHtml(it.amount||'0.00')}`).join('<br>')}</div>` : ''}
 <div class="actions">
 <button onclick="toggleLeadDetail('order-${o.id}')">Tracking</button>
 </div>
