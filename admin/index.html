@@ -321,6 +321,8 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <script>
 // ============ Shared ============
 const ADMIN_API = 'https://haychic-boutique.vercel.app/api/admin';
+const PENDING_SHIPMENTS_API = 'https://haychic-boutique.vercel.app/api/pending-shipments';
+const APPROVE_LABEL_API = 'https://haychic-boutique.vercel.app/api/approve-label';
 // Below this many units left, the site shows a red "only X left" warning.
 // Keep in sync with LOW_STOCK_THRESHOLD in script.js.
 const LOW_STOCK_THRESHOLD = 3;
@@ -992,6 +994,12 @@ loadItemRequests();
 // -> saveOrderToFirestore), not by this page — this just reads and updates
 // them. See ORDER-TRACKING-SETUP.md for the Firestore rule this needs.
 let allOrders = [];
+// Keyed by orderId. Populated from /api/pending-shipments (reads Make's
+// "HAYCHIC Pending Shipments" Data Store) so the Orders tab can offer an
+// Approve/Reject-a-label flow right here, as an alternative to the email
+// Approve/Reject links. Purely additive — an order with nothing in here
+// just shows the tracking fields like before.
+let pendingShipments = {};
 
 async function loadOrders(){
 const wrap = document.getElementById('ordersList');
@@ -1003,6 +1011,97 @@ allOrders.sort((a,b) => new Date(b.createdAt||0) - new Date(a.createdAt||0));
 renderOrders();
 }catch(err){
 wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
+}
+loadPendingShipments();
+}
+
+async function loadPendingShipments(){
+if(!ghSession) return;
+try{
+const res = await fetch(PENDING_SHIPMENTS_API, {
+headers: { 'Authorization': `Bearer ${ghSession}` }
+});
+const data = await res.json().catch(() => ({}));
+if(!res.ok) throw new Error(data.error || 'Could not load pending shipments.');
+pendingShipments = {};
+(data.pending || []).forEach(p => { pendingShipments[p.orderId] = p; });
+renderOrders();
+}catch(err){
+// Non-fatal — the Orders tab still works without this, it just won't
+// show the in-site label approval section for anyone.
+console.error('loadPendingShipments:', err.message);
+}
+}
+
+// Renders the "shipping label needs approval" block for one order, or ''
+// if there's nothing pending for it. Pre-selects whichever Shippo rate is
+// closest to what the customer actually paid at checkout — the two don't
+// always match exactly since the live-rate quote at checkout and the rate
+// Shippo returns moments later (when the order webhook creates the actual
+// shipment) can drift slightly — so Hayden should glance at the highlighted
+// one rather than assume it's automatically correct.
+function pendingShipmentHtml(o){
+const p = pendingShipments[o.id];
+if(!p || !p.rates || !p.rates.length) return '';
+const paid = parseFloat(p.shippingPaid);
+let closestIdx = 0;
+if(!isNaN(paid)){
+let bestDiff = Infinity;
+p.rates.forEach((r, i) => {
+const diff = Math.abs(parseFloat(r.amount) - paid);
+if(diff < bestDiff){ bestDiff = diff; closestIdx = i; }
+});
+}
+return `
+<div style="margin-top:10px;padding:12px 14px;background:var(--cream);border-radius:14px;">
+<div style="font-size:.82rem;font-weight:700;margin-bottom:6px;">Shipping label needs approval${!isNaN(paid) ? ` &mdash; customer paid $${escapeHtml(p.shippingPaid)}` : ''}</div>
+${p.rates.map((r, i) => `
+<label style="display:flex;align-items:center;gap:8px;font-size:.85rem;margin-bottom:4px;cursor:pointer;">
+<input type="radio" name="rate-${o.id}" value="${escapeAttr(r.id)}" ${i===closestIdx?'checked':''}>
+${escapeHtml(r.provider||'')} ${escapeHtml(r.serviceName||'')} &mdash; $${escapeHtml(String(r.amount||''))}${r.estimatedDays ? ` (${escapeHtml(String(r.estimatedDays))}d)` : ''}${i===closestIdx ? ' <span style="color:var(--muted);">— closest to what they paid</span>' : ''}
+</label>
+`).join('')}
+<div class="btn-row" style="margin-top:8px;">
+<button class="btn primary" onclick="approveLabel('${o.id}')">Approve &amp; Buy Label</button>
+<button class="btn secondary" onclick="rejectLabel('${o.id}')">Reject — ship manually</button>
+</div>
+</div>
+`;
+}
+
+async function approveLabel(orderId){
+const selected = document.querySelector(`input[name="rate-${orderId}"]:checked`);
+if(!selected){ showStatus('Pick a shipping rate first.', true); return; }
+if(!confirm('Buy this shipping label now? This charges your Shippo account for real.')) return;
+try{
+showStatus('Buying label…');
+const res = await fetch(APPROVE_LABEL_API, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ghSession}` },
+body: JSON.stringify({ orderId, rateId: selected.value })
+});
+const data = await res.json().catch(() => ({}));
+if(!res.ok) throw new Error(data.error || 'Could not buy the label.');
+showStatus(`Label bought — tracking ${data.trackingNumber} (${data.trackingCarrier})${data.emailSent ? ', customer emailed' : data.emailReason ? ` — email not sent: ${data.emailReason}` : ''} <img src="/assets/flower-icon.png" class="flower-emoji" alt="">`);
+delete pendingShipments[orderId];
+loadOrders();
+}catch(err){
+showStatus(err.message, true);
+}
+}
+
+async function rejectLabel(orderId){
+if(!confirm("Reject this shipping quote? You'll need to buy the label yourself outside the site.")) return;
+try{
+await db.collection('orders').doc(orderId).update({
+shippingLabelStatus: 'manual',
+updatedAt: new Date().toISOString()
+});
+showStatus('Flagged for manual shipping.');
+delete pendingShipments[orderId];
+renderOrders();
+}catch(err){
+showStatus(err.message, true);
 }
 }
 
@@ -1017,6 +1116,7 @@ wrap.innerHTML = allOrders.map(o => `
 <div style="font-size:.8rem;color:var(--muted);margin-top:4px;">Order ${escapeHtml(o.id)}${o.shippingMethod ? ' &middot; ' + escapeHtml(o.shippingMethod) : ''}</div>
 </div>
 ${o.items && o.items.length ? `<div style="font-size:.82rem;color:var(--muted);margin-top:6px;">${o.items.map(it => `${escapeHtml(String(it.quantity))}&times; ${escapeHtml(it.name||'')}${it.colorName ? ' — ' + escapeHtml(it.colorName) : ''}${it.sizeName ? ' (' + escapeHtml(it.sizeName) + ')' : ''} &mdash; $${escapeHtml(it.amount||'0.00')}`).join('<br>')}</div>` : ''}
+${pendingShipmentHtml(o)}
 <div class="actions">
 <button onclick="toggleLeadDetail('order-${o.id}')">Tracking</button>
 </div>
@@ -1294,7 +1394,7 @@ showStatus(err.message, true);
 const ACTIVITY_ICONS = {
 item_request: '📝',
 support_request: '💬',
-product_interest: '🛍️',
+product_interest: '�m️',
 product_view: '👁️',
 cart_abandoned: '🛒',
 page_view: '📄',
