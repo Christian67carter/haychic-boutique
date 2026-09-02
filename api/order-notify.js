@@ -225,11 +225,16 @@ module.exports = async (req, res) => {
         shippingMethod: session.shipping_cost?.shipping_rate?.display_name || '',
         shippingPaid: session.shipping_cost ? (session.shipping_cost.amount_total / 100).toFixed(2) : '0.00',
         amountTotal: (session.amount_total / 100).toFixed(2),
-        items: (session.line_items?.data || []).map((li) => ({
-          name: li.description,
-          quantity: li.quantity,
-          amount: (li.amount_total / 100).toFixed(2),
-        })),
+        items: (session.line_items?.data || []).map((li) => {
+          const meta = (li.price && li.price.product && li.price.product.metadata) || {};
+          return {
+            name: li.description,
+            quantity: li.quantity,
+            amount: (li.amount_total / 100).toFixed(2),
+            colorName: meta.colorName || '',
+            sizeName: meta.sizeName || '',
+          };
+        }),
       };
 
       if (process.env.MAKE_WEBHOOK_URL) {
