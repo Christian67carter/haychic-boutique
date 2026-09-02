@@ -252,6 +252,10 @@ First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMod
 <div class="admin-card">
 <h2>Orders &amp; Tracking</h2>
 <p class="hint">Every completed order, saved automatically when a customer checks out. Paste in a tracking number after you buy the shipping label to mark it shipped and email the customer — they can also look up their own order any time on the Track My Order page.</p>
+<div class="field" style="max-width:380px;margin-bottom:16px;">
+<label>Search orders</label>
+<input type="text" id="orderSearchInput" placeholder="Name, email, or order #…" oninput="filterOrders(this.value)">
+</div>
 <div id="ordersList"><p class="empty">Loading…</p></div>
 </div>
 </div>
@@ -422,6 +426,10 @@ function copyIgHandle(e, handle){
 e.preventDefault();
 e.stopPropagation();
 navigator.clipboard.writeText('@' + handle).then(() => showStatus(`Copied @${handle}`)).catch(() => showStatus('Could not copy — select and copy manually.', true));
+}
+function copyText(e, text, label){
+if(e){ e.preventDefault(); e.stopPropagation(); }
+navigator.clipboard.writeText(text).then(() => showStatus(`Copied ${label||'to clipboard'}`)).catch(() => showStatus('Could not copy — select and copy manually.', true));
 }
 function switchTab(name){
 document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
@@ -1000,6 +1008,34 @@ let allOrders = [];
 // Approve/Reject links. Purely additive — an order with nothing in here
 // just shows the tracking fields like before.
 let pendingShipments = {};
+let orderSearchQuery = '';
+
+// Short, human-friendly stand-in for the long Stripe session id — last 8
+// characters, uppercased. Not guaranteed globally unique but plenty for
+// eyeballing/referencing an order; the Copy ID button next to it copies
+// the real full id for anything that needs the exact value (Stripe
+// dashboard, Firestore, support emails).
+function shortOrderId(id){
+return String(id||'').slice(-8).toUpperCase();
+}
+
+// Formats the customer's shipping address (already saved to Firestore by
+// the checkout webhook) into an array of display lines. Returns [] if
+// there's no address on the order (e.g. very old orders from before this
+// was captured).
+function formatAddress(o){
+return [
+o.addressLine1,
+o.addressLine2,
+[o.city, o.state, o.zip].filter(Boolean).join(', '),
+o.country
+].filter(Boolean);
+}
+
+function filterOrders(q){
+orderSearchQuery = (q||'').trim().toLowerCase();
+renderOrders();
+}
 
 async function loadOrders(){
 const wrap = document.getElementById('ordersList');
@@ -1108,12 +1144,26 @@ showStatus(err.message, true);
 function renderOrders(){
 const wrap = document.getElementById('ordersList');
 if(!allOrders.length){ wrap.innerHTML = '<p class="empty">No orders yet.</p>'; return; }
-wrap.innerHTML = allOrders.map(o => `
+const q = orderSearchQuery;
+const filtered = !q ? allOrders : allOrders.filter(o => {
+const hay = [o.customerName, o.email, o.id, shortOrderId(o.id), o.instagram, o.trackingNumber].filter(Boolean).join(' ').toLowerCase();
+return hay.includes(q);
+});
+if(!filtered.length){ wrap.innerHTML = '<p class="empty">No orders match your search.</p>'; return; }
+wrap.innerHTML = filtered.map(o => `
 <div class="lead-row">
 <div class="info">
 <h4>${escapeHtml(o.customerName||'(no name)')} <span class="pill-badge pill-${o.status==='shipped'?'approved':o.status==='delivered'?'approved':'requested'}">${escapeHtml(o.status||'processing')}</span></h4>
-<span>${escapeHtml(o.email||'')} ${o.instagram ? '&middot; ' + igLink(o.instagram) : ''} &middot; $${escapeHtml(o.amountTotal||'0.00')} &middot; ${fmtDate(o.createdAt)}</span>
-<div style="font-size:.8rem;color:var(--muted);margin-top:4px;">Order ${escapeHtml(o.id)}${o.shippingMethod ? ' &middot; ' + escapeHtml(o.shippingMethod) : ''}</div>
+<div style="font-size:.85rem;color:var(--muted);margin-top:3px;">${escapeHtml(o.email||'')}${o.instagram ? ' &middot; ' + igLink(o.instagram) : ''}</div>
+<div style="font-size:.85rem;color:var(--muted);margin-top:2px;">$${escapeHtml(o.amountTotal||'0.00')} &middot; ${fmtDate(o.createdAt)}${o.shippingMethod ? ' &middot; ' + escapeHtml(o.shippingMethod) : ''}</div>
+<div style="font-size:.8rem;color:var(--muted);margin-top:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+<span>Order <strong style="color:var(--ink);">#${escapeHtml(shortOrderId(o.id))}</strong></span>
+<button type="button" class="ig-copy-btn" title="Copy full order ID" onclick="copyText(event,'${escapeAttr(o.id)}','order ID')">Copy ID</button>
+</div>
+${formatAddress(o).length ? `<div style="font-size:.82rem;color:var(--muted);margin-top:6px;display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap;">
+<span>Ship to: ${formatAddress(o).map(l => escapeHtml(l)).join(', ')}</span>
+<button type="button" class="ig-copy-btn" title="Copy address" onclick="copyText(event,'${escapeAttr(formatAddress(o).join(', '))}','address')">Copy</button>
+</div>` : ''}
 </div>
 ${o.items && o.items.length ? `<div style="font-size:.82rem;color:var(--muted);margin-top:6px;">${o.items.map(it => `${escapeHtml(String(it.quantity))}&times; ${escapeHtml(it.name||'')}${it.colorName ? ' — ' + escapeHtml(it.colorName) : ''}${it.sizeName ? ' (' + escapeHtml(it.sizeName) + ')' : ''} &mdash; $${escapeHtml(it.amount||'0.00')}`).join('<br>')}</div>` : ''}
 ${pendingShipmentHtml(o)}
@@ -1394,7 +1444,7 @@ showStatus(err.message, true);
 const ACTIVITY_ICONS = {
 item_request: '📝',
 support_request: '💬',
-product_interest: '�m️',
+product_interest: '�m️',
 product_view: '👁️',
 cart_abandoned: '🛒',
 page_view: '📄',
