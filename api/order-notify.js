@@ -87,6 +87,16 @@ const REPO = 'haychic-boutique';
 const BRANCH = 'main';
 const GITHUB_API = `https://api.github.com/repos/${OWNER}/${REPO}`;
 
+// Same Abilene, TX ZIP set create-checkout-session.js uses to unlock Local
+// Delivery at checkout. That gate is based on a ZIP the shopper self-reports
+// in the cart, before Stripe collects their real address — so it's flagged
+// here (not blocked) if the two disagree, giving Hayden a heads-up rather
+// than silently trusting it.
+const ABILENE_TX_ZIPS = new Set([
+  '79601', '79602', '79603', '79604', '79605',
+  '79606', '79607', '79608', '79697', '79698', '79699',
+]);
+
 function buffer(readable) {
   return new Promise((resolve, reject) => {
     const chunks = [];
@@ -125,45 +135,55 @@ function decrementEntryQty(entry, qtyPurchased) {
 async function decrementInventory(purchasedItems, orderId) {
   if (!process.env.GITHUB_TOKEN || purchasedItems.length === 0) return;
 
-  const r = await fetch(`${GITHUB_API}/contents/products.json?ref=${BRANCH}`, { headers: ghHeaders() });
-  if (!r.ok) throw new Error('Could not load products.json for inventory update.');
-  const data = await r.json();
-  const products = JSON.parse(Buffer.from(data.content, 'base64').toString('utf-8'));
+  // Retries on a save conflict (409/422) — another order's decrement, or an
+  // admin edit, landed on products.json between our read and write. Each
+  // retry re-fetches the latest copy and reapplies this order's decrement
+  // on top of it, so a close-timing double sale never silently loses one
+  // of the two inventory updates.
+  const MAX_ATTEMPTS = 3;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    const r = await fetch(`${GITHUB_API}/contents/products.json?ref=${BRANCH}`, { headers: ghHeaders() });
+    if (!r.ok) throw new Error('Could not load products.json for inventory update.');
+    const data = await r.json();
+    const products = JSON.parse(Buffer.from(data.content, 'base64').toString('utf-8'));
 
-  let changed = false;
-  for (const item of purchasedItems) {
-    const product = products.find((p) => p.id === item.productId);
-    if (!product) continue;
+    let changed = false;
+    for (const item of purchasedItems) {
+      const product = products.find((p) => p.id === item.productId);
+      if (!product) continue;
 
-    let touched = false;
-    if (item.colorName && Array.isArray(product.colors)) {
-      const color = product.colors.find((c) => c.name === item.colorName);
-      if (color) touched = decrementEntryQty(color, item.quantity) || touched;
+      let touched = false;
+      if (item.colorName && Array.isArray(product.colors)) {
+        const color = product.colors.find((c) => c.name === item.colorName);
+        if (color) touched = decrementEntryQty(color, item.quantity) || touched;
+      }
+      if (item.sizeName && Array.isArray(product.sizes)) {
+        const size = product.sizes.find((s) => s.name === item.sizeName);
+        if (size) touched = decrementEntryQty(size, item.quantity) || touched;
+      }
+      // Only fall back to the top-level product qty when no variant-level qty
+      // was tracked, so buying one colorway doesn't also decrement the base
+      // product count when they're meant to be tracked separately.
+      if (!touched) touched = decrementEntryQty(product, item.quantity) || touched;
+      if (touched) changed = true;
     }
-    if (item.sizeName && Array.isArray(product.sizes)) {
-      const size = product.sizes.find((s) => s.name === item.sizeName);
-      if (size) touched = decrementEntryQty(size, item.quantity) || touched;
-    }
-    // Only fall back to the top-level product qty when no variant-level qty
-    // was tracked, so buying one colorway doesn't also decrement the base
-    // product count when they're meant to be tracked separately.
-    if (!touched) touched = decrementEntryQty(product, item.quantity) || touched;
-    if (touched) changed = true;
-  }
 
-  if (!changed) return;
+    if (!changed) return;
 
-  const putRes = await fetch(`${GITHUB_API}/contents/products.json`, {
-    method: 'PUT',
-    headers: ghHeaders(),
-    body: JSON.stringify({
-      message: `Auto-update inventory from order ${orderId}`,
-      content: Buffer.from(JSON.stringify(products, null, 2)).toString('base64'),
-      sha: data.sha,
-      branch: BRANCH,
-    }),
-  });
-  if (!putRes.ok) {
+    const putRes = await fetch(`${GITHUB_API}/contents/products.json`, {
+      method: 'PUT',
+      headers: ghHeaders(),
+      body: JSON.stringify({
+        message: `Auto-update inventory from order ${orderId}`,
+        content: Buffer.from(JSON.stringify(products, null, 2)).toString('base64'),
+        sha: data.sha,
+        branch: BRANCH,
+      }),
+    });
+    if (putRes.ok) return;
+
+    if ((putRes.status === 409 || putRes.status === 422) && attempt < MAX_ATTEMPTS) continue;
+
     const errData = await putRes.json().catch(() => ({}));
     throw new Error(errData.message || 'Could not save inventory update.');
   }
@@ -236,6 +256,13 @@ module.exports = async (req, res) => {
           };
         }),
       };
+
+      // Local Delivery was unlocked by a self-reported cart ZIP, not this
+      // (real, Stripe-collected) shipping address — flag a mismatch for
+      // Hayden to check rather than silently trusting it.
+      if (/local delivery/i.test(payload.shippingMethod) && !ABILENE_TX_ZIPS.has(String(payload.zip).trim())) {
+        payload.shippingFlag = 'Local Delivery was selected but the shipping ZIP is outside Abilene, TX — double-check before fulfilling.';
+      }
 
       if (process.env.MAKE_WEBHOOK_URL) {
         await fetch(process.env.MAKE_WEBHOOK_URL, {

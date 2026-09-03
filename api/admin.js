@@ -186,6 +186,14 @@ module.exports = async (req, res) => {
         }),
       });
       if (!putRes.ok) {
+        // A sale (auto inventory decrement) or another admin save landed on
+        // products.json after this page loaded its copy — refuse to blindly
+        // overwrite it, since this save's product list doesn't include
+        // whatever just changed. Surface a clear, actionable message
+        // instead of a generic failure.
+        if (putRes.status === 409 || putRes.status === 422) {
+          throw new Error('Someone else updated inventory while you were editing (likely a sale just came in). Refresh the page and make your change again.');
+        }
         const errData = await putRes.json().catch(() => ({}));
         throw new Error(errData.message || 'Could not save the listing.');
       }
