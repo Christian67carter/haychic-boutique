@@ -1097,7 +1097,7 @@ ${!isNaN(paid) ? `<span style="font-size:.76rem;color:var(--muted);">Customer pa
 <div style="display:flex;flex-direction:column;gap:7px;">
 ${p.rates.map((r, i) => `
 <label style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:white;border:1.5px solid ${i===closestIdx ? 'var(--brown)' : 'var(--line)'};border-radius:12px;cursor:pointer;">
-<input type="radio" name="rate-${o.id}" value="${escapeAttr(r.id)}" ${i===closestIdx?'checked':''} style="flex-shrink:0;">
+<input type="radio" name="rate-${o.id}" value="${escapeAttr(r.id)}" ${i===closestIdx?'checked':''} style="flex-shrink:0;width:16px;height:16px;">
 <div style="flex:1;min-width:0;">
 <div style="font-size:.85rem;font-weight:600;">${escapeHtml(r.provider||'')} ${escapeHtml(r.serviceName||'')}</div>
 ${r.estimatedDays ? `<div style="font-size:.74rem;color:var(--muted);margin-top:1px;">${escapeHtml(String(r.estimatedDays))} day${Number(r.estimatedDays)===1?'':'s'} delivery</div>` : ''}
