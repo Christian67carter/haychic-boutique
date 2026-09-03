@@ -64,6 +64,23 @@ async function fetchWithTimeout(url, options, timeoutMs) {
   }
 }
 
+const PRODUCTS_URL = 'https://raw.githubusercontent.com/Christian67carter/haychic-boutique/main/products.json';
+
+// Turns a display price like "$70.00" into integer cents. Same parsing
+// approach as parsePriceToCents() in script.js, kept in sync manually.
+function parsePriceToCents(priceStr) {
+  const n = parseFloat(String(priceStr || '').replace(/[^0-9.]/g, ''));
+  return Number.isFinite(n) ? Math.round(n * 100) : NaN;
+}
+
+// Fetches the live product catalog so prices and availability are always
+// verified against the source of truth — never trusted from the client.
+async function fetchProducts() {
+  const res = await fetchWithTimeout(PRODUCTS_URL, { cache: 'no-store' }, 5000);
+  if (!res.ok) throw new Error(`products.json fetch failed (${res.status})`);
+  return res.json();
+}
+
 // Resolves a US ZIP to city/state via a free public lookup (zippopotam.us)
 // so the checkout form only ever has to ask for a ZIP code, same as today.
 async function resolveCityState(zip) {
@@ -170,25 +187,53 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // Rebuild line items server-side so nothing from the client is trusted
-    // directly as a price. unitAmount must be a positive integer (cents).
+    // Rebuild line items server-side from the live product catalog so
+    // nothing from the client — including price — is ever trusted
+    // directly. A tampered request can send any unitAmount it wants; it's
+    // ignored, and the real price is looked up by productId instead.
+    let products;
+    try {
+      products = await fetchProducts();
+    } catch (err) {
+      console.error('Could not load products.json for price verification:', err.message);
+      res.status(502).json({ error: 'Could not verify item prices right now. Please try again in a moment.' });
+      return;
+    }
+    const productsById = new Map(products.map((p) => [p.id, p]));
+
     const line_items = items.map((item) => {
-      const name = String(item.name || 'HAYCHIC item').slice(0, 200);
-      const unitAmount = Math.round(Number(item.unitAmount));
+      const productId = String(item.productId || '').slice(0, 200);
+      const colorName = String(item.colorName || '').slice(0, 200);
+      const sizeName = String(item.sizeName || '').slice(0, 200);
       const quantity = Math.max(1, Math.min(20, Math.round(Number(item.quantity)) || 1));
+
+      const product = productsById.get(productId);
+      if (!product) {
+        throw new Error('One of the items in your bag is no longer available. Please refresh the page and try again.');
+      }
+
+      const name = String(product.name || 'HAYCHIC item').slice(0, 200);
+      const unitAmount = parsePriceToCents(product.price);
 
       if (!Number.isFinite(unitAmount) || unitAmount <= 0) {
         throw new Error(`"${name}" doesn't have a valid price yet. Ask Hayden to update it in the admin panel before this item can be sold online.`);
+      }
+
+      // Re-check availability server-side too. The product grid and
+      // product page already hide sold-out variants from Add to Bag, but
+      // that's a UI convenience, not enforcement — a tampered request
+      // could otherwise still buy something that's actually sold out.
+      const colorEntry = colorName ? (product.colors || []).find((c) => c.name === colorName) : null;
+      const sizeEntry = sizeName ? (product.sizes || []).find((s) => s.name === sizeName) : null;
+      const activeStatus = (sizeEntry && sizeEntry.status) || (colorEntry && colorEntry.status) || product.status;
+      if (activeStatus === 'sold-out') {
+        throw new Error(`"${name}"${colorName ? ` in ${colorName}` : ''} just sold out. Please remove it from your bag and try again.`);
       }
 
       // Carry the product/variant identity through Stripe so the order
       // webhook can match purchased line items back to products.json and
       // decrement inventory automatically. Stripe metadata values must be
       // strings and are capped at 500 chars, so these are trimmed/short.
-      const productId = String(item.productId || '').slice(0, 200);
-      const colorName = String(item.colorName || '').slice(0, 200);
-      const sizeName = String(item.sizeName || '').slice(0, 200);
-
       return {
         price_data: {
           currency: 'usd',
