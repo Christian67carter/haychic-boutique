@@ -41,19 +41,13 @@ function renderProductCard(p){
   const bg = p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : '';
   const inner = p.image ? '' : '<span>HAYCHIC</span>';
   const href = `/${encodeURIComponent(p.id)}`;
-  // If there's a real color/size choice to make, send shoppers to the product
-  // page to pick one instead of silently adding a bag item with no variant —
-  // that's what was making the bag show items with no color/size on them.
+  // Quick-add from the grid always adds the first color/size shown — the
+  // toast confirmation and the cart line both name the picked variant, so
+  // shoppers can see it right away and go pick a different one if needed.
   const colorList = Array.isArray(p.colors) ? p.colors : [];
   const sizeList = Array.isArray(p.sizes) ? p.sizes : [];
-  const needsPicker = colorList.length > 1 || sizeList.length > 1;
-  const singleColor = colorList.length === 1 ? colorList[0].name : '';
-  const singleSize = sizeList.length === 1 ? sizeList[0].name : '';
-  const actionHtml = needsPicker
-    ? (soldOut
-        ? `<span class="select-options-btn is-disabled">Sold Out</span>`
-        : `<a class="select-options-btn" href="${href}">Select Options</a>`)
-    : `<button class="add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}" data-color="${escapeHtml(singleColor)}" data-size="${escapeHtml(singleSize)}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>`;
+  const defaultColor = colorList.length ? colorList[0].name : '';
+  const defaultSize = sizeList.length ? sizeList[0].name : '';
   return `
     <article class="product-card">
       <a class="product-link" href="${href}">
@@ -62,7 +56,7 @@ function renderProductCard(p){
         <h3>${escapeHtml(p.name)}</h3>
         <p class="price">${escapeHtml(p.price)} ${urgencyHtml(p.qty)}</p>
       </a>
-      ${actionHtml}
+      <button class="add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}" data-color="${escapeHtml(defaultColor)}" data-size="${escapeHtml(defaultSize)}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
     </article>`;
 }
 
@@ -572,7 +566,8 @@ document.addEventListener('click', (e) => {
     if(addBtn.disabled) return; // sold-out items can't be added to the bag
     const { id, name, price, image, color, size } = addBtn.dataset;
     addToCart(id, name, price, image, color, size);
-    showToast(`${name} added to bag`);
+    const variantSuffix = [color, size].filter(Boolean).join(' · ');
+    showToast(`${name}${variantSuffix ? ' (' + variantSuffix + ')' : ''} added to bag`);
     logProductInterest(id, name);
     return;
   }

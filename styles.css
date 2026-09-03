@@ -106,10 +106,10 @@ h2{font-size:clamp(2.2rem,4vw,4rem)}
 .in-stock{color:#7C8A5E}.preorder{color:var(--pink-dark)}.sold-out{color:#9A8F86}
 .urgency-badge{color:#B3261E;font-weight:800;font-size:.72rem;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
 .product-card h3{margin:6px 0 0;font-family:"Playfair Display",serif;color:var(--brown);font-size:1.05rem}.price{margin:3px 0 10px;color:var(--pink-dark);font-weight:700}
-.product-card button,.select-options-btn{display:block;box-sizing:border-box;width:100%;border:1px solid var(--pink-dark);background:transparent;color:var(--pink-dark);border-radius:999px;padding:10px;cursor:pointer;font-weight:700;text-align:center;text-decoration:none}
-.product-card button:hover,.select-options-btn:hover{background:var(--pink-dark);color:white}
-.product-card button:disabled,.add-to-bag-btn:disabled,.select-options-btn.is-disabled{border-color:var(--line);color:var(--muted);background:var(--cream);cursor:not-allowed;opacity:.75;pointer-events:none}
-.product-card button:disabled:hover,.add-to-bag-btn:disabled:hover,.select-options-btn.is-disabled:hover{background:var(--cream);color:var(--muted)}
+.product-card button{width:100%;border:1px solid var(--pink-dark);background:transparent;color:var(--pink-dark);border-radius:999px;padding:10px;cursor:pointer;font-weight:700}
+.product-card button:hover{background:var(--pink-dark);color:white}
+.product-card button:disabled,.add-to-bag-btn:disabled{border-color:var(--line);color:var(--muted);background:var(--cream);cursor:not-allowed;opacity:.75}
+.product-card button:disabled:hover,.add-to-bag-btn:disabled:hover{background:var(--cream);color:var(--muted)}
 
 /* Product detail page */
 .back-link{display:inline-block;margin:34px 7vw 0;color:var(--muted);font-size:.86rem;font-weight:700}
