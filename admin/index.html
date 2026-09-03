@@ -1233,8 +1233,15 @@ async function sendTrackingEmail(email, name, orderId, trackingNumber, trackingC
 function generatePassword(){
 const words = ['chic','haute','blush','luxe','dainty','golden','pearl','velvet','rosy','sweet'];
 const w = words[Math.floor(Math.random()*words.length)];
-const n = Math.floor(100 + Math.random()*900);
-return `${w}-${n}`;
+// A random 8-char alphanumeric suffix instead of a 3-digit number. The old
+// version only had ~9,000 possible codes total (10 words x 900 numbers),
+// which is brute-forceable in minutes against Firestore's open single-code
+// lookup (rules intentionally allow "get" but not "list", so this suffix
+// length is what actually makes guessing infeasible).
+const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+let suffix = '';
+for(let i=0;i<8;i++) suffix += chars[Math.floor(Math.random()*chars.length)];
+return `${w}-${suffix}`;
 }
 
 async function generateUniquePassword(){
