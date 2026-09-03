@@ -405,28 +405,28 @@ function updateBagBadge(){
 
 function addToCart(id, name, priceStr, image, colorName, sizeName){
   const cart = loadCart();
-  const existing = cart.find(item => item.id === id);
+  // Match on the exact variant (color + size), not just the product id, so
+  // two different colors of the same item stay as separate lines instead of
+  // silently merging into one — keeps packing/shipping accurate.
+  const existing = cart.find(item => item.id === id && (item.colorName || '') === (colorName || '') && (item.sizeName || '') === (sizeName || ''));
   if(existing){
     existing.qty += 1;
-    // Keep the most recently selected variant tied to this line item.
-    if(colorName) existing.colorName = colorName;
-    if(sizeName) existing.sizeName = sizeName;
   } else {
     cart.push({ id, name, price: priceStr, image: image || '', qty: 1, colorName: colorName || '', sizeName: sizeName || '' });
   }
   saveCart(cart);
 }
 
-function removeFromCart(id){
-  saveCart(loadCart().filter(item => item.id !== id));
+function removeFromCart(id, colorName, sizeName){
+  saveCart(loadCart().filter(item => !(item.id === id && (item.colorName || '') === (colorName || '') && (item.sizeName || '') === (sizeName || ''))));
 }
 
-function changeQty(id, delta){
+function changeQty(id, colorName, sizeName, delta){
   const cart = loadCart();
-  const item = cart.find(x => x.id === id);
+  const item = cart.find(x => x.id === id && (x.colorName || '') === (colorName || '') && (x.sizeName || '') === (sizeName || ''));
   if(!item) return;
   item.qty += delta;
-  if(item.qty <= 0){ removeFromCart(id); return; }
+  if(item.qty <= 0){ removeFromCart(id, colorName, sizeName); return; }
   saveCart(cart);
 }
 
@@ -481,12 +481,12 @@ function renderCartDrawer(){
           ${(item.colorName || item.sizeName) ? `<p class="cart-item-variant">${[item.colorName, item.sizeName].filter(Boolean).map(escapeHtml).join(' · ')}</p>` : ''}
           <span>${escapeHtml(item.price)}</span>
           <div class="cart-qty">
-            <button class="cart-qty-btn" data-id="${escapeHtml(item.id)}" data-delta="-1">−</button>
+            <button class="cart-qty-btn" data-id="${escapeHtml(item.id)}" data-color="${escapeHtml(item.colorName || '')}" data-size="${escapeHtml(item.sizeName || '')}" data-delta="-1">−</button>
             <span>${item.qty}</span>
-            <button class="cart-qty-btn" data-id="${escapeHtml(item.id)}" data-delta="1">+</button>
+            <button class="cart-qty-btn" data-id="${escapeHtml(item.id)}" data-color="${escapeHtml(item.colorName || '')}" data-size="${escapeHtml(item.sizeName || '')}" data-delta="1">+</button>
           </div>
         </div>
-        <button class="cart-remove-btn" data-id="${escapeHtml(item.id)}" aria-label="Remove">✕</button>
+        <button class="cart-remove-btn" data-id="${escapeHtml(item.id)}" data-color="${escapeHtml(item.colorName || '')}" data-size="${escapeHtml(item.sizeName || '')}" aria-label="Remove">✕</button>
       </div>`;
   }).join('');
   subtotalEl.textContent = '$' + (subtotalCents / 100).toFixed(2);
@@ -592,9 +592,9 @@ document.addEventListener('click', (e) => {
   const bagBtn = e.target.closest('.bag-btn');
   if(bagBtn){ toggleCart(); return; }
   const qtyBtn = e.target.closest('.cart-qty-btn');
-  if(qtyBtn){ changeQty(qtyBtn.dataset.id, parseInt(qtyBtn.dataset.delta, 10)); return; }
+  if(qtyBtn){ changeQty(qtyBtn.dataset.id, qtyBtn.dataset.color, qtyBtn.dataset.size, parseInt(qtyBtn.dataset.delta, 10)); return; }
   const removeBtn = e.target.closest('.cart-remove-btn');
-  if(removeBtn){ removeFromCart(removeBtn.dataset.id); return; }
+  if(removeBtn){ removeFromCart(removeBtn.dataset.id, removeBtn.dataset.color, removeBtn.dataset.size); return; }
   const closeEl = e.target.closest('.cart-close-btn, .cart-overlay');
   if(closeEl){ closeCart(); return; }
   const checkoutBtn = e.target.closest('.cart-checkout-btn');
