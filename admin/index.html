@@ -1089,15 +1089,27 @@ if(diff < bestDiff){ bestDiff = diff; closestIdx = i; }
 });
 }
 return `
-<div style="margin-top:10px;padding:12px 14px;background:var(--cream);border-radius:14px;">
-<div style="font-size:.82rem;font-weight:700;margin-bottom:6px;">Shipping label needs approval${!isNaN(paid) ? ` &mdash; customer paid $${escapeHtml(p.shippingPaid)}` : ''}</div>
+<div style="margin-top:12px;padding:14px 16px;background:var(--cream);border-radius:14px;">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+<span style="font-size:.82rem;font-weight:700;">Shipping label needs approval</span>
+${!isNaN(paid) ? `<span style="font-size:.76rem;color:var(--muted);">Customer paid $${escapeHtml(p.shippingPaid)}</span>` : ''}
+</div>
+<div style="display:flex;flex-direction:column;gap:7px;">
 ${p.rates.map((r, i) => `
-<label style="display:flex;align-items:center;gap:8px;font-size:.85rem;margin-bottom:4px;cursor:pointer;">
-<input type="radio" name="rate-${o.id}" value="${escapeAttr(r.id)}" ${i===closestIdx?'checked':''}>
-${escapeHtml(r.provider||'')} ${escapeHtml(r.serviceName||'')} &mdash; $${escapeHtml(String(r.amount||''))}${r.estimatedDays ? ` (${escapeHtml(String(r.estimatedDays))}d)` : ''}${i===closestIdx ? ' <span style="color:var(--muted);">— closest to what they paid</span>' : ''}
+<label style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:white;border:1.5px solid ${i===closestIdx ? 'var(--brown)' : 'var(--line)'};border-radius:12px;cursor:pointer;">
+<input type="radio" name="rate-${o.id}" value="${escapeAttr(r.id)}" ${i===closestIdx?'checked':''} style="flex-shrink:0;">
+<div style="flex:1;min-width:0;">
+<div style="font-size:.85rem;font-weight:600;">${escapeHtml(r.provider||'')} ${escapeHtml(r.serviceName||'')}</div>
+${r.estimatedDays ? `<div style="font-size:.74rem;color:var(--muted);margin-top:1px;">${escapeHtml(String(r.estimatedDays))} day${Number(r.estimatedDays)===1?'':'s'} delivery</div>` : ''}
+</div>
+<div style="text-align:right;flex-shrink:0;">
+<div style="font-size:.92rem;font-weight:700;">$${escapeHtml(String(r.amount||''))}</div>
+${i===closestIdx ? '<span class="pill-badge pill-approved" style="font-size:.6rem;padding:3px 9px;margin-top:2px;display:inline-block;">Closest match</span>' : ''}
+</div>
 </label>
 `).join('')}
-<div class="btn-row" style="margin-top:8px;">
+</div>
+<div class="btn-row" style="margin-top:10px;">
 <button class="btn primary" onclick="approveLabel('${o.id}')">Approve &amp; Buy Label</button>
 <button class="btn secondary" onclick="rejectLabel('${o.id}')">Reject — ship manually</button>
 </div>
