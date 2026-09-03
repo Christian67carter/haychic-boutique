@@ -111,6 +111,11 @@ h2{font-size:clamp(2.2rem,4vw,4rem)}
 .product-card button:disabled,.add-to-bag-btn:disabled{border-color:var(--line);color:var(--muted);background:var(--cream);cursor:not-allowed;opacity:.75}
 .product-card button:disabled:hover,.add-to-bag-btn:disabled:hover{background:var(--cream);color:var(--muted)}
 
+.mini-swatch-row{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.product-card .mini-swatch{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);background-color:var(--pink);background-size:cover;background-position:center;cursor:pointer;padding:0;transition:.15s}
+.product-card .mini-swatch:hover{border-color:var(--pink-dark)}
+.product-card .mini-swatch.active{border-color:var(--pink-dark);box-shadow:0 0 0 2px var(--pink-dark)}
+
 /* Product detail page */
 .back-link{display:inline-block;margin:34px 7vw 0;color:var(--muted);font-size:.86rem;font-weight:700}
 .back-link:hover{color:var(--pink-dark)}

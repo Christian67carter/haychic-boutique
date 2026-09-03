@@ -48,6 +48,10 @@ function renderProductCard(p){
   const sizeList = Array.isArray(p.sizes) ? p.sizes : [];
   const defaultColor = colorList.length ? colorList[0].name : '';
   const defaultSize = sizeList.length ? sizeList[0].name : '';
+  const swatchesHtml = colorList.length > 1 ? `
+      <div class="mini-swatch-row">
+        ${colorList.map((c, i) => `<button type="button" class="mini-swatch ${i === 0 ? 'active' : ''}" data-name="${escapeHtml(c.name)}" data-image="${escapeHtml(c.image || '')}" style="${c.image ? `background-image:url('${c.image}')` : ''}" title="${escapeHtml(c.name)}"></button>`).join('')}
+      </div>` : '';
   return `
     <article class="product-card">
       <a class="product-link" href="${href}">
@@ -56,6 +60,7 @@ function renderProductCard(p){
         <h3>${escapeHtml(p.name)}</h3>
         <p class="price">${escapeHtml(p.price)} ${urgencyHtml(p.qty)}</p>
       </a>
+      ${swatchesHtml}
       <button class="add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}" data-color="${escapeHtml(defaultColor)}" data-size="${escapeHtml(defaultSize)}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
     </article>`;
 }
@@ -561,6 +566,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('click', (e) => {
+  const swatch = e.target.closest('.mini-swatch');
+  if(swatch){
+    const row = swatch.closest('.mini-swatch-row');
+    if(row) row.querySelectorAll('.mini-swatch').forEach(s => s.classList.remove('active'));
+    swatch.classList.add('active');
+    const card = swatch.closest('.product-card');
+    const addBtn2 = card ? card.querySelector('.add-to-bag-btn') : null;
+    if(addBtn2){
+      addBtn2.dataset.color = swatch.dataset.name;
+      if(swatch.dataset.image) addBtn2.dataset.image = swatch.dataset.image;
+    }
+    return;
+  }
   const addBtn = e.target.closest('.add-to-bag-btn');
   if(addBtn){
     if(addBtn.disabled) return; // sold-out items can't be added to the bag
