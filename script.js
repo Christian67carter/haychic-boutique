@@ -41,6 +41,19 @@ function renderProductCard(p){
   const bg = p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : '';
   const inner = p.image ? '' : '<span>HAYCHIC</span>';
   const href = `/${encodeURIComponent(p.id)}`;
+  // If there's a real color/size choice to make, send shoppers to the product
+  // page to pick one instead of silently adding a bag item with no variant —
+  // that's what was making the bag show items with no color/size on them.
+  const colorList = Array.isArray(p.colors) ? p.colors : [];
+  const sizeList = Array.isArray(p.sizes) ? p.sizes : [];
+  const needsPicker = colorList.length > 1 || sizeList.length > 1;
+  const singleColor = colorList.length === 1 ? colorList[0].name : '';
+  const singleSize = sizeList.length === 1 ? sizeList[0].name : '';
+  const actionHtml = needsPicker
+    ? (soldOut
+        ? `<span class="select-options-btn is-disabled">Sold Out</span>`
+        : `<a class="select-options-btn" href="${href}">Select Options</a>`)
+    : `<button class="add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}" data-color="${escapeHtml(singleColor)}" data-size="${escapeHtml(singleSize)}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>`;
   return `
     <article class="product-card">
       <a class="product-link" href="${href}">
@@ -49,7 +62,7 @@ function renderProductCard(p){
         <h3>${escapeHtml(p.name)}</h3>
         <p class="price">${escapeHtml(p.price)} ${urgencyHtml(p.qty)}</p>
       </a>
-      <button class="add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
+      ${actionHtml}
     </article>`;
 }
 
@@ -325,7 +338,7 @@ async function loadProductDetail(){
           ${preorderNote}
           ${soldOutNote}
           <div class="hero-actions">
-            <button class="btn primary add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(displayName)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(activeImage || '')}" data-color="${escapeHtml(selectedColor ? selectedColor.name : '')}" data-size="${escapeHtml(selectedSize ? selectedSize.name : '')}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
+            <button class="btn primary add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(activeImage || '')}" data-color="${escapeHtml(selectedColor ? selectedColor.name : '')}" data-size="${escapeHtml(selectedSize ? selectedSize.name : '')}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
             <a class="btn secondary" href="request.html">Ask a Question</a>
           </div>
         </div>`;
@@ -466,6 +479,7 @@ function renderCartDrawer(){
         <div class="cart-item-thumb" style="${bg}"></div>
         <div class="cart-item-info">
           <h4>${escapeHtml(item.name)}</h4>
+          ${(item.colorName || item.sizeName) ? `<p class="cart-item-variant">${[item.colorName, item.sizeName].filter(Boolean).map(escapeHtml).join(' · ')}</p>` : ''}
           <span>${escapeHtml(item.price)}</span>
           <div class="cart-qty">
             <button class="cart-qty-btn" data-id="${escapeHtml(item.id)}" data-delta="-1">−</button>
