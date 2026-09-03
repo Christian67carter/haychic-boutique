@@ -121,9 +121,6 @@ body{background:var(--cream);}
 <div class="btn-row" style="justify-content:center;">
 <button class="btn primary" id="signInBtn" onclick="doSignIn()">Sign In</button>
 </div>
-<p style="margin-top:18px;font-size:.85rem;">
-First time here? <button class="link-btn" id="modeToggle" onclick="toggleAuthMode()">Create your admin login</button>
-</p>
 <p id="loginStatus"></p>
 </div>
 
@@ -398,7 +395,6 @@ const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
 </html>
 `;
 
-let authMode = 'signin'; // or 'signup'
 let ghSession = localStorage.getItem('haychic_admin_session') || '';
 
 function showStatus(msg, isError){
@@ -438,16 +434,6 @@ document.getElementById('panel-' + name).classList.add('active');
 }
 
 // ============ Login (one email + password for everything) ============
-function toggleAuthMode(){
-authMode = authMode === 'signin' ? 'signup' : 'signin';
-document.getElementById('signInBtn').textContent = authMode === 'signin' ? 'Sign In' : 'Create Login';
-document.getElementById('loginTagline').textContent = authMode === 'signin'
-? 'Log in to manage listings, access requests and customers — all in one place.'
-: 'Create your HAYCHIC admin login. Only you should know this password.';
-document.getElementById('modeToggle').textContent = authMode === 'signin' ? 'Create your admin login' : 'Back to sign in';
-document.getElementById('loginStatus').textContent = '';
-}
-
 async function doSignIn(){
 const email = document.getElementById('authEmail').value.trim();
 const password = document.getElementById('authPassword').value;
@@ -455,11 +441,7 @@ const statusEl = document.getElementById('loginStatus');
 if(!email || !password){ statusEl.textContent = 'Enter your email and password.'; return; }
 statusEl.textContent = '';
 try{
-if(authMode === 'signin'){
 await auth.signInWithEmailAndPassword(email, password);
-} else {
-await auth.createUserWithEmailAndPassword(email, password);
-}
 // Also try to start a listings session (Vercel-backed GitHub writes).
 // If this isn't configured yet (see ADMIN-SETUP.md) the Listings tab
 // will just show a setup note — everything else still works.
