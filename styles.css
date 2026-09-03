@@ -115,6 +115,13 @@ h2{font-size:clamp(2.2rem,4vw,4rem)}
 .product-card .mini-swatch{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);background-color:var(--pink);background-size:cover;background-position:center;cursor:pointer;padding:0;transition:.15s}
 .product-card .mini-swatch:hover{border-color:var(--pink-dark)}
 .product-card .mini-swatch.active{border-color:var(--pink-dark);box-shadow:0 0 0 2px var(--pink-dark)}
+.product-card .mini-swatch.is-soldout{opacity:.4}
+.mini-size-row{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.product-card .mini-size-pill{min-width:34px;height:28px;padding:0 8px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--brown);font-weight:700;font-size:.72rem;cursor:pointer;transition:.15s}
+.product-card .mini-size-pill:hover{border-color:var(--pink-dark)}
+.product-card .mini-size-pill.active{background:var(--pink-dark);color:#fff;border-color:var(--pink-dark)}
+.product-card .mini-size-pill.is-preorder{opacity:.75}
+.product-card .mini-size-pill.is-soldout,.product-card .mini-size-pill:disabled{opacity:.4;text-decoration:line-through;cursor:not-allowed;background:var(--cream)}
 
 /* Product detail page */
 .back-link{display:inline-block;margin:34px 7vw 0;color:var(--muted);font-size:.86rem;font-weight:700}

@@ -34,24 +34,42 @@ function effectiveProductStatus(p){
   return (p.status === 'in-stock' && p.qty === 0) ? 'preorder' : p.status;
 }
 
+function updateAddBtnAvailability(addBtn){
+  const status = addBtn.dataset.sizeStatus || addBtn.dataset.colorStatus || addBtn.dataset.baseStatus || '';
+  const soldOut = status === 'sold-out';
+  addBtn.disabled = soldOut;
+  addBtn.textContent = soldOut ? 'Sold Out' : 'Add to Bag';
+}
+
 function renderProductCard(p){
   const effectiveStatus = effectiveProductStatus(p);
-  const { cls: statusClass, label: statusLabel } = statusInfo(effectiveStatus);
-  const soldOut = effectiveStatus === 'sold-out';
   const bg = p.image ? `background-image:url('${p.image}');background-size:cover;background-position:center;` : '';
   const inner = p.image ? '' : '<span>HAYCHIC</span>';
   const href = `/${encodeURIComponent(p.id)}`;
-  // Quick-add from the grid always adds the first color/size shown — the
-  // toast confirmation and the cart line both name the picked variant, so
-  // shoppers can see it right away and go pick a different one if needed.
   const colorList = Array.isArray(p.colors) ? p.colors : [];
   const sizeList = Array.isArray(p.sizes) ? p.sizes : [];
-  const defaultColor = colorList.length ? colorList[0].name : '';
-  const defaultSize = sizeList.length ? sizeList[0].name : '';
+  const defaultColorObj = colorList.length ? colorList[0] : null;
+  const defaultSizeObj = sizeList.length ? sizeList[0] : null;
+  const defaultColor = defaultColorObj ? defaultColorObj.name : '';
+  const defaultSize = defaultSizeObj ? defaultSizeObj.name : '';
+
+  let activeStatus = (defaultSizeObj && defaultSizeObj.status) || (defaultColorObj && defaultColorObj.status) || effectiveStatus;
+  const activeQty = (defaultSizeObj && typeof defaultSizeObj.qty === 'number') ? defaultSizeObj.qty
+    : (defaultColorObj && typeof defaultColorObj.qty === 'number') ? defaultColorObj.qty
+    : (typeof p.qty === 'number' ? p.qty : null);
+  if(activeStatus === 'in-stock' && activeQty === 0) activeStatus = 'preorder';
+  const { cls: statusClass, label: statusLabel } = statusInfo(activeStatus);
+  const soldOut = activeStatus === 'sold-out';
+
   const swatchesHtml = colorList.length > 1 ? `
       <div class="mini-swatch-row">
-        ${colorList.map((c, i) => `<button type="button" class="mini-swatch ${i === 0 ? 'active' : ''}" data-name="${escapeHtml(c.name)}" data-image="${escapeHtml(c.image || '')}" style="${c.image ? `background-image:url('${c.image}')` : ''}" title="${escapeHtml(c.name)}"></button>`).join('')}
+        ${colorList.map((c, i) => `<button type="button" class="mini-swatch ${i === 0 ? 'active' : ''} ${c.status === 'sold-out' ? 'is-soldout' : ''}" data-name="${escapeHtml(c.name)}" data-image="${escapeHtml(c.image || '')}" data-status="${escapeHtml(c.status || '')}" style="${c.image ? `background-image:url('${c.image}')` : ''}" title="${escapeHtml(c.name)}${c.status === 'sold-out' ? ' (Sold Out)' : ''}"></button>`).join('')}
       </div>` : '';
+  const sizePillsHtml = sizeList.length > 1 ? `
+      <div class="mini-size-row">
+        ${sizeList.map((s, i) => `<button type="button" class="mini-size-pill ${i === 0 ? 'active' : ''} ${s.status === 'preorder' ? 'is-preorder' : ''} ${s.status === 'sold-out' ? 'is-soldout' : ''}" data-name="${escapeHtml(s.name)}" data-status="${escapeHtml(s.status || '')}" ${s.status === 'sold-out' ? 'disabled' : ''}>${escapeHtml(s.name)}</button>`).join('')}
+      </div>` : '';
+
   return `
     <article class="product-card">
       <a class="product-link" href="${href}">
@@ -61,7 +79,8 @@ function renderProductCard(p){
         <p class="price">${escapeHtml(p.price)} ${urgencyHtml(p.qty)}</p>
       </a>
       ${swatchesHtml}
-      <button class="add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}" data-color="${escapeHtml(defaultColor)}" data-size="${escapeHtml(defaultSize)}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
+      ${sizePillsHtml}
+      <button class="add-to-bag-btn" data-id="${escapeHtml(p.id)}" data-name="${escapeHtml(p.name)}" data-price="${escapeHtml(p.price)}" data-image="${escapeHtml(p.image || '')}" data-color="${escapeHtml(defaultColor)}" data-size="${escapeHtml(defaultSize)}" data-color-status="${escapeHtml((defaultColorObj && defaultColorObj.status) || '')}" data-size-status="${escapeHtml((defaultSizeObj && defaultSizeObj.status) || '')}" data-base-status="${escapeHtml(effectiveStatus)}" ${soldOut ? 'disabled' : ''}>${soldOut ? 'Sold Out' : 'Add to Bag'}</button>
     </article>`;
 }
 
@@ -575,7 +594,24 @@ document.addEventListener('click', (e) => {
     const addBtn2 = card ? card.querySelector('.add-to-bag-btn') : null;
     if(addBtn2){
       addBtn2.dataset.color = swatch.dataset.name;
+      addBtn2.dataset.colorStatus = swatch.dataset.status || '';
       if(swatch.dataset.image) addBtn2.dataset.image = swatch.dataset.image;
+      updateAddBtnAvailability(addBtn2);
+    }
+    return;
+  }
+  const sizePill = e.target.closest('.mini-size-pill');
+  if(sizePill){
+    if(sizePill.disabled) return;
+    const row = sizePill.closest('.mini-size-row');
+    if(row) row.querySelectorAll('.mini-size-pill').forEach(s => s.classList.remove('active'));
+    sizePill.classList.add('active');
+    const card = sizePill.closest('.product-card');
+    const addBtn3 = card ? card.querySelector('.add-to-bag-btn') : null;
+    if(addBtn3){
+      addBtn3.dataset.size = sizePill.dataset.name;
+      addBtn3.dataset.sizeStatus = sizePill.dataset.status || '';
+      updateAddBtnAvailability(addBtn3);
     }
     return;
   }
