@@ -1089,7 +1089,7 @@ if(diff < bestDiff){ bestDiff = diff; closestIdx = i; }
 });
 }
 return `
-<div style="margin-top:12px;padding:14px 16px;background:var(--cream);border-radius:14px;">
+<div style="margin-top:12px;padding:14px 16px;background:var(--cream);border-radius:14px;grid-column:1/-1;">
 <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
 <span style="font-size:.82rem;font-weight:700;">Shipping label needs approval</span>
 ${!isNaN(paid) ? `<span style="font-size:.76rem;color:var(--muted);">Customer paid $${escapeHtml(p.shippingPaid)}</span>` : ''}
@@ -1177,9 +1177,9 @@ ${formatAddress(o).length ? `<div style="font-size:.82rem;color:var(--muted);mar
 <button type="button" class="ig-copy-btn" title="Copy address" onclick="copyText(event,'${escapeAttr(formatAddress(o).join(', '))}','address')">Copy</button>
 </div>` : ''}
 </div>
-${o.items && o.items.length ? `<div style="font-size:.82rem;color:var(--muted);margin-top:6px;">${o.items.map(it => `${escapeHtml(String(it.quantity))}&times; ${escapeHtml(it.name||'')}${it.colorName ? ' — ' + escapeHtml(it.colorName) : ''}${it.sizeName ? ' (' + escapeHtml(it.sizeName) + ')' : ''} &mdash; $${escapeHtml(it.amount||'0.00')}`).join('<br>')}</div>` : ''}
+${o.items && o.items.length ? `<div style="font-size:.82rem;color:var(--muted);margin-top:6px;grid-column:1/-1;">${o.items.map(it => `${escapeHtml(String(it.quantity))}&times; ${escapeHtml(it.name||'')}${it.colorName ? ' — ' + escapeHtml(it.colorName) : ''}${it.sizeName ? ' (' + escapeHtml(it.sizeName) + ')' : ''} &mdash; $${escapeHtml(it.amount||'0.00')}`).join('<br>')}</div>` : ''}
 ${pendingShipmentHtml(o)}
-<div class="actions">
+<div class="actions" style="grid-column:1/-1;">
 <button onclick="toggleLeadDetail('order-${o.id}')">Tracking</button>
 </div>
 <div class="lead-detail" id="detail-order-${o.id}">
