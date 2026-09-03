@@ -133,7 +133,13 @@ module.exports = async (req, res) => {
 
       const trackingNumber = orderFields.trackingNumber?.stringValue || '';
       const shippingLabelStatus = orderFields.shippingLabelStatus?.stringValue || '';
-      if (trackingNumber || shippingLabelStatus === 'manual') continue;
+      // Hayden can also mark an order Shipped/Delivered by hand from the
+      // Orders tab status dropdown (no tracking number required — e.g. a
+      // hand-delivered or already-shipped-elsewhere order). Trust that
+      // too, so it drops off the pending-approval list instead of nagging
+      // for a label that was never going to be bought here.
+      const orderStatus = orderFields.status?.stringValue || '';
+      if (trackingNumber || shippingLabelStatus === 'manual' || orderStatus === 'shipped' || orderStatus === 'delivered') continue;
 
       const rates = parseRates(d.shippoRateId).map((r) => ({
         id: r.object_id,
