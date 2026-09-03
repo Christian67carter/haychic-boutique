@@ -59,6 +59,15 @@ function ghHeaders() {
   };
 }
 
+// Product/page IDs are interpolated straight into repo file paths below
+// (assets/products/${id}.jpg, ${id}.html). This only runs with a valid
+// admin session already, but there's no reason to let an id contain "/"
+// or ".." — strip it down to the same slug shape every real product id
+// already has, so a path can never escape its intended folder.
+function sanitizeId(id) {
+  return String(id || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 200);
+}
+
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', SITE_URL);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -134,7 +143,9 @@ module.exports = async (req, res) => {
       }
 
       for (const img of uploads) {
-        const imagePath = `assets/products/${img.id}.jpg`;
+        const safeImgId = sanitizeId(img.id);
+        if (!safeImgId) continue;
+        const imagePath = `assets/products/${safeImgId}.jpg`;
         let existingSha;
         const existRes = await fetch(`${GITHUB_API}/contents/${imagePath}?ref=${BRANCH}`, { headers: ghHeaders() });
         if (existRes.status === 200) {
@@ -158,7 +169,9 @@ module.exports = async (req, res) => {
       if (Array.isArray(pages)) {
         for (const pg of pages) {
           if (!pg || !pg.id || !pg.content) continue;
-          const pagePath = `${pg.id}.html`;
+          const safePgId = sanitizeId(pg.id);
+          if (!safePgId) continue;
+          const pagePath = `${safePgId}.html`;
           const existsRes = await fetch(`${GITHUB_API}/contents/${pagePath}?ref=${BRANCH}`, { headers: ghHeaders() });
           if (existsRes.status === 200) continue; // already there, don't overwrite
           const pageRes = await fetch(`${GITHUB_API}/contents/${pagePath}`, {
