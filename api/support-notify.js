@@ -15,6 +15,14 @@
 const SITE_URL = process.env.SITE_URL || 'https://haychicboutique.com';
 const ALLOWED_ORIGIN = SITE_URL;
 
+// The Make scenario emails this payload straight into a Raw HTML Gmail
+// body (Topic/Order#/From/Message with no escaping on Make's side), so a
+// crafted submission could otherwise inject markup into Hayden's inbox.
+// Escaping here, at the source, protects every downstream template.
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -40,11 +48,11 @@ module.exports = async (req, res) => {
 
     const payload = {
       type: 'support_request',
-      name: String(name).slice(0, 200),
-      email: String(email).slice(0, 200),
-      topic: String(topic || 'Something else').slice(0, 200),
-      orderNumber: String(orderNumber || '').slice(0, 200),
-      message: String(message).slice(0, 4000),
+      name: escapeHtml(String(name).slice(0, 200)),
+      email: escapeHtml(String(email).slice(0, 200)),
+      topic: escapeHtml(String(topic || 'Something else').slice(0, 200)),
+      orderNumber: escapeHtml(String(orderNumber || '').slice(0, 200)),
+      message: escapeHtml(String(message).slice(0, 4000)),
       submittedAt: new Date().toISOString(),
     };
 
