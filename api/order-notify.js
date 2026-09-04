@@ -97,6 +97,32 @@ const ABILENE_TX_ZIPS = new Set([
   '79606', '79607', '79608', '79697', '79698', '79699',
 ]);
 
+// Several fields below (customerName, instagram, address lines, and the
+// colorName/sizeName metadata a shopper's checkout request supplies) are
+// forwarded to Make and land in a Raw HTML Gmail template with no escaping
+// on Make's side. Escaping a copy here — used only for the emailed
+// payload, never for the Firestore save the admin panel/tracking page
+// read from — keeps a crafted submission from injecting markup into
+// Hayden's inbox without altering the canonical order data.
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function escapeForEmail(payload, stringFields) {
+  const copy = { ...payload };
+  for (const f of stringFields) {
+    if (typeof copy[f] === 'string') copy[f] = escapeHtml(copy[f]);
+  }
+  if (Array.isArray(copy.items)) {
+    copy.items = copy.items.map((item) => ({
+      ...item,
+      name: typeof item.name === 'string' ? escapeHtml(item.name) : item.name,
+      colorName: typeof item.colorName === 'string' ? escapeHtml(item.colorName) : item.colorName,
+      sizeName: typeof item.sizeName === 'string' ? escapeHtml(item.sizeName) : item.sizeName,
+    }));
+  }
+  return copy;
+}
+
 function buffer(readable) {
   return new Promise((resolve, reject) => {
     const chunks = [];
@@ -264,11 +290,15 @@ module.exports = async (req, res) => {
         payload.shippingFlag = 'Local Delivery was selected but the shipping ZIP is outside Abilene, TX — double-check before fulfilling.';
       }
 
+      const emailPayload = escapeForEmail(payload, [
+        'customerName', 'email', 'instagram', 'addressLine1', 'addressLine2', 'city', 'state',
+      ]);
+
       if (process.env.MAKE_WEBHOOK_URL) {
         await fetch(process.env.MAKE_WEBHOOK_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
+          body: JSON.stringify(emailPayload),
         });
       } else {
         console.error('order-notify: MAKE_WEBHOOK_URL not set, order not forwarded.', payload);
@@ -363,11 +393,13 @@ module.exports = async (req, res) => {
         expiredAt: new Date().toISOString(),
       };
 
+      const emailPayload = escapeForEmail(payload, ['customerName', 'email']);
+
       if (process.env.MAKE_WEBHOOK_URL) {
         await fetch(process.env.MAKE_WEBHOOK_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
+          body: JSON.stringify(emailPayload),
         });
       } else {
         console.error('order-notify: MAKE_WEBHOOK_URL not set, abandoned cart not forwarded.', payload);
