@@ -53,6 +53,11 @@ module.exports = async (req, res) => {
     return;
   }
 
+  if (orderId.length > 500) {
+    res.status(400).json({ error: 'Invalid order number.' });
+    return;
+  }
+
   try {
     const url = `${FIRESTORE_BASE}/orders/${encodeURIComponent(orderId)}?key=${FIREBASE_API_KEY}`;
     const ghRes = await fetch(url);
