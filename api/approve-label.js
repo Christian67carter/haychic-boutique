@@ -16,6 +16,7 @@
 //   EMAILJS_PUBLIC_KEY, EMAILJS_SERVICE_ID, EMAILJS_TRACKING_TEMPLATE_ID
 
 const crypto = require('crypto');
+const Sentry = require('./_sentry');
 const { rateLimit } = require('./_rateLimit');
 
 const FIREBASE_PROJECT_ID = 'haychic-boutique';
@@ -232,6 +233,7 @@ module.exports = async (req, res) => {
       emailReason: emailResult.reason || null,
     });
   } catch (err) {
-    res.status(500).json({ error: err.message || 'Something went wrong buying the label.' });
+    Sentry.captureException(err);
+  res.status(500).json({ error: err.message || 'Something went wrong buying the label.' });
   }
 };
