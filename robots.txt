@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Block admin panel from search indexers
+Disallow: /admin/
+
+Sitemap: https://haychicboutique.com/sitemap.xml
