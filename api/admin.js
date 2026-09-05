@@ -14,6 +14,7 @@
 // See ADMIN-SETUP.md for how to generate/choose each of these.
 
 const crypto = require('crypto');
+const Sentry = require('./_sentry');
 
 const OWNER = 'Christian67carter';
 const REPO = 'haychic-boutique';
@@ -82,7 +83,8 @@ module.exports = async (req, res) => {
     return;
   }
   if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD || !process.env.ADMIN_SECRET || !process.env.GITHUB_TOKEN) {
-    res.status(500).json({ error: 'The admin panel is not configured on the server yet.' });
+    Sentry.captureException(e);
+  res.status(500).json({ error: 'The admin panel is not configured on the server yet.' });
     return;
   }
 
