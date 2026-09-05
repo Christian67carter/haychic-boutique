@@ -4,6 +4,7 @@
   "private": true,
   "description": "HAYCHIC Boutique site (static, GitHub Pages) plus its Stripe checkout serverless function (deployed separately to Vercel).",
   "dependencies": {
+    "@sentry/node": "^8.0.0",
     "stripe": "^16.0.0"
   }
 }
