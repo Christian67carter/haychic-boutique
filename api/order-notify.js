@@ -80,6 +80,8 @@ async function saveOrderToFirestore(orderId, data) {
 // Stripe needs the raw, unparsed request body to verify the webhook
 // signature, so we turn off Vercel's automatic JSON body parsing for this
 // function only.
+const Sentry = require('./_sentry');
+
 module.exports.config = { api: { bodyParser: false } };
 
 const OWNER = 'Christian67carter';
