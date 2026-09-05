@@ -3,7 +3,7 @@
 // an in-site alternative to the email Approve link. Purely additive: it
 // doesn't touch the existing Make scenarios, so the email flow (once
 // reactivated) still works too; whichever path runs first for a given
-// order "wins", since both end by writing tracking info to the same
+// order 'wins', since both end by writing tracking info to the same
 // Firestore order doc.
 //
 // Required environment variables (set in the Vercel dashboard):
@@ -16,16 +16,17 @@
 //   EMAILJS_PUBLIC_KEY, EMAILJS_SERVICE_ID, EMAILJS_TRACKING_TEMPLATE_ID
 
 const crypto = require('crypto');
+const { rateLimit } = require('./_rateLimit');
 
 const FIREBASE_PROJECT_ID = 'haychic-boutique';
 const FIREBASE_API_KEY = 'AIzaSyAoHJvYgKl0Z6Gok71OCmyoFPmFLHTXOJw';
-const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
+const FIRESTORE_BASE = 'https://firestore.googleapis.com/v1/projects/' + FIREBASE_PROJECT_ID + '/databases/(default)/documents';
 
 const MAKE_DATA_STORE_ID = '128938';
 const MAKE_API_BASE = 'https://us2.make.com/api/v2';
 
 function base64url(buf) {
-  return buf.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  return buf.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 }
 
 function verify(token) {
@@ -49,7 +50,7 @@ function verify(token) {
 function parseRates(raw) {
   if (!raw) return [];
   try {
-    const arr = JSON.parse(`[${raw}]`);
+    const arr = JSON.parse('[' + raw + ']');
     return Array.isArray(arr) ? arr : [];
   } catch (e) {
     return [];
@@ -62,15 +63,11 @@ function toFirestoreValue(v) {
   return { stringValue: String(v) };
 }
 
-// Partial-update PATCH — Firestore replaces the WHOLE document unless you
-// pass updateMask.fieldPaths for exactly the fields you're touching. Same
-// pattern as the field update already used elsewhere in the admin panel
-// and in the existing (currently inactive) Make "Label Approval" scenario.
 async function patchOrderFields(orderId, fields) {
   const maskParams = Object.keys(fields)
-    .map((k) => `updateMask.fieldPaths=${encodeURIComponent(k)}`)
+    .map((k) => 'updateMask.fieldPaths=' + encodeURIComponent(k))
     .join('&');
-  const url = `${FIRESTORE_BASE}/orders/${encodeURIComponent(orderId)}?key=${FIREBASE_API_KEY}&${maskParams}`;
+  const url = FIRESTORE_BASE + '/orders/' + encodeURIComponent(orderId) + '?key=' + FIREBASE_API_KEY + '&' + maskParams;
   const body = {
     fields: Object.fromEntries(Object.entries(fields).map(([k, v]) => [k, toFirestoreValue(v)])),
   };
@@ -81,7 +78,7 @@ async function patchOrderFields(orderId, fields) {
   });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
-    throw new Error(`Could not save tracking info: ${res.status} ${text}`.slice(0, 300));
+    throw new Error(('Could not save tracking info: ' + res.status + ' ' + text).slice(0, 300));
   }
 }
 
@@ -92,14 +89,14 @@ async function sendTrackingEmail(email, name, orderId, trackingNumber, trackingC
 
   if (!publicKey || !serviceId || !templateId) {
     const settingsRes = await fetch(
-      `${FIRESTORE_BASE}/settings/emailjs?key=${FIREBASE_API_KEY}`
+      FIRESTORE_BASE + '/settings/emailjs?key=' + FIREBASE_API_KEY
     );
     if (settingsRes.ok) {
       const doc = await settingsRes.json();
       const f = doc.fields || {};
-      publicKey = publicKey || f.publicKey?.stringValue;
-      serviceId = serviceId || f.serviceId?.stringValue;
-      templateId = templateId || f.trackingTemplateId?.stringValue;
+      publicKey = publicKey || (f.publicKey && f.publicKey.stringValue);
+      serviceId = serviceId || (f.serviceId && f.serviceId.stringValue);
+      templateId = templateId || (f.trackingTemplateId && f.trackingTemplateId.stringValue);
     }
   }
 
@@ -144,6 +141,15 @@ module.exports = async (req, res) => {
     res.status(405).json({ error: 'Method not allowed' });
     return;
   }
+
+  // Rate-limit: 5 requests per minute per IP (admin endpoint).
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || (req.socket && req.socket.remoteAddress) || 'unknown';
+  const rl = rateLimit(ip, 5, 60000);
+  if (rl.limited) {
+    res.setHeader('Retry-After', '60');
+    return res.status(429).json({ error: 'Too many requests. Please wait a minute and try again.' });
+  }
+
   if (!process.env.MAKE_API_TOKEN || !process.env.SHIPPO_API_KEY || !process.env.ADMIN_SECRET) {
     res.status(500).json({ error: 'Label approval is not configured on the server yet.' });
     return;
@@ -163,11 +169,8 @@ module.exports = async (req, res) => {
   }
 
   try {
-    // Re-fetch the pending record fresh (rather than trusting whatever the
-    // client sent) so the rate we buy, and the provider/service name we
-    // save, are always exactly what Make/Shippo actually quoted.
-    const dsRes = await fetch(`${MAKE_API_BASE}/data-stores/${MAKE_DATA_STORE_ID}/data?pg[limit]=100`, {
-      headers: { Authorization: `Token ${process.env.MAKE_API_TOKEN}` },
+    const dsRes = await fetch(MAKE_API_BASE + '/data-stores/' + MAKE_DATA_STORE_ID + '/data?pg[limit]=100', {
+      headers: { Authorization: 'Token ' + process.env.MAKE_API_TOKEN },
     });
     if (!dsRes.ok) throw new Error('Could not read the pending shipment from Make.');
     const dsData = await dsRes.json();
@@ -182,14 +185,14 @@ module.exports = async (req, res) => {
     const txRes = await fetch('https://api.goshippo.com/transactions', {
       method: 'POST',
       headers: {
-        Authorization: `ShippoToken ${process.env.SHIPPO_API_KEY}`,
+        Authorization: 'ShippoToken ' + process.env.SHIPPO_API_KEY,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ rate: rateId, label_file_type: 'PDF', async: false }),
     });
     const tx = await txRes.json().catch(() => ({}));
     if (!txRes.ok || tx.status !== 'SUCCESS') {
-      const msg = (tx.messages || []).map((m) => m.text).join(' ') || `Shippo error (${txRes.status}).`;
+      const msg = (tx.messages || []).map((m) => m.text).join(' ') || ('Shippo error (' + txRes.status + ').');
       throw new Error(msg);
     }
 
