@@ -13,6 +13,7 @@
 //                      this reuses the admin panel's existing login session
 
 const crypto = require('crypto');
+const Sentry = require('./_sentry');
 const { rateLimit } = require('./_rateLimit');
 
 const FIREBASE_PROJECT_ID = 'haychic-boutique';
@@ -148,6 +149,7 @@ module.exports = async (req, res) => {
 
     res.status(200).json({ pending: results });
   } catch (err) {
-    res.status(500).json({ error: err.message || 'Something went wrong reading pending shipments.' });
+    Sentry.captureException(err);
+  res.status(500).json({ error: err.message || 'Something went wrong reading pending shipments.' });
   }
 };
