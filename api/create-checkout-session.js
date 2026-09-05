@@ -23,6 +23,7 @@
 // see CHECKOUT-SETUP.md.
 
 const Stripe = require('stripe');
+const Sentry = require('./_sentry');
 
 const SITE_URL = process.env.SITE_URL || 'https://haychicboutique.com';
 // Only allow requests from the actual storefront.
@@ -195,7 +196,8 @@ module.exports = async (req, res) => {
     try {
       products = await fetchProducts();
     } catch (err) {
-      console.error('Could not load products.json for price verification:', err.message);
+      Sentry.captureException(err);
+    console.error('Could not load products.json for price verification:', err.message);
       res.status(502).json({ error: 'Could not verify item prices right now. Please try again in a moment.' });
       return;
     }
@@ -358,6 +360,7 @@ module.exports = async (req, res) => {
 
     res.status(200).json({ url: session.url });
   } catch (err) {
-    res.status(400).json({ error: err.message || 'Could not start checkout.' });
+    Sentry.captureException(err);
+  res.status(400).json({ error: err.message || 'Could not start checkout.' });
   }
 };
