@@ -354,7 +354,7 @@
     "image": "assets/products/the-chelsey-msl8jhez.jpg",
     "name": "The Chelsey",
     "price": "$28.00",
-    "status": "preorder",
+    "status": "in-stock",
     "category": "Bags",
     "description": "",
     "colors": [
@@ -366,7 +366,8 @@
       {
         "name": "White checkered with pink trim",
         "image": "assets/products/the-chelsey-msl8jhez-white-checkered-with-pink-trim.jpg",
-        "status": "preorder"
+        "status": "in-stock",
+        "qty": 2
       },
       {
         "name": "Pink trim original pattern",
