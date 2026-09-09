@@ -167,7 +167,7 @@
       <form onsubmit="newsletter(event)">
         <input type="email" required placeholder="Email address">
         <label class="newsletter-consent" style="display:block;font-size:12px;margin:6px 0;"><input type="checkbox" required style="margin-right:5px;"> I agree to receive email updates from HAYCHIC Boutique.</label>
-        <button>Sign Me Up</button>
+        <label class="newsletter-consent" style="display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,0.75);white-space:nowrap;"><input type="checkbox" id="newsletter-consent" required style="flex-shrink:0;"> I agree to receive marketing emails. <a href="privacy.html" style="color:#d4a574;">Privacy Policy</a></label><button>Sign Me Up</button>
       </form>
     </section>
 
@@ -204,6 +204,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
   <script src="assets/js/firebase-config.js"></script>
   <script src="assets/js/gate.js"></script>
+  <script src="assets/js/cookie-consent.js"></script>
   <script src="assets/js/cookie-consent.js"></script>
   <script src="script.js"></script>
 </body>
