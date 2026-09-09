@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="announcement"><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> NEW ARRIVALS + PRE-ORDERS AVAILABLE <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></div>
+  <div class="announcement"><img src="/assets/flower-icon.png" class="flower-emoji" alt="" aria-hidden="true"> NEW ARRIVALS + PRE-ORDERS AVAILABLE <img src="/assets/flower-icon.png" class="flower-emoji" alt="" aria-hidden="true"></div>
 
   <header class="site-header">
     <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
@@ -32,7 +32,7 @@
       <a class="nav-cta" href="shop.html">Shop Now</a>
     </nav>
     <div class="header-actions">
-      <button class="bag-btn" aria-label="Shopping bag">Bag <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></button>
+      <button class="bag-btn" aria-label="Shopping bag">Bag <img src="/assets/flower-icon.png" class="flower-emoji" alt="" aria-hidden="true"></button>
     </div>
   </header>
 
@@ -40,7 +40,7 @@
     <section class="section" id="new-arrivals">
       <div class="section-heading">
         <span class="eyebrow">just added</span>
-        <h2>New Arrivals <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h2>
+        <h2>New Arrivals <img src="/assets/flower-icon.png" class="flower-emoji" alt="" aria-hidden="true"></h2>
       </div>
       <div class="product-grid" id="newarrivals-products"></div>
     </section>
@@ -52,6 +52,10 @@
       <a href="shop.html">Shop</a><a href="new-arrivals.html">New Arrivals</a><a href="preorders.html">Pre-Orders</a><a href="in-stock.html">In Stock</a>
       <a href="request.html">Request an Item</a><a href="about.html">About</a><a href="pr.html">PR Team</a><a href="faq.html">FAQ</a><a href="support.html">Support</a><a href="track-order.html">Track Order</a>
     </div>
+    <div class="footer-links footer-legal">
+      <a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="refund.html">Refund Policy</a><a href="cookies.html">Cookie Policy</a>
+    </div>
+    <p class="footer-location">Abilene, TX</p>
     <p>© 2026 HAYCHIC Boutique. All rights reserved.</p>
   </footer>
 
@@ -61,6 +65,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
   <script src="assets/js/firebase-config.js"></script>
   <script src="assets/js/gate.js"></script>
+  <script src="assets/js/cookie-consent.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
