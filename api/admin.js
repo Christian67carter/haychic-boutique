@@ -69,6 +69,40 @@ function sanitizeId(id) {
   return String(id || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 200);
 }
 
+
+function base32Decode(base32) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  let bits = 0, value = 0;
+  const output = [];
+  for (const char of base32.replace(/=+$/,'').toUpperCase()) {
+    const idx = chars.indexOf(char);
+    if (idx === -1) continue;
+    value = (value << 5) | idx;
+    bits += 5;
+    if (bits >= 8) { output.push((value >>> (bits - 8)) & 255); bits -= 8; }
+  }
+  return Buffer.from(output);
+}
+
+function hotp(secret, counter) {
+  const key = base32Decode(secret);
+  const msg = Buffer.alloc(8);
+  let c = counter;
+  for (let i = 7; i >= 0; i--) { msg[i] = c & 0xff; c = Math.floor(c / 256); }
+  const hmac = crypto.createHmac('sha1', key).update(msg).digest();
+  const off = hmac[hmac.length - 1] & 0xf;
+  const code = ((hmac[off] & 0x7f) << 24) | ((hmac[off+1] & 0xff) << 16) | ((hmac[off+2] & 0xff) << 8) | (hmac[off+3] & 0xff);
+  return String(code % 1000000).padStart(6, '0');
+}
+
+function verifyTOTP(secret, token) {
+  if (!secret) return true; // TOTP not configured, skip check
+  if (!token) return false;
+  const step = Math.floor(Date.now() / 1000 / 30);
+  for (let d = -1; d <= 1; d++) { if (hotp(secret, step + d) === String(token).trim()) return true; }
+  return false;
+}
+
 module.exports = async (req, res) => {
   const origin = req.headers.origin || '';
   const allowed = [SITE_URL, SITE_URL.replace('https://', 'https://www.'), SITE_URL.replace('https://www.', 'https://')];
@@ -102,9 +136,12 @@ module.exports = async (req, res) => {
       // case-sensitive.
       const usernameMatches = String(username || '').trim().toLowerCase() ===
         String(process.env.ADMIN_USERNAME || '').trim().toLowerCase();
-      if (usernameMatches && password === process.env.ADMIN_PASSWORD) {
+      const totpOk = verifyTOTP(process.env.ADMIN_TOTP_SECRET, body.totp);
+      if (usernameMatches && password === process.env.ADMIN_PASSWORD && totpOk) {
         const token = sign({ u: username, exp: Date.now() + SESSION_MS });
         res.status(200).json({ token });
+      } else if (usernameMatches && password === process.env.ADMIN_PASSWORD && !totpOk) {
+        res.status(401).json({ error: 'Invalid authenticator code.' });
       } else {
         res.status(401).json({ error: 'Incorrect username or password.' });
       }
