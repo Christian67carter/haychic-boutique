@@ -109,14 +109,14 @@ body{background:var(--cream);}
 
 <div id="loginScreen">
 <h1 style="font-family:'Playfair Display',serif;">HAYCHIC Admin <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h1>
-<p style="color:var(--muted);" id="loginTagline">Log in to manage listings, access requests and customers — all in one place.</p>
+<p style="color:var(--muted);" id="loginTagline">Log in to manage listings, access requests and customers â all in one place.</p>
 <div class="field">
 <label>Email</label>
 <input type="email" id="authEmail" autocomplete="username" placeholder="you@example.com">
 </div>
 <div class="field">
 <label>Password</label>
-<input type="password" id="authPassword" autocomplete="current-password" placeholder="••••••••">
+<input type="password" id="authPassword" autocomplete="current-password" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢">
 </div>
 <div class="btn-row" style="justify-content:center;">
 <button class="btn primary" id="signInBtn" onclick="doSignIn()">Sign In</button>
@@ -183,24 +183,24 @@ body{background:var(--cream);}
 </div>
 <div class="field">
 <label>Description (shown on the item's own page)</label>
-<textarea id="fDescription" rows="3" placeholder="A few sentences about this item — fit, material, why you love it..."></textarea>
+<textarea id="fDescription" rows="3" placeholder="A few sentences about this item â fit, material, why you love it..."></textarea>
 </div>
 <div class="field">
-<label>Cover Photo (shown on the shop grid — use a photo showing all colors together if this item has variants)</label>
+<label>Cover Photo (shown on the shop grid â use a photo showing all colors together if this item has variants)</label>
 <input type="file" id="fImage" accept="image/*">
-  <p class="hint" id="coverExistingNote" style="display:none;margin:6px 0 0;">Current cover photo saved ✓ (choose a file to replace it)</p>
+  <p class="hint" id="coverExistingNote" style="display:none;margin:6px 0 0;">Current cover photo saved â (choose a file to replace it)</p>
 </div>
 
 <div class="field">
 <label>Colors / Variants (optional)</label>
-<p class="hint" style="margin:0 0 10px;">Add a row per color — each gets its own photo and its own stock status. If you add colors, shoppers will see a color picker on the item page. The Cover Photo above is used as the main shop-grid thumbnail.</p>
+<p class="hint" style="margin:0 0 10px;">Add a row per color â each gets its own photo and its own stock status. If you add colors, shoppers will see a color picker on the item page. The Cover Photo above is used as the main shop-grid thumbnail.</p>
 <div id="colorRows" ondragover="colorRowsContainerDragOver(event)"></div>
 <button type="button" class="btn secondary add-color-btn" onclick="addColorRow()">+ Add Color</button>
 </div>
 
 <div class="field">
 <label>Sizes (optional)</label>
-<p class="hint" style="margin:0 0 10px;">Add a row per size — each gets its own stock status, no photo. If you add sizes, shoppers will see a size picker on the item page. Not every item needs this.</p>
+<p class="hint" style="margin:0 0 10px;">Add a row per size â each gets its own stock status, no photo. If you add sizes, shoppers will see a size picker on the item page. Not every item needs this.</p>
 <div id="sizeRows"></div>
 <button type="button" class="btn secondary add-size-btn" onclick="addSizeRow()">+ Add Size</button>
 </div>
@@ -213,7 +213,7 @@ body{background:var(--cream);}
 
 <div class="admin-card">
 <h2>Current Listings</h2>
-<div id="listings"><p class="empty">Loading…</p></div>
+<div id="listings"><p class="empty">Loadingâ¦</p></div>
 </div>
 </div>
 
@@ -222,7 +222,7 @@ body{background:var(--cream);}
 <div class="admin-card">
 <h2>Pending Access Requests</h2>
 <p class="hint">Visitors who asked to unlock the site. Approve to generate a password, then email it to them.</p>
-<div id="requestsList"><p class="empty">Loading…</p></div>
+<div id="requestsList"><p class="empty">Loadingâ¦</p></div>
 </div>
 </div>
 
@@ -230,16 +230,16 @@ body{background:var(--cream);}
 <div class="tab-panel" id="panel-tickets">
 <div class="admin-card">
 <h2>Support Tickets</h2>
-<p class="hint">Every message submitted through the Support form on the site, straight from Firestore — so it's here even if the email alert never arrives.</p>
-<div id="ticketsList"><p class="empty">Loading…</p></div>
+<p class="hint">Every message submitted through the Support form on the site, straight from Firestore â so it's here even if the email alert never arrives.</p>
+<div id="ticketsList"><p class="empty">Loadingâ¦</p></div>
 </div>
 </div>
 <!-- ----------- Item Requests ----------- -->
 <div class="tab-panel" id="panel-itemrequests">
 <div class="admin-card">
 <h2>Item Requests</h2>
-<p class="hint">Every "Request an Item" submission from the site, straight from Firestore — so it's here even if the email alert never arrives.</p>
-<div id="itemRequestsList"><p class="empty">Loading…</p></div>
+<p class="hint">Every "Request an Item" submission from the site, straight from Firestore â so it's here even if the email alert never arrives.</p>
+<div id="itemRequestsList"><p class="empty">Loadingâ¦</p></div>
 </div>
 </div>
 
@@ -248,12 +248,12 @@ body{background:var(--cream);}
 <div class="tab-panel" id="panel-orders">
 <div class="admin-card">
 <h2>Orders &amp; Tracking</h2>
-<p class="hint">Every completed order, saved automatically when a customer checks out. Paste in a tracking number after you buy the shipping label to mark it shipped and email the customer — they can also look up their own order any time on the Track My Order page.</p>
+<p class="hint">Every completed order, saved automatically when a customer checks out. Paste in a tracking number after you buy the shipping label to mark it shipped and email the customer â they can also look up their own order any time on the Track My Order page.</p>
 <div class="field" style="max-width:380px;margin-bottom:16px;">
 <label>Search orders</label>
-<input type="text" id="orderSearchInput" placeholder="Name, email, or order #…" oninput="filterOrders(this.value)">
+<input type="text" id="orderSearchInput" placeholder="Name, email, or order #â¦" oninput="filterOrders(this.value)">
 </div>
-<div id="ordersList"><p class="empty">Loading…</p></div>
+<div id="ordersList"><p class="empty">Loadingâ¦</p></div>
 </div>
 </div>
 
@@ -261,7 +261,7 @@ body{background:var(--cream);}
 <div class="tab-panel" id="panel-leads">
 <div class="admin-card">
 <h2>All Leads &amp; Customers</h2>
-<p class="hint">Every visitor who's requested access or been added manually — with notes, status, and site activity.</p>
+<p class="hint">Every visitor who's requested access or been added manually â with notes, status, and site activity.</p>
 <div class="btn-row" style="margin-bottom:16px;">
 <button class="btn primary" onclick="showAddLead()">+ Add Lead Manually</button>
 </div>
@@ -279,7 +279,7 @@ body{background:var(--cream);}
 <button class="btn secondary" onclick="hideAddLead()">Cancel</button>
 </div>
 </div>
-<div id="leadsList"><p class="empty">Loading…</p></div>
+<div id="leadsList"><p class="empty">Loadingâ¦</p></div>
 </div>
 </div>
 
@@ -292,7 +292,7 @@ body{background:var(--cream);}
 <div class="field"><label>EmailJS Service ID</label><input type="text" id="emailjsServiceId" placeholder="e.g. service_xxxxxxx"></div>
 <div class="field"><label>EmailJS Template ID (password email)</label><input type="text" id="emailjsTemplateId" placeholder="e.g. template_xxxxxxx"></div>
 <div class="field"><label>EmailJS Template ID (tracking email)</label><input type="text" id="emailjsTrackingTemplateId" placeholder="e.g. template_yyyyyyy"></div>
-<p class="hint">The tracking template is a separate one — create a second EmailJS template with variables <code>{{to_name}}</code>, <code>{{to_email}}</code>, <code>{{order_id}}</code>, <code>{{tracking_number}}</code>, <code>{{tracking_carrier}}</code>, <code>{{site_url}}</code>. See ORDER-TRACKING-SETUP.md.</p>
+<p class="hint">The tracking template is a separate one â create a second EmailJS template with variables <code>{{to_name}}</code>, <code>{{to_email}}</code>, <code>{{order_id}}</code>, <code>{{tracking_number}}</code>, <code>{{tracking_carrier}}</code>, <code>{{site_url}}</code>. See ORDER-TRACKING-SETUP.md.</p>
 <div class="btn-row">
 <button class="btn primary" onclick="saveEmailSettings()">Save Settings</button>
 </div>
@@ -305,10 +305,10 @@ body{background:var(--cream);}
 <div id="activityModal" class="hidden" style="position:fixed;inset:0;background:rgba(74,63,46,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;">
 <div style="background:white;border-radius:24px;max-width:520px;width:100%;max-height:80vh;overflow:auto;padding:26px;">
 <div style="display:flex;justify-content:space-between;align-items:center;">
-<h3 style="margin:0;font-family:'Playfair Display',serif;">Activity — <span id="activityLeadName"></span></h3>
+<h3 style="margin:0;font-family:'Playfair Display',serif;">Activity â <span id="activityLeadName"></span></h3>
 <button class="link-btn" onclick="closeActivity()">Close</button>
 </div>
-<div id="activityContent" class="activity-list"><p class="empty">Loading…</p></div>
+<div id="activityContent" class="activity-list"><p class="empty">Loadingâ¦</p></div>
 </div>
 </div>
 
@@ -321,14 +321,14 @@ body{background:var(--cream);}
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 // ============ Shared ============
-const ADMIN_API = 'https://haychic-boutique.vercel.app/api/admin';
+const ADMIN_API = '/api/admin';
 const PENDING_SHIPMENTS_API = 'https://haychic-boutique.vercel.app/api/pending-shipments';
 const APPROVE_LABEL_API = 'https://haychic-boutique.vercel.app/api/approve-label';
 // Below this many units left, the site shows a red "only X left" warning.
 // Keep in sync with LOW_STOCK_THRESHOLD in script.js.
 const LOW_STOCK_THRESHOLD = 3;
 
-// Verbatim copy of product.html — used to create a brand-new product's own
+// Verbatim copy of product.html â used to create a brand-new product's own
 // clean-URL page (e.g. "the-tiffany.html") the first time it's saved.
 const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
 <html lang="en">
@@ -350,7 +350,7 @@ const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
   <div class="announcement"><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> NEW ARRIVALS + PRE-ORDERS AVAILABLE <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></div>
 
   <header class="site-header">
-    <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
+    <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">â°</button>
     <a class="brand" href="index.html">HAYCHIC <span>Boutique</span></a>
     <nav id="nav">
       <a href="new-arrivals.html">New Arrivals</a>
@@ -369,9 +369,9 @@ const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
   </header>
 
   <main>
-    <a class="back-link" href="shop.html">← Back to Shop</a>
+    <a class="back-link" href="shop.html">â Back to Shop</a>
     <div class="pdp-wrap" id="productDetail">
-      <p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:60px 0;">Loading item…</p>
+      <p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:60px 0;">Loading itemâ¦</p>
     </div>
   </main>
 
@@ -381,7 +381,7 @@ const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
       <a href="shop.html">Shop</a><a href="new-arrivals.html">New Arrivals</a><a href="preorders.html">Pre-Orders</a><a href="in-stock.html">In Stock</a>
       <a href="request.html">Request an Item</a><a href="about.html">About</a><a href="pr.html">PR Team</a><a href="faq.html">FAQ</a><a href="support.html">Support</a>
     </div>
-    <p>© 2026 HAYCHIC Boutique. All rights reserved.</p>
+    <p>Â© 2026 HAYCHIC Boutique. All rights reserved.</p>
   </footer>
 
   <div id="toast" class="toast"></div>
@@ -421,11 +421,11 @@ return `<a href="https://instagram.com/${encodeURIComponent(handle)}" target="_b
 function copyIgHandle(e, handle){
 e.preventDefault();
 e.stopPropagation();
-navigator.clipboard.writeText('@' + handle).then(() => showStatus(`Copied @${handle}`)).catch(() => showStatus('Could not copy — select and copy manually.', true));
+navigator.clipboard.writeText('@' + handle).then(() => showStatus(`Copied @${handle}`)).catch(() => showStatus('Could not copy â select and copy manually.', true));
 }
 function copyText(e, text, label){
 if(e){ e.preventDefault(); e.stopPropagation(); }
-navigator.clipboard.writeText(text).then(() => showStatus(`Copied ${label||'to clipboard'}`)).catch(() => showStatus('Could not copy — select and copy manually.', true));
+navigator.clipboard.writeText(text).then(() => showStatus(`Copied ${label||'to clipboard'}`)).catch(() => showStatus('Could not copy â select and copy manually.', true));
 }
 function switchTab(name){
 document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
@@ -444,9 +444,9 @@ try{
 await auth.signInWithEmailAndPassword(email, password);
 // Also try to start a listings session (Vercel-backed GitHub writes).
 // If this isn't configured yet (see ADMIN-SETUP.md) the Listings tab
-// will just show a setup note — everything else still works.
+// will just show a setup note â everything else still works.
 // Note: onAuthStateChanged fires as soon as the Firebase sign-in
-// above resolves, and immediately calls loadListings() — which can
+// above resolves, and immediately calls loadListings() â which can
 // race ahead of this call and run before ghSession is set. So once
 // we have a token here, refresh the Listings tab again to make sure
 // it picks it up.
@@ -455,7 +455,7 @@ const data = await callAdmin('login', { username: email, password });
 ghSession = data.token;
 localStorage.setItem('haychic_admin_session', ghSession);
 loadListings();
-}catch(e){ /* listings backend not set up yet — that's OK */ }
+}catch(e){ /* listings backend not set up yet â that's OK */ }
 }catch(err){
 statusEl.textContent = err.message;
 }
@@ -510,14 +510,14 @@ return data;
 
 async function loadListings(){
 const wrap = document.getElementById('listings');
-wrap.innerHTML = '<p class="empty">Loading…</p>';
+wrap.innerHTML = '<p class="empty">Loadingâ¦</p>';
 try{
 const data = await callAdmin('list', {});
 products = data.products;
 productsSha = data.sha;
 renderListings();
 }catch(err){
-wrap.innerHTML = `<p style="color:#a05f70;">${err.message} — see <code>ADMIN-SETUP.md</code> to finish connecting listings.</p>`;
+wrap.innerHTML = `<p style="color:#a05f70;">${err.message} â see <code>ADMIN-SETUP.md</code> to finish connecting listings.</p>`;
 }
 }
 
@@ -587,7 +587,7 @@ color = color || {};
 const hasExisting = !!color.image;
 return `
 <div class="color-row" data-existing-image="${escapeAttr(color.image || '')}" ondragover="colorRowDragOver(event)">
-<span class="color-drag-handle" draggable="true" ondragstart="colorRowDragStart(event)" ondragend="colorRowDragEnd(event)" title="Drag to reorder" aria-label="Drag to reorder">⋮⋮</span>
+<span class="color-drag-handle" draggable="true" ondragstart="colorRowDragStart(event)" ondragend="colorRowDragEnd(event)" title="Drag to reorder" aria-label="Drag to reorder">â®â®</span>
 <div class="field">
 <label>Color Name</label>
 <input type="text" class="colorName" value="${escapeAttr(color.name || '')}" placeholder="e.g. Blush Pink">
@@ -595,7 +595,7 @@ return `
 <div class="field field-photo">
 <label>Photo</label>
 <input type="file" class="colorImage" accept="image/*">
-${hasExisting ? `<span class="existing-note">Current photo saved ✓ (choose a file to replace it)</span>` : ''}
+${hasExisting ? `<span class="existing-note">Current photo saved â (choose a file to replace it)</span>` : ''}
 </div>
 <div class="field field-stock">
 <label>Stock</label>
@@ -609,7 +609,7 @@ ${hasExisting ? `<span class="existing-note">Current photo saved ✓ (choose a f
 <label>Qty (optional)</label>
 <input type="number" class="colorQty" min="0" step="1" value="${typeof color.qty === 'number' ? color.qty : ''}">
 </div>
-<button type="button" class="color-remove-btn" onclick="this.closest('.color-row').remove()" aria-label="Remove color">✕</button>
+<button type="button" class="color-remove-btn" onclick="this.closest('.color-row').remove()" aria-label="Remove color">â</button>
 </div>`;
 }
 
@@ -660,7 +660,7 @@ if(!name) continue;
 let status = row.querySelector('.colorStatus').value;
 const qtyRaw = row.querySelector('.colorQty').value.trim();
 const qty = qtyRaw === '' ? null : Math.max(0, parseInt(qtyRaw, 10) || 0);
-// Quantity hit zero — auto-switch from In Stock to Pre-Order so it stays
+// Quantity hit zero â auto-switch from In Stock to Pre-Order so it stays
 // sellable instead of silently blocking orders.
 if(qty === 0 && status === 'in-stock') status = 'preorder';
 const file = row.querySelector('.colorImage').files[0];
@@ -699,7 +699,7 @@ return `
 <label>Qty (optional)</label>
 <input type="number" class="sizeQty" min="0" step="1" value="${typeof size.qty === 'number' ? size.qty : ''}">
 </div>
-<button type="button" class="size-remove-btn" onclick="this.closest('.size-admin-row').remove()" aria-label="Remove size">✕</button>
+<button type="button" class="size-remove-btn" onclick="this.closest('.size-admin-row').remove()" aria-label="Remove size">â</button>
 </div>`;
 }
 
@@ -744,7 +744,7 @@ if(!name || !price){ showStatus('Please fill in item name and price.', true); re
 
 const saveBtn = document.getElementById('saveBtn');
 saveBtn.disabled = true;
-saveBtn.textContent = 'Saving…';
+saveBtn.textContent = 'Savingâ¦';
 
 try{
 const isNew = !editingId;
@@ -774,7 +774,7 @@ delete entry.colors;
 }
 
 if(file){
-showStatus('Uploading photo…');
+showStatus('Uploading photoâ¦');
 const base64 = await resizeImage(file, 1200);
 images.push({ id: entry.id, base64 });
 entry.image = `assets/products/${entry.id}.jpg`;
@@ -790,7 +790,7 @@ if(sizes.length){ entry.sizes = sizes; } else { delete entry.sizes; }
 // if the file is already there, so this is safe to always send.
 const pages = isNew ? [{ id: entry.id, content: PRODUCT_PAGE_HTML }] : [];
 
-showStatus('Saving listing…');
+showStatus('Saving listingâ¦');
 const data = await callAdmin('save', {
 products,
 sha: productsSha,
@@ -873,7 +873,7 @@ showStatus(err.message, true);
 // ============ Access Requests ============
 async function loadRequests(){
 const wrap = document.getElementById('requestsList');
-wrap.innerHTML = '<p class="empty">Loading…</p>';
+wrap.innerHTML = '<p class="empty">Loadingâ¦</p>';
 try{
 const snap = await db.collection('leads').where('status','==','requested').get();
 let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -906,12 +906,12 @@ loadLeads();
 }
 
 // ============ Support Tickets ============
-// Pulls every support_request activity doc straight from Firestore — this
+// Pulls every support_request activity doc straight from Firestore â this
 // is the backstop for the Make -> Gmail email alert, so a submission still
 // shows up here even if that email never arrives or Make hiccups.
 async function loadTickets(){
 const wrap = document.getElementById('ticketsList');
-wrap.innerHTML = '<p class="empty">Loading…</p>';
+wrap.innerHTML = '<p class="empty">Loadingâ¦</p>';
 try{
 const snap = await db.collection('activity').where('type','==','support_request').get();
 let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -942,12 +942,12 @@ await db.collection('activity').doc(id).update({ handled });
 loadTickets();
 }
 // ============ Item Requests ============
-// Pulls every item_request activity doc straight from Firestore — this is
+// Pulls every item_request activity doc straight from Firestore â this is
 // the backstop for the Make -> Gmail email alert, so a submission still
 // shows up here even if that email never arrives or Make hiccups.
 async function loadItemRequests(){
 const wrap = document.getElementById('itemRequestsList');
-wrap.innerHTML = '<p class="empty">Loading…</p>';
+wrap.innerHTML = '<p class="empty">Loadingâ¦</p>';
 try{
 const snap = await db.collection('activity').where('type','==','item_request').get();
 let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -981,18 +981,18 @@ loadItemRequests();
 
 // ============ Orders / Tracking ============
 // Orders are written to Firestore by the Stripe webhook (api/order-notify.js
-// -> saveOrderToFirestore), not by this page — this just reads and updates
+// -> saveOrderToFirestore), not by this page â this just reads and updates
 // them. See ORDER-TRACKING-SETUP.md for the Firestore rule this needs.
 let allOrders = [];
 // Keyed by orderId. Populated from /api/pending-shipments (reads Make's
 // "HAYCHIC Pending Shipments" Data Store) so the Orders tab can offer an
 // Approve/Reject-a-label flow right here, as an alternative to the email
-// Approve/Reject links. Purely additive — an order with nothing in here
+// Approve/Reject links. Purely additive â an order with nothing in here
 // just shows the tracking fields like before.
 let pendingShipments = {};
 let orderSearchQuery = '';
 
-// Short, human-friendly stand-in for the long Stripe session id — last 8
+// Short, human-friendly stand-in for the long Stripe session id â last 8
 // characters, uppercased. Not guaranteed globally unique but plenty for
 // eyeballing/referencing an order; the Copy ID button next to it copies
 // the real full id for anything that needs the exact value (Stripe
@@ -1021,7 +1021,7 @@ renderOrders();
 
 async function loadOrders(){
 const wrap = document.getElementById('ordersList');
-wrap.innerHTML = '<p class="empty">Loading…</p>';
+wrap.innerHTML = '<p class="empty">Loadingâ¦</p>';
 try{
 const snap = await db.collection('orders').get();
 allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -1045,7 +1045,7 @@ pendingShipments = {};
 (data.pending || []).forEach(p => { pendingShipments[p.orderId] = p; });
 renderOrders();
 }catch(err){
-// Non-fatal — the Orders tab still works without this, it just won't
+// Non-fatal â the Orders tab still works without this, it just won't
 // show the in-site label approval section for anyone.
 console.error('loadPendingShipments:', err.message);
 }
@@ -1053,10 +1053,10 @@ console.error('loadPendingShipments:', err.message);
 
 // Renders the "shipping label needs approval" block for one order, or ''
 // if there's nothing pending for it. Pre-selects whichever Shippo rate is
-// closest to what the customer actually paid at checkout — the two don't
+// closest to what the customer actually paid at checkout â the two don't
 // always match exactly since the live-rate quote at checkout and the rate
 // Shippo returns moments later (when the order webhook creates the actual
-// shipment) can drift slightly — so Hayden should glance at the highlighted
+// shipment) can drift slightly â so Hayden should glance at the highlighted
 // one rather than assume it's automatically correct.
 function pendingShipmentHtml(o){
 const p = pendingShipments[o.id];
@@ -1093,7 +1093,7 @@ ${i===closestIdx ? '<span class="pill-badge pill-approved" style="font-size:.6re
 </div>
 <div class="btn-row" style="margin-top:10px;">
 <button class="btn primary" onclick="approveLabel('${o.id}')">Approve &amp; Buy Label</button>
-<button class="btn secondary" onclick="rejectLabel('${o.id}')">Reject — ship manually</button>
+<button class="btn secondary" onclick="rejectLabel('${o.id}')">Reject â ship manually</button>
 </div>
 </div>
 `;
@@ -1104,7 +1104,7 @@ const selected = document.querySelector(`input[name="rate-${orderId}"]:checked`)
 if(!selected){ showStatus('Pick a shipping rate first.', true); return; }
 if(!confirm('Buy this shipping label now? This charges your Shippo account for real.')) return;
 try{
-showStatus('Buying label…');
+showStatus('Buying labelâ¦');
 const res = await fetch(APPROVE_LABEL_API, {
 method: 'POST',
 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ghSession}` },
@@ -1112,7 +1112,7 @@ body: JSON.stringify({ orderId, rateId: selected.value })
 });
 const data = await res.json().catch(() => ({}));
 if(!res.ok) throw new Error(data.error || 'Could not buy the label.');
-showStatus(`Label bought — tracking ${data.trackingNumber} (${data.trackingCarrier})${data.emailSent ? ', customer emailed' : data.emailReason ? ` — email not sent: ${data.emailReason}` : ''} <img src="/assets/flower-icon.png" class="flower-emoji" alt="">`);
+showStatus(`Label bought â tracking ${data.trackingNumber} (${data.trackingCarrier})${data.emailSent ? ', customer emailed' : data.emailReason ? ` â email not sent: ${data.emailReason}` : ''} <img src="/assets/flower-icon.png" class="flower-emoji" alt="">`);
 delete pendingShipments[orderId];
 loadOrders();
 }catch(err){
@@ -1159,7 +1159,7 @@ ${formatAddress(o).length ? `<div style="font-size:.82rem;color:var(--muted);mar
 <button type="button" class="ig-copy-btn" title="Copy address" onclick="copyText(event,'${escapeAttr(formatAddress(o).join(', '))}','address')">Copy</button>
 </div>` : ''}
 </div>
-${o.items && o.items.length ? `<div style="font-size:.82rem;color:var(--muted);margin-top:6px;grid-column:1/-1;">${o.items.map(it => `${escapeHtml(String(it.quantity))}&times; ${escapeHtml(it.name||'')}${it.colorName ? ' — ' + escapeHtml(it.colorName) : ''}${it.sizeName ? ' (' + escapeHtml(it.sizeName) + ')' : ''} &mdash; $${escapeHtml(it.amount||'0.00')}`).join('<br>')}</div>` : ''}
+${o.items && o.items.length ? `<div style="font-size:.82rem;color:var(--muted);margin-top:6px;grid-column:1/-1;">${o.items.map(it => `${escapeHtml(String(it.quantity))}&times; ${escapeHtml(it.name||'')}${it.colorName ? ' â ' + escapeHtml(it.colorName) : ''}${it.sizeName ? ' (' + escapeHtml(it.sizeName) + ')' : ''} &mdash; $${escapeHtml(it.amount||'0.00')}`).join('<br>')}</div>` : ''}
 ${pendingShipmentHtml(o)}
 <div class="actions" style="grid-column:1/-1;">
 <button onclick="toggleLeadDetail('order-${o.id}')">Tracking</button>
@@ -1197,7 +1197,7 @@ updatedAt: new Date().toISOString()
 });
 showStatus('Order updated.');
 if(order && order.email && trackingNumber){
-showStatus('Order updated — sending tracking email…');
+showStatus('Order updated â sending tracking emailâ¦');
 await sendTrackingEmail(order.email, order.customerName, id, trackingNumber, trackingCarrier);
 }
 loadOrders();
@@ -1214,7 +1214,7 @@ async function sendTrackingEmail(email, name, orderId, trackingNumber, trackingC
     publicKey = s.publicKey; serviceId = s.serviceId; templateId = s.trackingTemplateId;
   }catch(err){ /* falls into the missing-settings branch below */ }
   if(!publicKey || !serviceId || !templateId){
-    showStatus(`Tracking is ${trackingNumber} — set up the Tracking Email Template in Email Settings to auto-send it.`, true);
+    showStatus(`Tracking is ${trackingNumber} â set up the Tracking Email Template in Email Settings to auto-send it.`, true);
     return;
   }
   try{
@@ -1255,7 +1255,7 @@ return generatePassword() + '-' + Date.now().toString(36).slice(-3);
 
 async function approveAndGenerate(leadId, email, name){
 try{
-showStatus('Generating password…');
+showStatus('Generating passwordâ¦');
 const password = await generateUniquePassword();
 await db.collection('access_codes').doc(password).set({
 leadId: leadId, email: email, active: true,
@@ -1265,7 +1265,7 @@ await db.collection('leads').doc(leadId).update({
 status: 'approved', password: password,
 approvedAt: firebase.firestore.FieldValue.serverTimestamp()
 });
-showStatus('Password generated! Sending email…');
+showStatus('Password generated! Sending emailâ¦');
 await sendPasswordEmail(email, name, password);
 loadRequests();
 loadLeads();
@@ -1294,7 +1294,7 @@ async function loadEmailSettings(){
     const trackingTemplateId = document.getElementById('emailjsTrackingTemplateId').value.trim();
     try{
       await db.collection('settings').doc('emailjs').set({ publicKey, serviceId, templateId, trackingTemplateId }, { merge: true });
-      showStatus('Email settings saved — synced for every device.');
+      showStatus('Email settings saved â synced for every device.');
     }catch(err){
       showStatus('Could not save email settings: ' + (err.message || err), true);
     }
@@ -1308,7 +1308,7 @@ async function loadEmailSettings(){
       publicKey = s.publicKey; serviceId = s.serviceId; templateId = s.templateId;
     }catch(err){ /* falls into the missing-settings branch below */ }
     if(!publicKey || !serviceId || !templateId){
-      showStatus(`Password is ${password} — set up Email Settings tab to auto-send it.`, true);
+      showStatus(`Password is ${password} â set up Email Settings tab to auto-send it.`, true);
       return;
     }
     try{
@@ -1329,7 +1329,7 @@ let currentActivityEmail = '';
 
 async function loadLeads(){
 const wrap = document.getElementById('leadsList');
-wrap.innerHTML = '<p class="empty">Loading…</p>';
+wrap.innerHTML = '<p class="empty">Loadingâ¦</p>';
 try{
 const snap = await db.collection('leads').get();
 allLeads = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -1397,10 +1397,10 @@ const l = allLeads.find(x => x.id === id);
 if(!l) return;
 if(!confirm(`Remove ${l.name || l.email || 'this lead'}? This can't be undone.`)) return;
 try{
-// If they had an active password, deactivate it too — removing someone
+// If they had an active password, deactivate it too â removing someone
 // as a lead should also cut off their site access.
 if(l.password){
-try{ await db.collection('access_codes').doc(l.password).update({ active: false }); }catch(e){ /* code may not exist — fine */ }
+try{ await db.collection('access_codes').doc(l.password).update({ active: false }); }catch(e){ /* code may not exist â fine */ }
 }
 await db.collection('leads').doc(id).delete();
 showStatus('Lead removed.');
@@ -1443,13 +1443,13 @@ showStatus(err.message, true);
 // showing the same flower for everything. Falls back to a neutral dot for
 // any type not listed here.
 const ACTIVITY_ICONS = {
-item_request: '📝',
-support_request: '💬',
-product_interest: '�m️',
-product_view: '👁️',
-cart_abandoned: '🛒',
-page_view: '📄',
-access_request: '🔑'
+item_request: 'ð',
+support_request: 'ð¬',
+product_interest: 'ï¿½mï¸',
+product_view: 'ðï¸',
+cart_abandoned: 'ð',
+page_view: 'ð',
+access_request: 'ð'
 };
 
 async function openActivity(email, name){
@@ -1457,19 +1457,19 @@ currentActivityEmail = email;
 document.getElementById('activityLeadName').textContent = name || email;
 document.getElementById('activityModal').classList.remove('hidden');
 const content = document.getElementById('activityContent');
-content.innerHTML = '<p class="empty">Loading…</p>';
+content.innerHTML = '<p class="empty">Loadingâ¦</p>';
 try{
 const snap = await db.collection('activity').where('leadEmail','==', email).get();
 let docs = snap.docs.map(d => d.data());
 docs.sort((a,b) => (b.timestamp?.toMillis?.()||0) - (a.timestamp?.toMillis?.()||0));
-if(!docs.length){ content.innerHTML = '<p class="empty">No tracked activity yet for this email — activity is only linked once they unlock the site with their password.</p>'; return; }
+if(!docs.length){ content.innerHTML = '<p class="empty">No tracked activity yet for this email â activity is only linked once they unlock the site with their password.</p>'; return; }
 content.innerHTML = docs.slice(0,50).map(a => {
 // Thumbnail: look up the matching product's image for anything tied to a
 // productId (product_interest, product_view). Falls back to a plain
 // placeholder box for activity that isn't about a specific product.
 const product = a.productId ? products.find(p => p.id === a.productId) : null;
 const thumbImg = product && product.image ? `style="background-image:url('../${escapeAttr(product.image)}')"` : '';
-const thumbInner = product && product.image ? '' : (ACTIVITY_ICONS[a.type] || '•');
+const thumbInner = product && product.image ? '' : (ACTIVITY_ICONS[a.type] || 'â¢');
 const quoteText = a.requestText || a.message || '';
 return `
 <div class="activity-item">
