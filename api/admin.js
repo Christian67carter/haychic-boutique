@@ -5,10 +5,10 @@
 // server, and is never sent to the client.
 //
 // Required environment variables (set in the Vercel dashboard):
-//   ADMIN_USERNAME  — the login username for the admin panel
-//   ADMIN_PASSWORD  — the login password for the admin panel
-//   ADMIN_SECRET    — any long random string, used to sign session tokens
-//   GITHUB_TOKEN    — a fine-grained GitHub token scoped to just this repo,
+//   ADMIN_USERNAME  â the login username for the admin panel
+//   ADMIN_PASSWORD  â the login password for the admin panel
+//   ADMIN_SECRET    â any long random string, used to sign session tokens
+//   GITHUB_TOKEN    â a fine-grained GitHub token scoped to just this repo,
 //                     with Contents: Read and write permission
 //
 // See ADMIN-SETUP.md for how to generate/choose each of these.
@@ -63,14 +63,17 @@ function ghHeaders() {
 // Product/page IDs are interpolated straight into repo file paths below
 // (assets/products/${id}.jpg, ${id}.html). This only runs with a valid
 // admin session already, but there's no reason to let an id contain "/"
-// or ".." — strip it down to the same slug shape every real product id
+// or ".." â strip it down to the same slug shape every real product id
 // already has, so a path can never escape its intended folder.
 function sanitizeId(id) {
   return String(id || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 200);
 }
 
 module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', SITE_URL);
+  const origin = req.headers.origin || '';
+  const allowed = [SITE_URL, SITE_URL.replace('https://', 'https://www.'), SITE_URL.replace('https://www.', 'https://')];
+  if (allowed.includes(origin)) res.setHeader('Access-Control-Allow-Origin', origin);
+  else res.setHeader('Access-Control-Allow-Origin', SITE_URL);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -127,9 +130,9 @@ module.exports = async (req, res) => {
 
     if (action === 'save') {
       // `image` (single) is kept for backwards compatibility. `images` is a
-      // list of { id, base64 } — used for color-variant photos, where a
+      // list of { id, base64 } â used for color-variant photos, where a
       // single listing can have several photos to upload in one save.
-      // `pages` is a list of { id, content } — plain-text HTML for a
+      // `pages` is a list of { id, content } â plain-text HTML for a
       // brand-new product's clean-URL page (e.g. "the-tiffany.html"). We
       // only create these, never overwrite an existing page, so re-saving
       // an existing product doesn't produce a pointless commit.
@@ -202,7 +205,7 @@ module.exports = async (req, res) => {
       });
       if (!putRes.ok) {
         // A sale (auto inventory decrement) or another admin save landed on
-        // products.json after this page loaded its copy — refuse to blindly
+        // products.json after this page loaded its copy â refuse to blindly
         // overwrite it, since this save's product list doesn't include
         // whatever just changed. Surface a clear, actionable message
         // instead of a generic failure.
