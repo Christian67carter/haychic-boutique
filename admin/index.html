@@ -118,6 +118,10 @@ body{background:var(--cream);}
 <label>Password</label>
 <input type="password" id="authPassword" autocomplete="current-password" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;">
 </div>
+<div class="field" id="totpField" style="display:none;">
+<label>Authenticator Code</label>
+<input type="text" id="authTOTP" autocomplete="one-time-code" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]{6}">
+</div>
 <div class="btn-row" style="justify-content:center;">
 <button class="btn primary" id="signInBtn" onclick="doSignIn()">Sign In</button>
 </div>
