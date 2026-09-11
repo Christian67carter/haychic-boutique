@@ -141,10 +141,33 @@ module.exports = async (req, res) => {
         const token = sign({ u: username, exp: Date.now() + SESSION_MS });
         res.status(200).json({ token });
       } else if (usernameMatches && password === process.env.ADMIN_PASSWORD && !totpOk) {
-        res.status(401).json({ error: 'Invalid authenticator code.' });
+        res.status(401).json({ error: 'Invalid authenticator code.', needsTotp: true });
       } else {
         res.status(401).json({ error: 'Incorrect username or password.' });
       }
+      return;
+    }
+
+    if (action === 'google-login') {
+      const { idToken } = body;
+      if (!idToken) { res.status(400).json({ error: 'Missing ID token.' }); return; }
+      // Verify the Firebase ID token using the REST accounts:lookup endpoint.
+      // The Web API key is already public (in firebase-config.js).
+      const FIREBASE_API_KEY = 'AIzaSyAoHJvYgKl0Z6Gok71OCmyoFPmFLHTXOJw';
+      const fbRes = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FIREBASE_API_KEY}`,
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken }) }
+      );
+      if (!fbRes.ok) { res.status(401).json({ error: 'Could not verify Google token.' }); return; }
+      const fbData = await fbRes.json();
+      const userEmail = ((fbData.users || [])[0] || {}).email || '';
+      const adminEmail = String(process.env.ADMIN_USERNAME || '').trim().toLowerCase();
+      if (!userEmail || userEmail.toLowerCase() !== adminEmail) {
+        res.status(403).json({ error: 'This Google account is not authorized.' });
+        return;
+      }
+      const token = sign({ u: userEmail, exp: Date.now() + SESSION_MS });
+      res.status(200).json({ token });
       return;
     }
 
