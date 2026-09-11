@@ -5,11 +5,11 @@
 // server, and is never sent to the client.
 //
 // Required environment variables (set in the Vercel dashboard):
-//   ADMIN_USERNAME  â the login username for the admin panel
-//   ADMIN_PASSWORD  â the login password for the admin panel
-//   ADMIN_SECRET    â any long random string, used to sign session tokens
-//   GITHUB_TOKEN    â a fine-grained GitHub token scoped to just this repo,
-//                     with Contents: Read and write permission
+//   ADMIN_USERNAME  —  the login username for the admin panel
+//   ADMIN_PASSWORD  —  the login password for the admin panel
+//   ADMIN_SECRET    —  any long random string, used to sign session tokens
+//   GITHUB_TOKEN    —  a fine-grained GitHub token scoped to just this repo,
+//                    with Contents: Read and write permission
 //
 // See ADMIN-SETUP.md for how to generate/choose each of these.
 
@@ -63,12 +63,11 @@ function ghHeaders() {
 // Product/page IDs are interpolated straight into repo file paths below
 // (assets/products/${id}.jpg, ${id}.html). This only runs with a valid
 // admin session already, but there's no reason to let an id contain "/"
-// or ".." â strip it down to the same slug shape every real product id
+// or ".." — strip it down to the same slug shape every real product id
 // already has, so a path can never escape its intended folder.
 function sanitizeId(id) {
   return String(id || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 200);
 }
-
 
 function base32Decode(base32) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
@@ -120,8 +119,8 @@ module.exports = async (req, res) => {
     return;
   }
   if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD || !process.env.ADMIN_SECRET || !process.env.GITHUB_TOKEN) {
-    Sentry.captureException(e);
-  res.status(500).json({ error: 'The admin panel is not configured on the server yet.' });
+    Sentry.captureException(new Error('Missing env vars'));
+    res.status(500).json({ error: 'The admin panel is not configured on the server yet.' });
     return;
   }
 
@@ -131,11 +130,10 @@ module.exports = async (req, res) => {
   try {
     if (action === 'login') {
       const { username, password } = body;
-      // Email addresses are case-insensitive (Firebase treats them that way
-      // too), so compare usernames case-insensitively. Passwords stay
-      // case-sensitive.
-      const usernameMatches = String(username || '').trim().toLowerCase() ===
-        String(process.env.ADMIN_USERNAME || '').trim().toLowerCase();
+      // Support multiple authorized emails (comma-separated in ADMIN_USERNAME).
+      // Email addresses are case-insensitive, so compare lowercased.
+      const adminEmails = String(process.env.ADMIN_USERNAME || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+      const usernameMatches = adminEmails.includes(String(username || '').trim().toLowerCase());
       const totpOk = verifyTOTP(process.env.ADMIN_TOTP_SECRET, body.totp);
       if (usernameMatches && password === process.env.ADMIN_PASSWORD && totpOk) {
         const token = sign({ u: username, exp: Date.now() + SESSION_MS });
@@ -161,8 +159,9 @@ module.exports = async (req, res) => {
       if (!fbRes.ok) { res.status(401).json({ error: 'Could not verify Google token.' }); return; }
       const fbData = await fbRes.json();
       const userEmail = ((fbData.users || [])[0] || {}).email || '';
-      const adminEmail = String(process.env.ADMIN_USERNAME || '').trim().toLowerCase();
-      if (!userEmail || userEmail.toLowerCase() !== adminEmail) {
+      // Support multiple authorized emails (comma-separated in ADMIN_USERNAME).
+      const adminEmails = String(process.env.ADMIN_USERNAME || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+      if (!userEmail || !adminEmails.includes(userEmail.toLowerCase())) {
         res.status(403).json({ error: 'This Google account is not authorized.' });
         return;
       }
@@ -189,13 +188,6 @@ module.exports = async (req, res) => {
     }
 
     if (action === 'save') {
-      // `image` (single) is kept for backwards compatibility. `images` is a
-      // list of { id, base64 } â used for color-variant photos, where a
-      // single listing can have several photos to upload in one save.
-      // `pages` is a list of { id, content } â plain-text HTML for a
-      // brand-new product's clean-URL page (e.g. "the-tiffany.html"). We
-      // only create these, never overwrite an existing page, so re-saving
-      // an existing product doesn't produce a pointless commit.
       const { products, sha, image, images, pages, message } = body;
       if (!Array.isArray(products)) throw new Error('Missing product list.');
 
@@ -264,11 +256,6 @@ module.exports = async (req, res) => {
         }),
       });
       if (!putRes.ok) {
-        // A sale (auto inventory decrement) or another admin save landed on
-        // products.json after this page loaded its copy â refuse to blindly
-        // overwrite it, since this save's product list doesn't include
-        // whatever just changed. Surface a clear, actionable message
-        // instead of a generic failure.
         if (putRes.status === 409 || putRes.status === 422) {
           throw new Error('Someone else updated inventory while you were editing (likely a sale just came in). Refresh the page and make your change again.');
         }
