@@ -615,7 +615,7 @@ color = color || {};
 const hasExisting = !!color.image;
 return `
 <div class="color-row" data-existing-image="${escapeAttr(color.image || '')}" ondragover="colorRowDragOver(event)">
-<span class="color-drag-handle" draggable="true" ondragstart="colorRowDragStart(event)" ondragend="colorRowDragEnd(event)" title="Drag to reorder" aria-label="Drag to reorder">â®â®</span>
+<span class="color-drag-handle" draggable="true" ondragstart="colorRowDragStart(event)" ondragend="colorRowDragEnd(event)" title="Drag to reorder" aria-label="Drag to reorder">⋮⋮</span>
 <div class="field">
 <label>Color Name</label>
 <input type="text" class="colorName" value="${escapeAttr(color.name || '')}" placeholder="e.g. Blush Pink">
@@ -637,7 +637,7 @@ ${hasExisting ? `<span class="existing-note">Current photo saved â (choose 
 <label>Qty (optional)</label>
 <input type="number" class="colorQty" min="0" step="1" value="${typeof color.qty === 'number' ? color.qty : ''}">
 </div>
-<button type="button" class="color-remove-btn" onclick="this.closest('.color-row').remove()" aria-label="Remove color">â</button>
+<button type="button" class="color-remove-btn" onclick="this.closest('.color-row').remove()" aria-label="Remove color">✕</button>
 </div>`;
 }
 
@@ -727,7 +727,7 @@ return `
 <label>Qty (optional)</label>
 <input type="number" class="sizeQty" min="0" step="1" value="${typeof size.qty === 'number' ? size.qty : ''}">
 </div>
-<button type="button" class="size-remove-btn" onclick="this.closest('.size-admin-row').remove()" aria-label="Remove size">â</button>
+<button type="button" class="size-remove-btn" onclick="this.closest('.size-admin-row').remove()" aria-label="Remove size">✕</button>
 </div>`;
 }
 
