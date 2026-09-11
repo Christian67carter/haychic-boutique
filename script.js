@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
           '<div style="flex:1 1 340px;min-width:0;">' +
             '<img id="pdp-main-img" src="' + escapeHtml(firstImg) + '" alt="' + escapeHtml(p.name) + '"' +
               ' style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:1/1;display:block;"' +
-           ' onerror="this.hidden=true">' +
+          ' onerror="this.hidden=true">' +
           '</div>' +
           '<div style="flex:1 1 280px;min-width:0;">' +
             '<h1 style="margin:0 0 8px;font-size:1.6rem;">' + escapeHtml(p.name) + '</h1>' +
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
               '<button id="pdp-qty-plus" style="width:36px;height:36px;border-radius:50%;border:1.5px solid #ccc;background:#fff;font-size:1.2rem;cursor:pointer;">+</button>' +
             '</div>' +
             '<button id="pdp-add-btn" style="width:100%;padding:14px;background:' + initBtnBg + ';color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;letter-spacing:.05em;cursor:pointer;">' + initBtnLabel + '</button>' +
-            '<p id="pdp-preorder-note" style="font-size:.8rem;color:var(--muted);margin:8px 0 0;display:' + (initStatus===''preorder'?'block':'none') + ';">Pre-orders are charged now and ship when the item arrives.</p>' +
+            '<p id="pdp-preorder-note" style="font-size:.8rem;color:var(--muted);margin:8px 0 0;display:' + (initStatus==='preorder'?'block':'none') + ';">Pre-orders are charged now and ship when the item arrives.</p>' +
             (p.description ? '<p style="margin:20px 0 0;line-height:1.7;color:var(--muted);">' + escapeHtml(p.description) + '</p>' : '') +
           '</div>' +
         '</div>';
@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // \u2500\u2500 Grid Pages \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
   fetchProducts().then(function(products) {
     var shopGrid = document.getElementById('products');
-    if (showGrid) {
+    if (shopGrid) {
       var cat = new URLSearchParams(location.search).get('category');
       applyFilter(cat && cat !== 'all' ? cat.charAt(0).toUpperCase() + cat.slice(1) : 'All');
     }
