@@ -319,6 +319,54 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+// \u2500\u2500\u2500 Cart / Bag \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+(function initCart() {
+  // Inject cart drawer HTML once
+  if (!document.querySelector('.cart-drawer')) {
+    document.body.insertAdjacentHTML('beforeend',
+      '<div class="cart-overlay" onclick="closeCart()"></div>' +
+      '<div class="cart-drawer">' +
+        '<div class="cart-drawer-header">' +
+          '<h3>Your Bag</h3>' +
+          '<button class="cart-close-btn" onclick="closeCart()" aria-label="Close bag">\u2715</button>' +
+        '</div>' +
+        '<div class="cart-items">' +
+          '<div class="cart-empty">' +
+            '<p style="font-size:2rem;margin:0 0 10px;">\u{1F6CD}\ufe0f</p>' +
+            '<p style="font-weight:700;color:var(--brown);">Your bag is empty</p>' +
+            '<p style="color:var(--muted);font-size:.9rem;">Browse our collection and add something beautiful!</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="cart-drawer-footer">' +
+          '<div class="cart-subtotal"><span>Subtotal</span><span>$0.00</span></div>' +
+          '<button style="width:100%;padding:14px;background:var(--pink-dark);color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;letter-spacing:.05em;cursor:pointer;" onclick="closeCart()">Continue Shopping</button>' +
+          '<p class="cart-note">Full checkout coming soon \u2665</p>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+  // Wire Bag button
+  var bagBtn = document.querySelector('.bag-btn');
+  if (bagBtn && !bagBtn._cartWired) {
+    bagBtn._cartWired = true;
+    bagBtn.addEventListener('click', openCart);
+  }
+})();
+
+function openCart() {
+  var overlay = document.querySelector('.cart-overlay');
+  var drawer = document.querySelector('.cart-drawer');
+  if (overlay) overlay.classList.add('open');
+  if (drawer) drawer.classList.add('open');
+}
+
+function closeCart() {
+  var overlay = document.querySelector('.cart-overlay');
+  var drawer = document.querySelector('.cart-drawer');
+  if (overlay) overlay.classList.remove('open');
+  if (drawer) drawer.classList.remove('open');
+}
+
 // \u2500\u2500\u2500 Nav / Toast / Forms \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function toggleMenu() {
   var nav = document.getElementById('nav');
