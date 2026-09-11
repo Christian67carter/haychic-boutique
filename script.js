@@ -184,6 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // ─── Product Detail Page ────────────────────────────────────────────
 // Renders individual product pages. Each product HTML file has a
 // <div id="productDetail"> that this populates from products.json.
+// Per-color inventory: each color can independently be in-stock or preorder.
+// Sold-out colors are treated as pre-orderable (never show per-color sold out).
 
 document.addEventListener('DOMContentLoaded', () => {
   const detailEl = document.getElementById('productDetail');
@@ -209,80 +211,167 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getSelectedColor() { return hasColors ? colors[selectedColorIdx] : null; }
 
-    function getSelectedStatus() {
+    // Per-color status: sold-out or in-stock+qty=0 -> preorder (always orderable)
+    function colorStatus(c) {
+      if (!c) return effectiveProductStatus(p);
+      const raw = c.status || 'in-stock';
+      const cQty = typeof c.qty === 'number' ? c.qty : undefined;
+      if (raw === 'sold-out') return 'preorder';
+      if (raw === 'in-stock' && cQty === 0) return 'preorder';
+      return raw;
+    }
+
+    function getSelectedStatus() { return colorStatus(getSelectedColor()); }
+
+    // Status info block HTML for the currently selected color
+    function buildStatusHtml() {
       const c = getSelectedColor();
-      if (c && c.status) return (c.status === 'in-stock' && c.qty === 0) ? 'preorder' : c.status;
-      return effectiveProductStatus(p);
+      const status = getSelectedStatus();
+      const cQty = (c && typeof c.qty === 'number') ? c.qty : (typeof p.qty === 'number' ? p.qty : undefined);
+
+      if (status === 'preorder') {
+        return '<div id="pdp-status-info" style="padding:10px 14px;background:#fdf7f0;border-radius:10px;border:1px solid #e8cdb0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
+          '<span style="font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--pink-dark,#c48b70);color:#fff;padding:3px 10px;border-radius:999px;white-space:nowrap;">PRE-ORDER</span>' +
+          '<span style="font-size:.88rem;color:var(--muted,#7A6F5C);">This color ships when it arrives — we'll email you updates.</span>' +
+          '</div>';
+      }
+
+      let qtyNote = '';
+      if (typeof cQty === 'number' && cQty > 0) {
+        qtyNote = cQty <= LOW_STOCK_THRESHOLD
+          ? ' — <strong style="color:#c0392b;">Only ' + cQty + ' left!</strong>'
+          : ' — ' + cQty + ' available';
+      }
+      return '<div id="pdp-status-info" style="padding:10px 14px;background:#f0f7f0;border-radius:10px;border:1px solid #b8d8b8;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
+        '<span style="font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:#6a9955;color:#fff;padding:3px 10px;border-radius:999px;white-space:nowrap;">IN STOCK</span>' +
+        '<span style="font-size:.88rem;color:#2d5a2d;">✓ Ready to ship' + qtyNote + '</span>' +
+        '</div>';
     }
 
     function render() {
       const c = getSelectedColor();
       const mainImg = (c && c.image) ? c.image : p.image;
       const selStatus = getSelectedStatus();
-      const si = statusInfo(selStatus);
-      const isSoldOut = selStatus === 'sold-out';
       const isPreorder = selStatus === 'preorder';
-      const cQty = (c && typeof c.qty === 'number') ? c.qty : p.qty;
-      const urgency = urgencyHtml(cQty);
 
       const thumbsHtml = hasColors && colors.length > 1
-        ? '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">' +
+        ? '<div id="pdp-thumbs" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">' +
           colors.slice(0, 8).map((col, i) =>
-            '<img src="' + escapeHtml(col.image || p.image) + '" alt="' + escapeHtml(col.name) + '" data-idx="' + i + '" class="pdp-thumb" style="width:60px;height:60px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid ' + (i === selectedColorIdx ? 'var(--brown,#4A3F2E)' : 'var(--line,#E3D9C3)') + ';flex-shrink:0;">'
+            '<img src="' + escapeHtml(col.image || p.image) + '" alt="' + escapeHtml(col.name) + '" data-idx="' + i + '" class="pdp-thumb" style="width:60px;height:60px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid ' + (i === 0 ? 'var(--brown,#4A3F2E)' : 'var(--line,#E3D9C3)') + ';flex-shrink:0;">'
           ).join('') + '</div>' : '';
 
-      const swatchesHtml = hasColors && colors.length > 1
-        ? '<div style="margin:4px 0;"><p style="margin:0 0 8px;font-size:.9rem;font-weight:600;">Color: <span id="pdp-color-label" style="font-weight:400;">' + escapeHtml(colors[selectedColorIdx].name) + '</span></p><div style="display:flex;gap:8px;flex-wrap:wrap;">' +
-          colors.map((col, i) => {
-            const bkg = col.image ? 'background-image:url(\'' + escapeHtml(col.image) + '\');background-size:cover;background-position:center;' : 'background:var(--cream,#F2E9DA);';
-            return '<button class="pdp-swatch" data-idx="' + i + '" style="' + bkg + 'width:44px;height:44px;border-radius:8px;border:2px solid ' + (i === selectedColorIdx ? 'var(--brown,#4A3F2E)' : 'var(--line,#E3D9C3)') + ';cursor:pointer;flex-shrink:0;padding:0;" title="' + escapeHtml(col.name) + '" aria-label="' + escapeHtml(col.name) + '"></button>';
-          }).join('') + '</div></div>' : '';
+      const hasPreorderColors = hasColors && colors.some(col => colorStatus(col) === 'preorder');
 
-      const badgeBg = si.cls === 'in-stock' ? '#6a9955' : si.cls === 'preorder' ? 'var(--pink-dark,#c48b70)' : '#aaa';
-      const btnLabel = isSoldOut ? 'Sold Out' : isPreorder ? 'Pre-Order' : 'Add to Bag';
+      const swatchesHtml = hasColors && colors.length > 1
+        ? '<div><p style="margin:0 0 8px;font-size:.9rem;font-weight:600;">Color: <span id="pdp-color-label" style="font-weight:400;">' + escapeHtml(colors[0].name) + '</span></p>' +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+          colors.map((col, i) => {
+            const isPreCol = colorStatus(col) === 'preorder';
+            const bkg = col.image ? 'background-image:url(\'' + escapeHtml(col.image) + '\');background-size:cover;background-position:center;' : 'background:var(--cream,#F2E9DA);';
+            return '<button class="pdp-swatch" data-idx="' + i + '" style="' + bkg + 'width:44px;height:44px;border-radius:8px;border:2px solid ' + (i === 0 ? 'var(--brown,#4A3F2E)' : 'var(--line,#E3D9C3)') + ';cursor:pointer;flex-shrink:0;padding:0;position:relative;" title="' + escapeHtml(col.name) + (isPreCol ? ' (Pre-Order)' : '') + '" aria-label="' + escapeHtml(col.name) + '">' +
+              (isPreCol ? '<span style="position:absolute;bottom:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:var(--pink-dark,#c48b70);border:1.5px solid #fff;display:block;pointer-events:none;"></span>' : '') +
+              '</button>';
+          }).join('') + '</div>' +
+          (hasPreorderColors ? '<p style="font-size:.72rem;color:var(--muted,#7A6F5C);margin:5px 0 0;"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--pink-dark,#c48b70);vertical-align:middle;margin-right:4px;"></span>= Pre-Order color</p>' : '') +
+          '</div>' : '';
+
+      const btnBg = isPreorder ? 'var(--pink-dark,#c48b70)' : 'var(--brown,#4A3F2E)';
+      const btnLabel = isPreorder ? 'Pre-Order' : 'Add to Bag';
 
       detailEl.innerHTML =
-        '<style>@media(max-width:620px){.pdp-layout{grid-template-columns:1fr!important;}} .pdp-thumb:hover,.pdp-swatch:hover{opacity:.82;}</style>' +
+        '<style>@media(max-width:620px){.pdp-layout{grid-template-columns:1fr!important;gap:24px!important;}} .pdp-thumb:hover,.pdp-swatch:hover{opacity:.8;} #pdp-add-btn{transition:background .25s,border-color .25s;}</style>' +
         '<div class="pdp-layout" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;max-width:960px;margin:24px auto;padding:0 20px;">' +
           '<div>' +
             '<img id="pdp-main-img" src="' + escapeHtml(mainImg) + '" alt="' + escapeHtml(p.name) + '" style="width:100%;border-radius:16px;object-fit:cover;aspect-ratio:1/1;display:block;">' +
             thumbsHtml +
           '</div>' +
           '<div style="display:flex;flex-direction:column;gap:14px;padding-top:4px;">' +
-            '<span style="align-self:flex-start;background:' + badgeBg + ';color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.05em;padding:4px 12px;border-radius:999px;text-transform:uppercase;">' + si.label + '</span>' +
             '<h1 style="font-family:\'Playfair Display\',serif;font-size:1.9rem;margin:0;line-height:1.2;">' + escapeHtml(p.name) + '</h1>' +
             '<p style="font-size:1.25rem;font-weight:700;margin:0;">' + escapeHtml(p.price) + '</p>' +
             (p.description ? '<p style="color:var(--muted,#7A6F5C);line-height:1.65;margin:0;">' + escapeHtml(p.description) + '</p>' : '') +
             swatchesHtml +
-            '<div id="pdp-urgency">' + urgency + '</div>' +
+            buildStatusHtml() +
             '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
               '<div style="display:flex;align-items:center;border:1px solid var(--line,#E3D9C3);border-radius:999px;overflow:hidden;">' +
-                '<button id="pdp-dec" aria-label="Decrease quantity" style="width:40px;height:40px;border:none;background:none;cursor:pointer;font-size:1.2rem;line-height:1;">−</button>' +
-                '<span id="pdp-qty-display" style="min-width:30px;text-align:center;font-weight:700;font-size:.95rem;">' + qty + '</span>' +
-                '<button id="pdp-inc" aria-label="Increase quantity" style="width:40px;height:40px;border:none;background:none;cursor:pointer;font-size:1.2rem;line-height:1;">+</button>' +
+                '<button id="pdp-dec" aria-label="Decrease quantity" style="width:40px;height:40px;border:none;background:none;cursor:pointer;font-size:1.3rem;line-height:1;">−</button>' +
+                '<span id="pdp-qty-display" style="min-width:32px;text-align:center;font-weight:700;font-size:.95rem;">' + qty + '</span>' +
+                '<button id="pdp-inc" aria-label="Increase quantity" style="width:40px;height:40px;border:none;background:none;cursor:pointer;font-size:1.3rem;line-height:1;">+</button>' +
               '</div>' +
-              '<button id="pdp-add-btn" style="flex:1;min-width:140px;padding:13px 20px;border-radius:999px;font-weight:700;font-size:.95rem;border:1px solid var(--brown,#4A3F2E);background:' + (isSoldOut?'#aaa':'var(--brown,#4A3F2E)') + ';color:#fff;cursor:pointer;"' + (isSoldOut?' disabled':'') + '>' + btnLabel + '</button>' +
+              '<button id="pdp-add-btn" style="flex:1;min-width:140px;padding:13px 20px;border-radius:999px;font-weight:700;font-size:.95rem;border:1px solid ' + btnBg + ';background:' + btnBg + ';color:#fff;cursor:pointer;">' + btnLabel + '</button>' +
             '</div>' +
-            (isPreorder ? '<p style="font-size:.82rem;color:var(--muted,#7A6F5C);margin:0;">Pre-orders ship when your item arrives — we\'ll email you with updates!</p>' : '') +
+            '<p id="pdp-preorder-note" style="font-size:.82rem;color:var(--muted,#7A6F5C);margin:0;' + (isPreorder ? '' : 'display:none;') + '">Pre-orders ship when your item arrives — we'll email you with updates!</p>' +
           '</div>' +
         '</div>';
 
-      detailEl.querySelectorAll('.pdp-thumb,.pdp-swatch').forEach(el => {
-        el.addEventListener('click', () => { selectedColorIdx = +el.dataset.idx; render(); });
+      wireEvents();
+    }
+
+    // Update only dynamic parts when color changes — no full re-render, no scroll jump
+    function updateForColor() {
+      const c = getSelectedColor();
+      const mainImg = (c && c.image) ? c.image : p.image;
+      const selStatus = getSelectedStatus();
+      const isPreorder = selStatus === 'preorder';
+
+      const mainImgEl = document.getElementById('pdp-main-img');
+      if (mainImgEl) mainImgEl.src = mainImg;
+
+      const colorLabel = document.getElementById('pdp-color-label');
+      if (colorLabel && c) colorLabel.textContent = c.name;
+
+      detailEl.querySelectorAll('.pdp-swatch').forEach((sw, i) => {
+        sw.style.borderColor = i === selectedColorIdx ? 'var(--brown,#4A3F2E)' : 'var(--line,#E3D9C3)';
+      });
+      detailEl.querySelectorAll('.pdp-thumb').forEach((th, i) => {
+        th.style.borderColor = i === selectedColorIdx ? 'var(--brown,#4A3F2E)' : 'var(--line,#E3D9C3)';
+      });
+
+      const existingStatus = document.getElementById('pdp-status-info');
+      if (existingStatus) {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = buildStatusHtml();
+        existingStatus.replaceWith(tmp.firstElementChild);
+      }
+
+      const addBtn = document.getElementById('pdp-add-btn');
+      if (addBtn) {
+        const btnBg = isPreorder ? 'var(--pink-dark,#c48b70)' : 'var(--brown,#4A3F2E)';
+        addBtn.textContent = isPreorder ? 'Pre-Order' : 'Add to Bag';
+        addBtn.style.background = btnBg;
+        addBtn.style.borderColor = btnBg;
+      }
+
+      const note = document.getElementById('pdp-preorder-note');
+      if (note) note.style.display = isPreorder ? '' : 'none';
+    }
+
+    function wireEvents() {
+      detailEl.querySelectorAll('.pdp-swatch,.pdp-thumb').forEach(el => {
+        el.addEventListener('click', () => {
+          selectedColorIdx = +el.dataset.idx;
+          updateForColor();
+        });
       });
 
       const qtyEl = document.getElementById('pdp-qty-display');
       const dec = document.getElementById('pdp-dec');
       const inc = document.getElementById('pdp-inc');
       const addBtn = document.getElementById('pdp-add-btn');
+
       if (dec) dec.onclick = () => { if (qty > 1) { qty--; if (qtyEl) qtyEl.textContent = qty; } };
       if (inc) inc.onclick = () => { qty++; if (qtyEl) qtyEl.textContent = qty; };
-      if (addBtn && !addBtn.disabled) {
+      if (addBtn) {
         addBtn.onclick = () => {
           const label = addBtn.textContent;
           addBtn.textContent = '✓ Added!';
           addBtn.style.background = '#6a9955';
-          setTimeout(() => { addBtn.textContent = label; addBtn.style.background = 'var(--brown,#4A3F2E)'; }, 1800);
+          addBtn.style.borderColor = '#6a9955';
+          setTimeout(() => {
+            const bg = getSelectedStatus() === 'preorder' ? 'var(--pink-dark,#c48b70)' : 'var(--brown,#4A3F2E)';
+            addBtn.textContent = label;
+            addBtn.style.background = bg;
+            addBtn.style.borderColor = bg;
+          }, 1800);
         };
       }
     }
