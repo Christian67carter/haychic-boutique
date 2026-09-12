@@ -325,8 +325,7 @@
       {
         "name": "Brown",
         "image": "",
-        "status": "preorder",
-        "qty": 0
+        "status": "preorder"
       },
       {
         "name": "Black",
