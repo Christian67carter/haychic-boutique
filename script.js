@@ -18,7 +18,7 @@ function urgencyHtml(qty) {
 
 let ALL_PRODUCTS = [];
 
-// ‚îÄ‚îÄ‚îÄ Cart State ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// ─── Cart State ──────────────────────────────────────────────────────────────
 function loadCart() {
   try { return JSON.parse(localStorage.getItem('haychic_cart') || '[]'); } catch(e) { return []; }
 }
@@ -94,7 +94,7 @@ function renderCartItems() {
   if (cart.length === 0) {
     itemsEl.innerHTML =
       '<div class="cart-empty">' +
-        '<p style="font-size:2rem;margin:0 0 10px;">üõçÔ∏è</p>' +
+        '<p style="font-size:2rem;margin:0 0 10px;">🛍️</p>' +
         '<p style="font-weight:700;color:var(--brown);">Your bag is empty</p>' +
         '<p style="color:var(--muted);font-size:.9rem;">Browse our collection and add something beautiful!</p>' +
       '</div>';
@@ -113,13 +113,13 @@ function renderCartItems() {
         '<p style="margin:0 0 2px;font-weight:700;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escapeHtml(item.name) + '</p>' +
         (item.color ? '<p style="margin:0 0 4px;font-size:.8rem;color:var(--muted);">' + escapeHtml(item.color) + '</p>' : '') +
         '<div style="display:flex;align-items:center;gap:8px;margin:4px 0;">' +
-          '<button onclick="updateCartQty(\'' + safeKey + '\',-1)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid #ccc;background:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">‚àí</button>' +
+          '<button onclick="updateCartQty(\'' + safeKey + '\',-1)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid #ccc;background:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">−</button>' +
           '<span style="font-weight:700;min-width:18px;text-align:center;">' + item.qty + '</span>' +
           '<button onclick="updateCartQty(\'' + safeKey + '\',1)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid #ccc;background:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>' +
         '</div>' +
         '<p style="margin:0;font-size:.85rem;font-weight:600;">' + lineTotal + '</p>' +
       '</div>' +
-      '<button onclick="removeFromCart(\'' + safeKey + '\')" style="background:none;border:none;font-size:1.1rem;color:#bbb;cursor:pointer;padding:4px;flex-shrink:0;" title="Remove">‚úï</button>' +
+      '<button onclick="removeFromCart(\'' + safeKey + '\')" style="background:none;border:none;font-size:1.1rem;color:#bbb;cursor:pointer;padding:4px;flex-shrink:0;" title="Remove">✕</button>' +
     '</div>';
   }).join('');
 
@@ -132,15 +132,17 @@ function startCheckout() {
   if (cart.length === 0) return;
   var btn = document.querySelector('.cart-checkout-btn');
   var origText = btn ? btn.textContent : 'Checkout';
-  if (btn) { btn.textContent = 'Loading‚Ä¶'; btn.disabled = true; }
+  if (btn) { btn.textContent = 'Loading…'; btn.disabled = true; }
   var zip = '';
   var zipEl = document.querySelector('.cart-zip-input');
   if (zipEl) zip = zipEl.value.trim();
   var items = cart.map(function(item) {
     return {
-      name: item.name + (item.color ? ' ‚Äî ' + item.color : ''),
+      name: item.name + (item.color ? ' — ' + item.color : ''),
       unitAmount: Math.round(item.priceNum * 100),
-      quantity: item.qty
+      quantity: item.qty,
+      productId: item.id,
+      colorName: item.color || ''
     };
   });
   fetch('/api/create-checkout-session', {
