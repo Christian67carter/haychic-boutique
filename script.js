@@ -1,4 +1,4 @@
-// \u2500\u2500\u2500 Utilities \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// ─── Utilities ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
@@ -18,11 +18,147 @@ function urgencyHtml(qty) {
 
 let ALL_PRODUCTS = [];
 
+// ─── Cart State ──────────────────────────────────────────────────────────────
+var cart = [];
+
+function parsePrice(str) {
+  return parseFloat(String(str).replace(/[^0-9.]/g, '')) || 0;
+}
+
+function addToCart(product, qty, colorName, colorImg) {
+  var key = product.id + '|' + (colorName || '');
+  var found = false;
+  for (var i = 0; i < cart.length; i++) {
+    if (cart[i].key === key) { cart[i].qty += qty; found = true; break; }
+  }
+  if (!found) {
+    cart.push({
+      key: key,
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      priceNum: parsePrice(product.price),
+      color: colorName || '',
+      img: colorImg || product.image || '',
+      qty: qty
+    });
+  }
+  updateCartBadge();
+  renderCartItems();
+  openCart();
+}
+
+function removeFromCart(key) {
+  cart = cart.filter(function(item) { return item.key !== key; });
+  updateCartBadge();
+  renderCartItems();
+}
+
+function updateCartQty(key, delta) {
+  for (var i = 0; i < cart.length; i++) {
+    if (cart[i].key === key) {
+      cart[i].qty = Math.max(1, cart[i].qty + delta);
+      break;
+    }
+  }
+  updateCartBadge();
+  renderCartItems();
+}
+
+function cartTotal() {
+  return cart.reduce(function(sum, item) { return sum + item.priceNum * item.qty; }, 0);
+}
+
+function updateCartBadge() {
+  var count = cart.reduce(function(sum, item) { return sum + item.qty; }, 0);
+  var badge = document.querySelector('.cart-badge');
+  if (!badge) return;
+  badge.textContent = count;
+  badge.style.display = count > 0 ? 'flex' : 'none';
+}
+
+function renderCartItems() {
+  var itemsEl = document.querySelector('.cart-items');
+  var subtotalEl = document.querySelector('.cart-subtotal-amt');
+  if (!itemsEl) return;
+
+  if (cart.length === 0) {
+    itemsEl.innerHTML =
+      '<div class="cart-empty">' +
+        '<p style="font-size:2rem;margin:0 0 10px;">🛍️</p>' +
+        '<p style="font-weight:700;color:var(--brown);">Your bag is empty</p>' +
+        '<p style="color:var(--muted);font-size:.9rem;">Browse our collection and add something beautiful!</p>' +
+      '</div>';
+    if (subtotalEl) subtotalEl.textContent = '$0.00';
+    var chkBtn = document.querySelector('.cart-checkout-btn');
+    if (chkBtn) { chkBtn.disabled = true; chkBtn.style.opacity = '0.5'; }
+    return;
+  }
+
+  itemsEl.innerHTML = cart.map(function(item) {
+    var lineTotal = '$' + (item.priceNum * item.qty).toFixed(2);
+    var safeKey = escapeHtml(item.key).replace(/'/g, '&#39;');
+    return '<div class="cart-item" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #f0e8e0;">' +
+      (item.img ? '<img src="' + escapeHtml(item.img) + '" alt="' + escapeHtml(item.name) + '" style="width:64px;height:64px;object-fit:cover;border-radius:8px;flex-shrink:0;">' : '') +
+      '<div style="flex:1;min-width:0;">' +
+        '<p style="margin:0 0 2px;font-weight:700;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escapeHtml(item.name) + '</p>' +
+        (item.color ? '<p style="margin:0 0 4px;font-size:.8rem;color:var(--muted);">' + escapeHtml(item.color) + '</p>' : '') +
+        '<div style="display:flex;align-items:center;gap:8px;margin:4px 0;">' +
+          '<button onclick="updateCartQty(\'' + safeKey + '\',-1)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid #ccc;background:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">−</button>' +
+          '<span style="font-weight:700;min-width:18px;text-align:center;">' + item.qty + '</span>' +
+          '<button onclick="updateCartQty(\'' + safeKey + '\',1)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid #ccc;background:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>' +
+        '</div>' +
+        '<p style="margin:0;font-size:.85rem;font-weight:600;">' + lineTotal + '</p>' +
+      '</div>' +
+      '<button onclick="removeFromCart(\'' + safeKey + '\')" style="background:none;border:none;font-size:1.1rem;color:#bbb;cursor:pointer;padding:4px;flex-shrink:0;" title="Remove">✕</button>' +
+    '</div>';
+  }).join('');
+
+  if (subtotalEl) subtotalEl.textContent = '$' + cartTotal().toFixed(2);
+  var chkBtn = document.querySelector('.cart-checkout-btn');
+  if (chkBtn) { chkBtn.disabled = false; chkBtn.style.opacity = '1'; }
+}
+
+function startCheckout() {
+  if (cart.length === 0) return;
+  var btn = document.querySelector('.cart-checkout-btn');
+  var origText = btn ? btn.textContent : 'Checkout';
+  if (btn) { btn.textContent = 'Loading…'; btn.disabled = true; }
+  var zip = '';
+  var zipEl = document.querySelector('.cart-zip-input');
+  if (zipEl) zip = zipEl.value.trim();
+  var items = cart.map(function(item) {
+    return {
+      name: item.name + (item.color ? ' — ' + item.color : ''),
+      unitAmount: Math.round(item.priceNum * 100),
+      quantity: item.qty
+    };
+  });
+  fetch('/api/create-checkout-session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items: items, zip: zip })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert('Checkout error: ' + (data.error || 'Please try again.'));
+      if (btn) { btn.textContent = origText; btn.disabled = false; }
+    }
+  })
+  .catch(function() {
+    alert('Checkout error. Please check your connection and try again.');
+    if (btn) { btn.textContent = origText; btn.disabled = false; }
+  });
+}
+
 function effectiveProductStatus(p) {
   return (p.status === 'in-stock' && p.qty === 0) ? 'preorder' : p.status;
 }
 
-// \u2500\u2500\u2500 Product Loading \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// ─── Product Loading ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 let _productsPromise = null;
 function fetchProducts() {
   if (!_productsPromise) {
@@ -108,10 +244,10 @@ function applyFilter(category) {
   renderProducts(filtered, grid);
 }
 
-// \u2500\u2500\u2500 DOMContentLoaded \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// ─── DOMContentLoaded ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
 
-  // \u2500\u2500 Product Detail Page \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+  // ── Product Detail Page ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   var detailEl = document.getElementById('productDetail');
   if (detailEl) {
     var slug = location.pathname.replace(/^\//, '').replace(/\.html$/, '');
@@ -147,14 +283,14 @@ document.addEventListener('DOMContentLoaded', function() {
         var status = getSelectedStatus();
         var cQty = (c && typeof c.qty === 'number') ? c.qty : (typeof p.qty === 'number' ? p.qty : undefined);
         if (status === 'preorder') {
-          return '<div id="pdp-status-info" style="margin:12px 0;padding:10px 14px;background:#fdf0f4;border:1.5px solid var(--pink-dark,#c48b70);border-radius:8px;font-size:.85rem;font-weight:700;color:var(--pink-dark,#c48b70);letter-spacing:.04em;">PRE-ORDER \u2014 This color ships when it arrives</div>';
+          return '<div id="pdp-status-info" style="margin:12px 0;padding:10px 14px;background:#fdf0f4;border:1.5px solid var(--pink-dark,#c48b70);border-radius:8px;font-size:.85rem;font-weight:700;color:var(--pink-dark,#c48b70);letter-spacing:.04em;">PRE-ORDER — This color ships when it arrives</div>';
         }
         var qtyNote = '';
         if (typeof cQty === 'number' && cQty > 0) {
           if (cQty <= LOW_STOCK_THRESHOLD) {
-            qtyNote = ' \u2014 <strong style="color:#c0392b;">Only ' + cQty + ' left!</strong>';
+            qtyNote = ' — <strong style="color:#c0392b;">Only ' + cQty + ' left!</strong>';
           } else {
-            qtyNote = ' \u2014 ' + cQty + ' available';
+            qtyNote = ' — ' + cQty + ' available';
           }
         }
         return '<div id="pdp-status-info" style="margin:12px 0;padding:10px 14px;background:#f0faf3;border:1.5px solid #6a9955;border-radius:8px;font-size:.85rem;font-weight:700;color:#3a7a2a;letter-spacing:.04em;">IN STOCK' + qtyNote + '</div>';
@@ -180,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
               dot + '</button>';
           }).join('') +
           '</div>' +
-          (hasAnyPreorder ? '<p style="font-size:.75rem;color:var(--pink-dark,#c48b70);margin:0 0 12px;">\u25CF = Pre-Order color</p>' : '') +
+          (hasAnyPreorder ? '<p style="font-size:.75rem;color:var(--pink-dark,#c48b70);margin:0 0 12px;">● = Pre-Order color</p>' : '') +
           '<p id="pdp-color-label" style="font-size:.9rem;font-weight:600;margin:4px 0 0;">' + escapeHtml(colors[0].name) + '</p>';
       }
 
@@ -203,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
             buildStatusHtml() +
             swatchesHtml +
             '<div style="display:flex;align-items:center;gap:12px;margin:16px 0;">' +
-              '<button id="pdp-qty-minus" style="width:36px;height:36px;border-radius:50%;border:1.5px solid #ccc;background:#fff;font-size:1.2rem;cursor:pointer;">\u2212</button>' +
+              '<button id="pdp-qty-minus" style="width:36px;height:36px;border-radius:50%;border:1.5px solid #ccc;background:#fff;font-size:1.2rem;cursor:pointer;">−</button>' +
               '<span id="pdp-qty-val" style="font-size:1.1rem;font-weight:700;min-width:24px;text-align:center;">1</span>' +
               '<button id="pdp-qty-plus" style="width:36px;height:36px;border-radius:50%;border:1.5px solid #ccc;background:#fff;font-size:1.2rem;cursor:pointer;">+</button>' +
             '</div>' +
@@ -213,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
           '</div>' +
         '</div>';
 
-      // Update only changed parts when color switches \u2014 no scroll jump
+      // Update only changed parts when color switches
       function updateForColor() {
         var c = getSelectedColor();
         var status = getSelectedStatus();
@@ -267,12 +403,13 @@ document.addEventListener('DOMContentLoaded', function() {
       if (plusBtn) plusBtn.addEventListener('click', function() { qty++; updateQtyDisplay(); });
       if (addBtn) {
         addBtn.addEventListener('click', function() {
+          var c = getSelectedColor();
+          addToCart(p, qty, c ? c.name : '', c ? (c.image || p.image || '') : (p.image || ''));
           var origLabel = addBtn.textContent;
-          addBtn.textContent = '\u2713 Added!';
+          addBtn.textContent = '✓ Added!';
           addBtn.disabled = true;
           setTimeout(function() { addBtn.textContent = origLabel; addBtn.disabled = false; }, 1600);
           if (window.HAYCHIC_logActivity) {
-            var c = getSelectedColor();
             window.HAYCHIC_logActivity('add_to_bag', {
               productId: p.id, productName: p.name,
               color: c ? c.name : '', qty: qty, status: getSelectedStatus()
@@ -287,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  // \u2500\u2500 Grid Pages \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+  // ── Grid Pages ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   fetchProducts().then(function(products) {
     var shopGrid = document.getElementById('products');
     if (shopGrid) {
@@ -319,41 +456,46 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// \u2500\u2500\u2500 Cart / Bag \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// ─── Cart / Bag ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 (function initCart() {
-  // Inject cart drawer HTML once
   if (!document.querySelector('.cart-drawer')) {
     document.body.insertAdjacentHTML('beforeend',
       '<div class="cart-overlay" onclick="closeCart()"></div>' +
       '<div class="cart-drawer">' +
         '<div class="cart-drawer-header">' +
           '<h3>Your Bag</h3>' +
-          '<button class="cart-close-btn" onclick="closeCart()" aria-label="Close bag">\u2715</button>' +
+          '<button class="cart-close-btn" onclick="closeCart()" aria-label="Close bag">×</button>' +
         '</div>' +
-        '<div class="cart-items">' +
-          '<div class="cart-empty">' +
-            '<p style="font-size:2rem;margin:0 0 10px;">\u{1F6CD}\ufe0f</p>' +
-            '<p style="font-weight:700;color:var(--brown);">Your bag is empty</p>' +
-            '<p style="color:var(--muted);font-size:.9rem;">Browse our collection and add something beautiful!</p>' +
-          '</div>' +
-        '</div>' +
+        '<div class="cart-items"></div>' +
         '<div class="cart-drawer-footer">' +
-          '<div class="cart-subtotal"><span>Subtotal</span><span>$0.00</span></div>' +
-          '<button style="width:100%;padding:14px;background:var(--pink-dark);color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;letter-spacing:.05em;cursor:pointer;" onclick="closeCart()">Continue Shopping</button>' +
-          '<p class="cart-note">Full checkout coming soon \u2665</p>' +
+          '<input class="cart-zip-input" type="text" placeholder="ZIP code (for shipping)" maxlength="10"' +
+            ' style="width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:.9rem;margin-bottom:10px;">' +
+          '<div class="cart-subtotal"><span>Subtotal</span><span class="cart-subtotal-amt">$0.00</span></div>' +
+          '<button class="cart-checkout-btn" onclick="startCheckout()" disabled' +
+            ' style="width:100%;padding:14px;background:var(--brown,#4A3F2E);color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;letter-spacing:.05em;cursor:pointer;margin-top:10px;opacity:0.5;">Checkout</button>' +
+          '<p style="font-size:.75rem;color:var(--muted);text-align:center;margin:8px 0 0;">Secure checkout ♥ Powered by Stripe</p>' +
         '</div>' +
       '</div>'
     );
+    renderCartItems();
   }
   // Wire Bag button
   var bagBtn = document.querySelector('.bag-btn');
   if (bagBtn && !bagBtn._cartWired) {
     bagBtn._cartWired = true;
     bagBtn.addEventListener('click', openCart);
+    if (!bagBtn.querySelector('.cart-badge')) {
+      var badge = document.createElement('span');
+      badge.className = 'cart-badge';
+      badge.style.cssText = 'display:none;position:absolute;top:-6px;right:-6px;background:var(--pink-dark,#c48b70);color:#fff;border-radius:50%;width:18px;height:18px;font-size:.65rem;font-weight:700;align-items:center;justify-content:center;pointer-events:none;';
+      bagBtn.style.position = 'relative';
+      bagBtn.appendChild(badge);
+    }
   }
 })();
 
 function openCart() {
+  renderCartItems();
   var overlay = document.querySelector('.cart-overlay');
   var drawer = document.querySelector('.cart-drawer');
   if (overlay) overlay.classList.add('open');
@@ -367,7 +509,7 @@ function closeCart() {
   if (drawer) drawer.classList.remove('open');
 }
 
-// \u2500\u2500\u2500 Nav / Toast / Forms \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// ─── Nav / Toast / Forms ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 function toggleMenu() {
   var nav = document.getElementById('nav');
   if (nav) nav.classList.toggle('open');
@@ -394,13 +536,13 @@ function submitRequest(e) {
       requestText: data.get('request') || ''
     });
   }
-  showToast('Request captured \u2665');
+  showToast('Request captured ♥');
   form.reset();
 }
 
 function newsletter(e) {
   e.preventDefault();
-  showToast("You're on the HAYCHIC list \u2665");
+  showToast("You're on the HAYCHIC list ♥");
   e.target.reset();
 }
 
