@@ -318,7 +318,7 @@
     "image": "assets/products/the-tiffany-msl8iu37.jpg",
     "name": "The Tiffany",
     "price": "$56.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Bags",
     "description": "",
     "colors": [
@@ -349,7 +349,7 @@
         "status": "preorder"
       }
     ],
-    "qty": 1
+    "qty": 0
   },
   {
     "id": "the-chelsey-msl8jhez",
