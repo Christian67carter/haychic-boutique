@@ -18,7 +18,7 @@ function urgencyHtml(qty) {
 
 let ALL_PRODUCTS = [];
 
-// ─── Cart State ──────────────────────────────────────────────────────────────
+// --- Cart State --------------------------------------------------------------
 function loadCart() {
   try { return JSON.parse(localStorage.getItem('haychic_cart') || '[]'); } catch(e) { return []; }
 }
@@ -503,6 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
       bagBtn.appendChild(badge);
     }
   }
+  updateCartBadge();
 })();
 
 function openCart() {
