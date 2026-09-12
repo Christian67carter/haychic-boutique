@@ -3,1523 +3,203 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>HAYCHIC Admin</title>
-  <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16.png" />
-  <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png" />
+<title>HAYCHIC Boutique</title>
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16.png" />
+<link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png" />
+<meta name="description" content="HAYCHIC Boutique — trendy bags, clothing, shoes, accessories, beauty, pre-orders and special-order finds." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../styles.css" />
-<style>
-body{background:var(--cream);}
-.admin-header{position:sticky;top:0;background:rgba(255,250,245,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:18px 5vw;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;z-index:10;}
-.admin-header .brand{font-size:1.4rem;}
-.admin-wrap{max-width:1000px;margin:0 auto;padding:30px 20px 90px;}
-.admin-card{background:white;border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:var(--shadow);margin-bottom:26px;}
-.admin-card h2{font-size:1.4rem;margin-top:0;}
-.admin-card p.hint{color:var(--muted);font-size:.86rem;margin-top:-8px;}
-.field{margin-bottom:16px;}
-.field label{display:block;font-size:.82rem;font-weight:700;margin-bottom:6px;}
-.field input, .field select, .field textarea{width:100%;border:1px solid var(--line);background:var(--cream);border-radius:12px;padding:11px 14px;color:var(--brown);}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
-
-.tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
-.tab-btn{border:1px solid var(--line);background:white;border-radius:999px;padding:9px 18px;font-size:.85rem;font-weight:700;cursor:pointer;}
-.tab-btn.active{background:var(--brown);color:white;border-color:var(--brown);}
-.tab-panel{display:none;}
-.tab-panel.active{display:block;}
-
-.listing{display:flex;align-items:center;gap:16px;padding:14px 0;border-top:1px solid var(--line);}
-.listing:first-child{border-top:none;}
-.listing .thumb{width:64px;height:64px;border-radius:12px;background:var(--sage) center/cover no-repeat;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--muted);text-align:center;}
-.listing .info{flex:1;}
-.listing .info h4{margin:0 0 2px;font-size:1rem;}
-.listing .info span{font-size:.82rem;color:var(--muted);}
-.listing .actions{display:flex;gap:8px;}
-.listing .actions button{border:1px solid var(--line);background:var(--cream);border-radius:999px;padding:7px 14px;font-size:.78rem;cursor:pointer;}
-.listing .actions button.danger{border-color:#c98a7b;color:#a05f70;}
-
-.req-card{border-top:1px solid var(--line);padding:18px 0;}
-.req-card:first-child{border-top:none;}
-.req-card h4{margin:0 0 2px;}
-.req-card .meta{font-size:.8rem;color:var(--muted);margin-bottom:8px;}
-.req-card .msg{font-size:.9rem;background:var(--cream);border-radius:12px;padding:10px 12px;margin-bottom:10px;}
-.pill-badge{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:5px 11px;}
-.pill-requested{background:#FBE7C6;color:#8A6B22;}
-.pill-approved{background:var(--sage);color:#3F4A34;}
-.pill-denied{background:#f1d3cf;color:#a05f70;}
-.lead-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;border-top:1px solid var(--line);padding:14px 0;}
-.lead-row:first-child{border-top:none;}
-.lead-row .info h4{margin:0 0 2px;}
-.lead-row .info span{font-size:.8rem;color:var(--muted);}
-.lead-row .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
-.lead-row .actions button{border:1px solid var(--line);background:var(--cream);border-radius:999px;padding:7px 13px;font-size:.76rem;cursor:pointer;}
-.lead-row .actions button.danger{border-color:#c98a7b;color:#a05f70;}
-.lead-detail{grid-column:1/-1;background:var(--cream);border-radius:14px;padding:16px;margin-top:10px;display:none;}
-.lead-detail.open{display:block;}
-.lead-detail textarea{min-height:70px;}
-.password-chip{font-family:monospace;background:var(--brown);color:white;border-radius:8px;padding:6px 10px;font-size:.85rem;}
-.ig-copy-btn{border:1px solid var(--line);background:var(--cream);border-radius:999px;padding:1px 8px;font-size:.68rem;cursor:pointer;margin-left:4px;color:var(--brown);}
-.activity-list{max-height:320px;overflow:auto;margin-top:10px;}
-.activity-item{font-size:.82rem;padding:10px 0;border-top:1px dashed var(--line);display:flex;gap:10px;align-items:flex-start;}
-.activity-item:first-child{border-top:none;}
-.activity-thumb{width:40px;height:40px;border-radius:8px;background:var(--cream) center/cover no-repeat;border:1px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;font-size:1.15rem;color:var(--muted);overflow:hidden;}
-.activity-body{flex:1;min-width:0;}
-.activity-item .a-type{font-weight:700;text-transform:capitalize;}
-.activity-item .a-time{color:var(--muted);float:right;}
-.activity-item .a-quote{margin-top:4px;color:var(--muted);font-style:italic;}
-
-#loginScreen{max-width:440px;margin:80px auto;text-align:center;}
-#loginScreen .field{text-align:left;}
-#loginStatus{color:#a05f70;font-size:.85rem;min-height:1.2em;margin-top:10px;}
-.link-btn{background:none;border:0;color:var(--pink-dark);font-weight:700;cursor:pointer;text-decoration:underline;padding:0;font-size:.85rem;}
-
-#status{position:fixed;bottom:20px;right:20px;background:var(--brown);color:white;padding:14px 20px;border-radius:14px;opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none;z-index:99;max-width:320px;}
-#status.show{opacity:1;transform:none;}
-.hidden{display:none !important;}
-.empty{color:var(--muted);font-size:.9rem;}
-
-/* Color variants */
-.color-row{display:flex;gap:12px;align-items:flex-end;margin-bottom:12px;padding:14px;background:var(--cream);border-radius:14px;flex-wrap:wrap;}
-.color-row .field{flex:1;min-width:140px;margin-bottom:0;}
-.color-row .field-photo{flex:1.2;min-width:160px;}
-.color-row .field-photo .existing-note{display:block;font-size:.74rem;color:var(--muted);margin-top:4px;}
-.color-row .field-stock{flex:0 0 130px;}
-.color-remove-btn{border:1px solid var(--line);background:white;border-radius:999px;width:38px;height:38px;cursor:pointer;font-size:.9rem;color:#a05f70;flex-shrink:0;}
-.color-remove-btn:hover{background:#f1d3cf;}
-#colorRows:empty + .add-color-btn{margin-top:0;}
-
-/* Size variants (named .size-admin-row so it doesn't collide with the
-   storefront's own .size-row class in styles.css) */
-.size-admin-row{display:flex;gap:12px;align-items:flex-end;margin-bottom:12px;padding:14px;background:var(--cream);border-radius:14px;flex-wrap:wrap;}
-.size-admin-row .field{flex:1;min-width:140px;margin-bottom:0;}
-.size-admin-row .field-stock{flex:0 0 130px;}
-.size-remove-btn{border:1px solid var(--line);background:white;border-radius:999px;width:38px;height:38px;cursor:pointer;font-size:.9rem;color:#a05f70;flex-shrink:0;}
-.size-remove-btn:hover{background:#f1d3cf;}
-  .color-drag-handle{flex:0 0 auto;align-self:center;cursor:grab;font-size:1.1rem;line-height:1;color:var(--muted);padding:4px 6px;user-select:none;}
-  .color-drag-handle:active{cursor:grabbing;}
-  .color-row.dragging{opacity:.4;}
-#sizeRows:empty + .add-size-btn{margin-top:0;}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+<div class="announcement"><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> NEW ARRIVALS + PRE-ORDERS AVAILABLE <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></div>
 
-<div id="loginScreen">
-<h1 style="font-family:'Playfair Display',serif;">HAYCHIC Admin <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h1>
-<p style="color:var(--muted);" id="loginTagline">Log in to manage listings, access requests and customers &#x2014; all in one place.</p>
-<div class="field">
-<label>Email</label>
-<input type="email" id="authEmail" autocomplete="username" placeholder="you@example.com">
+<header class="site-header">
+<button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
+<a class="brand" href="#home">HAYCHIC <span>Boutique</span></a>
+<nav id="nav">
+<a href="new-arrivals.html">New Arrivals</a>
+<a href="preorders.html">Pre-Orders</a>
+<a href="in-stock.html">In Stock</a>
+<a href="request.html">Request an Item</a>
+<a href="about.html">About</a>
+<a href="pr.html">PR Team</a>
+<a href="support.html">Support</a>
+<a href="track-order.html">Track Order</a>
+<a class="nav-cta" href="shop.html">Shop Now</a>
+</nav>
+<div class="header-actions">
+<button class="bag-btn" aria-label="Shopping bag">Bag <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></button>
 </div>
-<div class="field">
-<label>Password</label>
-<input type="password" id="authPassword" autocomplete="current-password" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;">
-</div>
-<div class="field" id="totpField" style="display:none;">
-<label>Authenticator Code</label>
-<input type="text" id="authTOTP" autocomplete="one-time-code" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]{6}">
-</div>
-<div class="btn-row" style="justify-content:center;">
-<button class="btn primary" id="signInBtn" onclick="doSignIn()">Sign In</button>
-</div>
-<div style="display:flex;align-items:center;gap:12px;margin:14px 0;color:var(--muted);">
-  <hr style="flex:1;border:none;border-top:1px solid var(--line);"><span style="font-size:.78rem;white-space:nowrap;">or</span><hr style="flex:1;border:none;border-top:1px solid var(--line);">
-</div>
-<button onclick="doGoogleSignIn()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:11px 16px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;">
-  <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
-  Sign in with Google
-</button>
-<p id="loginStatus"></p>
-</div>
+</header>
 
-<div id="adminApp" class="hidden">
-<div class="admin-header">
-<a class="brand" href="../index.html" style="font-family:'Playfair Display',serif;">HAYCHIC <span style="font-size:.6rem;letter-spacing:.2em;">ADMIN</span></a>
-<button class="btn secondary" onclick="doSignOut()">Log Out</button>
+<main>
+<section class="hero" id="home">
+<div class="hero-content">
+<span class="eyebrow">cute finds • special orders • boutique favorites</span>
+<h1>Your newest obsession is waiting <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h1>
+<p>Shop trendy bags, clothing, shoes, beauty, accessories and pre-order finds picked for HAYCHIC Boutique.</p>
+<div class="hero-actions">
+<a class="btn primary" href="new-arrivals.html">Shop New Arrivals</a>
+<a class="btn secondary" href="request.html">Request an Item</a>
 </div>
+</div>
+<div class="hero-card">
+<div class="mini-card pink">
+<span>NEW</span>
+<strong>Fresh Finds</strong>
+<small>added regularly</small>
+</div>
+<div class="mini-card sage">
+<span>PRE-ORDER</span>
+<strong>More Options</strong>
+<small>even when not listed</small>
+</div>
+<div class="mini-card blue">
+<span>LOCAL</span>
+<strong>Pickup + Delivery</strong>
+<small>when available</small>
+</div>
+</div>
+</section>
 
-<div class="admin-wrap">
-<div class="tabs">
-<button class="tab-btn active" data-tab="listings" onclick="switchTab('listings')">Listings</button>
-<button class="tab-btn" data-tab="requests" onclick="switchTab('requests')">Access Requests <span id="reqCount"></span></button>
-<button class="tab-btn" data-tab="tickets" onclick="switchTab('tickets')">Support Tickets <span id="ticketCount"></span></button>
-  <button class="tab-btn" data-tab="itemrequests" onclick="switchTab('itemrequests')">Item Requests <span id="itemReqCount"></span></button>
-<button class="tab-btn" data-tab="orders" onclick="switchTab('orders')">Orders</button>
-<button class="tab-btn" data-tab="leads" onclick="switchTab('leads')">All Leads / CRM</button>
-<button class="tab-btn" data-tab="settings" onclick="switchTab('settings')">Email Settings</button>
-</div>
-
-<!-- ---------- Listings ---------- -->
-<div class="tab-panel active" id="panel-listings">
-<div class="admin-card">
-<h2 id="formTitle">Add a New Listing</h2>
-<div class="field">
-<label>Item Name</label>
-<input type="text" id="fName" placeholder="e.g. The Gabriella Bag">
-</div>
-<div class="field-row">
-<div class="field">
-<label>Price</label>
-<input type="text" id="fPrice" placeholder="e.g. $48.00">
-</div>
-<div class="field">
-<label>Status</label>
-<select id="fStatus">
-<option value="in-stock">In Stock</option>
-<option value="preorder">Pre-Order</option>
-<option value="sold-out">Sold Out</option>
-</select>
-</div>
-</div>
-<div class="field-row">
-<div class="field">
-<label>Quantity in stock (optional)</label>
-<input type="number" id="fQty" min="0" step="1" placeholder="Leave blank to manage status manually">
-<p class="hint" style="margin:6px 0 0;">If set, hitting 0 auto-switches this item to Pre-Order, and low stock shows an "only X left" warning on the site.</p>
-</div>
-</div>
-<div class="field">
-<label>Category</label>
-<select id="fCategory">
-<option>Bags</option>
-<option>Clothing</option>
-<option>Shoes</option>
-<option>Beauty</option>
-<option>Accessories</option>
-<option>Other</option>
-</select>
-</div>
-<div class="field">
-<label>Description (shown on the item's own page)</label>
-<textarea id="fDescription" rows="3" placeholder="A few sentences about this item &#x2014; fit, material, why you love it..."></textarea>
-</div>
-<div class="field">
-<label>Cover Photo (shown on the shop grid &#x2014; use a photo showing all colors together if this item has variants)</label>
-<input type="file" id="fImage" accept="image/*">
-  <p class="hint" id="coverExistingNote" style="display:none;margin:6px 0 0;">Current cover photo saved ✓ (choose a file to replace it)</p>
-</div>
-
-<div class="field">
-<label>Colors / Variants (optional)</label>
-<p class="hint" style="margin:0 0 10px;">Add a row per color &#x2014; each gets its own photo and its own stock status. If you add colors, shoppers will see a color picker on the item page. The Cover Photo above is used as the main shop-grid thumbnail.</p>
-<div id="colorRows" ondragover="colorRowsContainerDragOver(event)"></div>
-<button type="button" class="btn secondary add-color-btn" onclick="addColorRow()">+ Add Color</button>
-</div>
-
-<div class="field">
-<label>Sizes (optional)</label>
-<p class="hint" style="margin:0 0 10px;">Add a row per size &#x2014; each gets its own stock status, no photo. If you add sizes, shoppers will see a size picker on the item page. Not every item needs this.</p>
-<div id="sizeRows"></div>
-<button type="button" class="btn secondary add-size-btn" onclick="addSizeRow()">+ Add Size</button>
-</div>
-
-<div class="btn-row">
-<button class="btn primary" id="saveBtn" onclick="saveProduct()">Add Listing</button>
-<button class="btn secondary hidden" id="cancelEditBtn" onclick="cancelEdit()">Cancel</button>
+<div class="marquee" aria-hidden="true">
+<div class="marquee-track">
+<span>★ Thank you for shopping small</span>
+<span>★ New drops weekly</span>
+<span>★ Follow along on Instagram</span>
+<span>★ Happy Shopping <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></span>
+<span>★ Thank you for shopping small</span>
+<span>★ New drops weekly</span>
+<span>★ Follow along on Instagram</span>
+<span>★ Happy Shopping <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></span>
 </div>
 </div>
 
-<div class="admin-card">
-<h2>Current Listings</h2>
-<div id="listings"><p class="empty">Loading…</p></div>
+<section class="section" id="shop">
+<div class="section-heading">
+<span class="eyebrow">shop by category</span>
+<h2>Find your favorite <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h2>
 </div>
+<div class="category-grid">
+<a class="category-card blush" href="new-arrivals.html"><span>🎀</span><h3>New Arrivals</h3><p>Shop the latest drops.</p></a>
+<a class="category-card cream" href="shop.html?cat=Bags"><span>👜</span><h3>Bags</h3><p>Everyday + statement bags.</p></a>
+<a class="category-card sage" href="shop.html?cat=Clothing"><span>👗</span><h3>Clothing</h3><p>Cute boutique-ready looks.</p></a>
+<a class="category-card blue" href="shop.html?cat=Shoes"><span>👟</span><h3>Shoes</h3><p>Trendy pairs you'll love.</p></a>
+<a class="category-card blush" href="shop.html?cat=Beauty"><span>💄</span><h3>Beauty</h3><p>Little luxuries + favorites.</p></a>
+<a class="category-card cream" href="shop.html?cat=Accessories"><span>✨</span><h3>Accessories</h3><p>The finishing touches.</p></a>
 </div>
+</section>
 
-<!-- ---------- Access Requests ---------- -->
-<div class="tab-panel" id="panel-requests">
-<div class="admin-card">
-<h2>Pending Access Requests</h2>
-<p class="hint">Visitors who asked to unlock the site. Approve to generate a password, then email it to them.</p>
-<div id="requestsList"><p class="empty">Loading…</p></div>
+<section class="section products-section" id="just-dropped">
+<div class="section-heading">
+<span class="eyebrow">just dropped</span>
+<h2>New Arrivals <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h2>
 </div>
+<div class="product-grid" id="home-newarrivals"></div>
+<div class="home-shop-band">
+<a class="btn primary" href="new-arrivals.html">Shop All New Arrivals →</a>
 </div>
+</section>
 
-<!-- ---------- Support Tickets ---------- -->
-<div class="tab-panel" id="panel-tickets">
-<div class="admin-card">
-<h2>Support Tickets</h2>
-<p class="hint">Every message submitted through the Support form on the site, straight from Firestore &#x2014; so it's here even if the email alert never arrives.</p>
-<div id="ticketsList"><p class="empty">Loading…</p></div>
+<section class="banner">
+<div class="banner-content">
+<span class="eyebrow">on hand &amp; in stock</span>
+<h2>Shop it now, love it sooner</h2>
+<p>Every HAYCHIC piece is hand-picked to help you feel confident and put-together — no long wait required.</p>
+<a class="btn primary" href="in-stock.html">Browse In-Stock Items</a>
 </div>
-</div>
-<!-- ----------- Item Requests ----------- -->
-<div class="tab-panel" id="panel-itemrequests">
-<div class="admin-card">
-<h2>Item Requests</h2>
-<p class="hint">Every "Request an Item" submission from the site, straight from Firestore &#x2014; so it's here even if the email alert never arrives.</p>
-<div id="itemRequestsList"><p class="empty">Loading…</p></div>
-</div>
-</div>
+</section>
 
+<section class="split-section" id="preorders">
+<div class="split-art">
+<div class="big-heart"><img src="/assets/flower-icon.png" class="flower-emoji" alt=""></div>
+<p>pre-order with confidence</p>
+</div>
+<div class="split-copy">
+<span class="eyebrow">important information</span>
+<h2>How HAYCHIC pre-orders work</h2>
+<p>Some HAYCHIC items are ordered especially for you and may not be on hand when you purchase — typical turnaround is about 2–3 weeks.</p>
+<a class="btn primary" href="preorders.html">Learn How Pre-Orders Work</a>
+</div>
+</section>
 
-<!-- ---------- Orders / Tracking ---------- -->
-<div class="tab-panel" id="panel-orders">
-<div class="admin-card">
-<h2>Orders &amp; Tracking</h2>
-<p class="hint">Every completed order, saved automatically when a customer checks out. Paste in a tracking number after you buy the shipping label to mark it shipped and email the customer &#x2014; they can also look up their own order any time on the Track My Order page.</p>
-<div class="field" style="max-width:380px;margin-bottom:16px;">
-<label>Search orders</label>
-<input type="text" id="orderSearchInput" placeholder="Name, email, or order #…" oninput="filterOrders(this.value)">
-</div>
-<div id="ordersList"><p class="empty">Loading…</p></div>
-</div>
-</div>
+<section class="request-band">
+<span class="eyebrow">can't find it?</span>
+<h2>Let HAYCHIC find it for you <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h2>
+<p>Send us a photo or description and we'll check availability, pricing and timing — this is one of the things that makes HAYCHIC different from a regular online store.</p>
+<a class="btn" href="request.html">Request an Item →</a>
+</section>
 
-<!-- ---------- Leads / CRM ---------- -->
-<div class="tab-panel" id="panel-leads">
-<div class="admin-card">
-<h2>All Leads &amp; Customers</h2>
-<p class="hint">Every visitor who's requested access or been added manually &#x2014; with notes, status, and site activity.</p>
-<div class="btn-row" style="margin-bottom:16px;">
-<button class="btn primary" onclick="showAddLead()">+ Add Lead Manually</button>
-</div>
-<div id="addLeadForm" class="hidden" style="margin-bottom:20px;padding:16px;background:var(--cream);border-radius:14px;">
-<div class="field-row">
-<div class="field"><label>Name</label><input type="text" id="newLeadName"></div>
-<div class="field"><label>Email</label><input type="email" id="newLeadEmail"></div>
-</div>
-<div class="field-row">
-<div class="field"><label>Phone (optional)</label><input type="text" id="newLeadPhone"></div>
-<div class="field"><label>Notes (optional)</label><input type="text" id="newLeadNotes"></div>
-</div>
-<div class="btn-row">
-<button class="btn primary" onclick="addLeadManually()">Add Lead</button>
-<button class="btn secondary" onclick="hideAddLead()">Cancel</button>
+<section class="about-section">
+<div class="about-card">
+<span class="eyebrow">meet the boutique</span>
+<h2>Hey, I'm Hayden <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h2>
+<p>HAYCHIC Boutique is all about bringing together cute, trendy finds — from clothing and bags to shoes, accessories, beauty and special-order favorites.</p>
+<div class="hero-actions" style="justify-content:center;">
+<a class="btn primary" href="about.html">Meet Hayden →</a>
+<a class="text-link" href="https://instagram.com/" target="_blank" rel="noopener">@HAYCHICBOUTIQUE →</a>
 </div>
 </div>
-<div id="leadsList"><p class="empty">Loading…</p></div>
-</div>
-</div>
+</section>
 
-<!-- ---------- Email Settings ---------- -->
-<div class="tab-panel" id="panel-settings">
-<div class="admin-card">
-<h2>Email Sending Setup (EmailJS)</h2>
-<p class="hint">These connect the "Send Password" button to your real inbox via EmailJS. Set up a free EmailJS account, connect your email as a Service, and create a template with variables <code>{{to_name}}</code>, <code>{{to_email}}</code>, <code>{{password}}</code>, <code>{{site_url}}</code>. Paste the IDs below (synced automatically across every device you log in from).</p>
-<div class="field"><label>EmailJS Public Key</label><input type="text" id="emailjsPublicKey" placeholder="e.g. AbCdEfGhIjKlMnOp"></div>
-<div class="field"><label>EmailJS Service ID</label><input type="text" id="emailjsServiceId" placeholder="e.g. service_xxxxxxx"></div>
-<div class="field"><label>EmailJS Template ID (password email)</label><input type="text" id="emailjsTemplateId" placeholder="e.g. template_xxxxxxx"></div>
-<div class="field"><label>EmailJS Template ID (tracking email)</label><input type="text" id="emailjsTrackingTemplateId" placeholder="e.g. template_yyyyyyy"></div>
-<p class="hint">The tracking template is a separate one &#x2014; create a second EmailJS template with variables <code>{{to_name}}</code>, <code>{{to_email}}</code>, <code>{{order_id}}</code>, <code>{{tracking_number}}</code>, <code>{{tracking_carrier}}</code>, <code>{{site_url}}</code>. See ORDER-TRACKING-SETUP.md.</p>
-<div class="btn-row">
-<button class="btn primary" onclick="saveEmailSettings()">Save Settings</button>
-</div>
-</div>
-</div>
-</div>
-</div>
+<section class="follow-band">
+<span class="eyebrow">social media</span>
+<h2>Follow along @HAYCHICBOUTIQUE</h2>
+<p>New drops, restocks and behind-the-scenes boutique life — first on Instagram.</p>
+<a class="btn" href="https://instagram.com/" target="_blank" rel="noopener">Follow on Instagram →</a>
+</section>
 
-<!-- Activity modal -->
-<div id="activityModal" class="hidden" style="position:fixed;inset:0;background:rgba(74,63,46,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;">
-<div style="background:white;border-radius:24px;max-width:520px;width:100%;max-height:80vh;overflow:auto;padding:26px;">
-<div style="display:flex;justify-content:space-between;align-items:center;">
-<h3 style="margin:0;font-family:'Playfair Display',serif;">Activity &#x2014; <span id="activityLeadName"></span></h3>
-<button class="link-btn" onclick="closeActivity()">Close</button>
+<section class="section" style="padding-top:60px;padding-bottom:60px;">
+<div class="pr-standalone">
+<strong>Join the PR Team</strong>
+<p>Share HAYCHIC finds and earn exclusive perks, discounts and early access.</p>
+<a class="btn primary" href="pr.html">Learn More →</a>
 </div>
-<div id="activityContent" class="activity-list"><p class="empty">Loading…</p></div>
-</div>
-</div>
+</section>
 
-<div id="status"></div>
+<section class="newsletter">
+<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""></span>
+<div><h2>Join the HAYCHIC list</h2><p>Be first to know about drops, restocks and boutique news.</p></div>
+<form onsubmit="newsletter(event)">
+<input type="email" required placeholder="Email address">
+<button>Sign Me Up</button>
+</form>
+</section>
 
+<div class="marquee brand-marquee" aria-hidden="true">
+<div class="marquee-track">
+<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
+<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
+<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
+<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
+<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
+<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
+<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
+<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
+</div>
+</div>
+</main>
+
+<footer>
+<a class="brand footer-brand" href="#home">HAYCHIC <span>Boutique</span></a>
+<div class="footer-links">
+<a href="shop.html">Shop</a><a href="new-arrivals.html">New Arrivals</a><a href="preorders.html">Pre-Orders</a><a href="in-stock.html">In Stock</a>
+<a href="request.html">Request an Item</a><a href="about.html">About</a><a href="pr.html">PR Team</a><a href="faq.html">FAQ</a><a href="support.html">Support</a><a href="track-order.html">Track Order</a>
+</div>
+<p>© 2026 HAYCHIC Boutique. All rights reserved.</p>
+</footer>
+
+<div id="toast" class="toast"></div>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
-<script src="../assets/js/firebase-config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-// ============ Shared ============
-const ADMIN_API = '/api/admin';
-const PENDING_SHIPMENTS_API = 'https://haychic-boutique.vercel.app/api/pending-shipments';
-const APPROVE_LABEL_API = 'https://haychic-boutique.vercel.app/api/approve-label';
-// Below this many units left, the site shows a red "only X left" warning.
-// Keep in sync with LOW_STOCK_THRESHOLD in script.js.
-const LOW_STOCK_THRESHOLD = 3;
-
-// Verbatim copy of product.html &#x2014; used to create a brand-new product's own
-// clean-URL page (e.g. "the-tiffany.html") the first time it's saved.
-const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Item | HAYCHIC Boutique</title>
-  <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16.png" />
-  <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png" />
-  <meta name="description" content="Shop this item from HAYCHIC Boutique." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <div class="announcement"><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> NEW ARRIVALS + PRE-ORDERS AVAILABLE <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></div>
-
-  <header class="site-header">
-    <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
-    <a class="brand" href="index.html">HAYCHIC <span>Boutique</span></a>
-    <nav id="nav">
-      <a href="new-arrivals.html">New Arrivals</a>
-      <a href="preorders.html">Pre-Orders</a>
-      <a href="in-stock.html">In Stock</a>
-      <a href="request.html">Request an Item</a>
-      <a href="about.html">About</a>
-      <a href="pr.html">PR Team</a>
-      <a href="support.html">Support</a>
-      <a href="track-order.html">Track Order</a>
-      <a class="nav-cta" href="shop.html">Shop Now</a>
-    </nav>
-    <div class="header-actions">
-      <button class="bag-btn" aria-label="Shopping bag">Bag <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></button>
-    </div>
-  </header>
-
-  <main>
-    <a class="back-link" href="shop.html">← Back to Shop</a>
-    <div class="pdp-wrap" id="productDetail">
-      <p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:60px 0;">Loading item…</p>
-    </div>
-  </main>
-
-  <footer>
-    <a class="brand footer-brand" href="index.html">HAYCHIC <span>Boutique</span></a>
-    <div class="footer-links">
-      <a href="shop.html">Shop</a><a href="new-arrivals.html">New Arrivals</a><a href="preorders.html">Pre-Orders</a><a href="in-stock.html">In Stock</a>
-      <a href="request.html">Request an Item</a><a href="about.html">About</a><a href="pr.html">PR Team</a><a href="faq.html">FAQ</a><a href="support.html">Support</a>
-    </div>
-    <p>© 2026 HAYCHIC Boutique. All rights reserved.</p>
-  </footer>
-
-  <div id="toast" class="toast"></div>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"><\/script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"><\/script>
-  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"><\/script>
-  <script src="assets/js/firebase-config.js"><\/script>
-  <script src="assets/js/gate.js"><\/script>
-  <script src="script.js"><\/script>
-</body>
-</html>
-`;
-
-let ghSession = localStorage.getItem('haychic_admin_session') || '';
-
-function showStatus(msg, isError){
-const el = document.getElementById('status');
-el.innerHTML = msg;
-el.style.background = isError ? '#a05f70' : 'var(--brown)';
-el.classList.add('show');
-setTimeout(()=>el.classList.remove('show'), 3400);
-}
-function escapeHtml(str){
-return String(str||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function escapeAttr(str){
-return String(str||'').replace(/'/g, "\\'");
-}
-// Renders a lead's Instagram handle as a link to their profile plus a copy
-// button for quick-DMing, tolerating whether they typed "@name",
-// "instagram.com/name", or just "name".
-function igLink(social){
-const handle = String(social).trim().replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/^@/, '').replace(/\/$/, '');
-if(!handle) return '';
-return `<a href="https://instagram.com/${encodeURIComponent(handle)}" target="_blank" rel="noopener">@${escapeHtml(handle)}</a><button type="button" class="ig-copy-btn" title="Copy handle" onclick="copyIgHandle(event,'${escapeAttr(handle)}')">Copy</button>`;
-}
-function copyIgHandle(e, handle){
-e.preventDefault();
-e.stopPropagation();
-navigator.clipboard.writeText('@' + handle).then(() => showStatus(`Copied @${handle}`)).catch(() => showStatus('Could not copy &#x2014; select and copy manually.', true));
-}
-function copyText(e, text, label){
-if(e){ e.preventDefault(); e.stopPropagation(); }
-navigator.clipboard.writeText(text).then(() => showStatus(`Copied ${label||'to clipboard'}`)).catch(() => showStatus('Could not copy &#x2014; select and copy manually.', true));
-}
-function switchTab(name){
-document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
-document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-document.getElementById('panel-' + name).classList.add('active');
-}
-
-// ============ Login (one email + password for everything) ============
-async function doSignIn(){
-const email = document.getElementById('authEmail').value.trim();
-const password = document.getElementById('authPassword').value;
-const statusEl = document.getElementById('loginStatus');
-if(!email || !password){ statusEl.textContent = 'Enter your email and password.'; return; }
-statusEl.textContent = '';
-try{
-await auth.signInWithEmailAndPassword(email, password);
-try{
-const totp = (document.getElementById('authTOTP') || {}).value || '';
-const data = await callAdmin('login', { username: email, password, ...(totp ? { totp } : {}) });
-ghSession = data.token;
-localStorage.setItem('haychic_admin_session', ghSession);
-loadListings();
-}catch(e){
-if(e.needsTotp){
-document.getElementById('totpField').style.display = '';
-document.getElementById('authTOTP').focus();
-statusEl.textContent = 'Enter your 6-digit authenticator code.';
-} /* else listings backend not set up yet — that's OK */
-}
-}catch(err){
-statusEl.textContent = err.message;
-}
-}
-
-async function doGoogleSignIn(){
-const statusEl = document.getElementById('loginStatus');
-statusEl.textContent = '';
-try{
-const provider = new firebase.auth.GoogleAuthProvider();
-const result = await auth.signInWithPopup(provider);
-const idToken = await result.user.getIdToken();
-try{
-const data = await callAdmin('google-login', { idToken });
-ghSession = data.token;
-localStorage.setItem('haychic_admin_session', ghSession);
-loadListings();
-}catch(e){ /* listings API not configured */ }
-}catch(err){
-statusEl.textContent = err.message || 'Google sign-in failed.';
-}
-}
-
-function doSignOut(){
-localStorage.removeItem('haychic_admin_session');
-ghSession = '';
-auth.signOut();
-}
-
-auth.onAuthStateChanged(function(user){
-var ADMIN_EMAILS = ['christiancarter130@gmail.com','hayden@haychicboutique.com'];
-if(user && ADMIN_EMAILS.indexOf(user.email) !== -1){
-document.getElementById('loginScreen').classList.add('hidden');
-document.getElementById('adminApp').classList.remove('hidden');
-loadListings();
-loadRequests();
-loadTickets();
-loadOrders();
-loadLeads();
-loadEmailSettings();
-  loadItemRequests();
-} else {
-if(user){ auth.signOut(); document.getElementById('loginStatus').textContent = 'Not authorized.'; }
-document.getElementById('loginScreen').classList.remove('hidden');
-document.getElementById('adminApp').classList.add('hidden');
-}
-});
-
-function fmtDate(ts){
-if(!ts || !ts.toDate) return '';
-return ts.toDate().toLocaleString();
-}
-
-// ============ Listings (product admin, via /api/admin -> GitHub) ============
-let products = [];
-let productsSha = null;
-let editingId = null;
-
-async function callAdmin(action, payload){
-const res = await fetch(ADMIN_API, {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json',
-...(ghSession ? { 'Authorization': `Bearer ${ghSession}` } : {})
-},
-body: JSON.stringify({ action, ...payload })
-});
-const data = await res.json().catch(() => ({}));
-if(!res.ok){ const err = new Error(data.error || 'Something went wrong.'); err.needsTotp = !!data.needsTotp; throw err; }
-return data;
-}
-
-async function loadListings(){
-const wrap = document.getElementById('listings');
-wrap.innerHTML = '<p class="empty">Loading…</p>';
-try{
-const data = await callAdmin('list', {});
-products = data.products;
-productsSha = data.sha;
-renderListings();
-}catch(err){
-wrap.innerHTML = `<p style="color:#a05f70;">${err.message} &#x2014; see <code>ADMIN-SETUP.md</code> to finish connecting listings.</p>`;
-}
-}
-
-function renderListings(){
-const wrap = document.getElementById('listings');
-if(!products.length){
-wrap.innerHTML = '<p class="empty">No listings yet.</p>';
-return;
-}
-wrap.innerHTML = products.map(p => {
-const thumbImage = (p.colors && p.colors.length && p.colors[0].image) ? p.colors[0].image : p.image;
-const colorNote = (p.colors && p.colors.length) ? ` &middot; ${p.colors.length} color${p.colors.length===1?'':'s'}` : '';
-const sizeNote = (p.sizes && p.sizes.length) ? ` &middot; ${p.sizes.length} size${p.sizes.length===1?'':'s'}` : '';
-const qtyNote = typeof p.qty === 'number'
-  ? (p.qty <= LOW_STOCK_THRESHOLD
-    ? ` &middot; <strong style="color:#B3261E;">only ${p.qty} left</strong>`
-    : ` &middot; ${p.qty} in stock`)
-  : '';
-return `
-<div class="listing">
-<div class="thumb" style="${thumbImage ? `background-image:url('../${thumbImage}')` : ''}">${thumbImage ? '' : 'HAYCHIC'}</div>
-<div class="info">
-<h4>${escapeHtml(p.name)}</h4>
-<span>${escapeHtml(p.price)} &middot; ${escapeHtml(p.category)} &middot; ${p.status === 'sold-out' ? 'Sold Out' : (p.status === 'preorder' ? 'Pre-Order' : 'In Stock')}${colorNote}${sizeNote}${qtyNote}</span>
-</div>
-<div class="actions">
-<button onclick="editProduct('${p.id}')">Edit</button>
-<button class="danger" onclick="deleteProduct('${p.id}')">Delete</button>
-</div>
-</div>
-`;
-}).join('');
-}
-
-function slugify(str){
-return str.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);
-}
-
-function colorSlug(str){
-return String(str||'').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'color';
-}
-
-function resizeImage(file, maxW){
-return new Promise((resolve, reject) => {
-const img = new Image();
-const reader = new FileReader();
-reader.onload = e => { img.src = e.target.result; };
-reader.onerror = reject;
-img.onload = () => {
-const scale = Math.min(1, maxW / img.width);
-const canvas = document.createElement('canvas');
-canvas.width = img.width * scale;
-canvas.height = img.height * scale;
-const ctx = canvas.getContext('2d');
-ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-const base64 = canvas.toDataURL('image/jpeg', 0.82).split(',')[1];
-resolve(base64);
-};
-img.onerror = reject;
-reader.readAsDataURL(file);
-});
-}
-
-// ---- Color variant rows ----
-function colorRowHtml(color){
-color = color || {};
-const hasExisting = !!color.image;
-return `
-<div class="color-row" data-existing-image="${escapeAttr(color.image || '')}" ondragover="colorRowDragOver(event)">
-<span class="color-drag-handle" draggable="true" ondragstart="colorRowDragStart(event)" ondragend="colorRowDragEnd(event)" title="Drag to reorder" aria-label="Drag to reorder">⋮⋮</span>
-<div class="field">
-<label>Color Name</label>
-<input type="text" class="colorName" value="${escapeAttr(color.name || '')}" placeholder="e.g. Blush Pink">
-</div>
-<div class="field field-photo">
-<label>Photo</label>
-<input type="file" class="colorImage" accept="image/*">
-${hasExisting ? `<span class="existing-note">Current photo saved ✓ (choose a file to replace it)</span>` : ''}
-</div>
-<div class="field field-stock">
-<label>Stock</label>
-<select class="colorStatus">
-<option value="in-stock" ${(!color.status || color.status === 'in-stock') ? 'selected' : ''}>In Stock</option>
-<option value="preorder" ${color.status === 'preorder' ? 'selected' : ''}>Pre-Order</option>
-<option value="sold-out" ${color.status === 'sold-out' ? 'selected' : ''}>Sold Out</option>
-</select>
-</div>
-<div class="field field-stock">
-<label>Qty (optional)</label>
-<input type="number" class="colorQty" min="0" step="1" value="${typeof color.qty === 'number' ? color.qty : ''}">
-</div>
-<button type="button" class="color-remove-btn" onclick="this.closest('.color-row').remove()" aria-label="Remove color">✕</button>
-</div>`;
-}
-
-let draggedColorRow = null;
-
-function colorRowDragStart(event){
-draggedColorRow = event.target.closest('.color-row');
-draggedColorRow.classList.add('dragging');
-event.dataTransfer.effectAllowed = 'move';
-}
-
-function colorRowDragEnd(event){
-if(draggedColorRow) draggedColorRow.classList.remove('dragging');
-draggedColorRow = null;
-}
-
-function colorRowDragOver(event){
-event.preventDefault();
-if(!draggedColorRow) return;
-const row = event.currentTarget;
-if(row === draggedColorRow) return;
-const rect = row.getBoundingClientRect();
-const isAfter = (event.clientY - rect.top) > rect.height / 2;
-row.parentNode.insertBefore(draggedColorRow, isAfter ? row.nextSibling : row);
-}
-
-function colorRowsContainerDragOver(event){
-event.preventDefault();
-if(!draggedColorRow) return;
-if(event.target.id === 'colorRows') event.target.appendChild(draggedColorRow);
-}
-
-function addColorRow(color){
-document.getElementById('colorRows').insertAdjacentHTML('beforeend', colorRowHtml(color));
-}
-
-function clearColorRows(){
-document.getElementById('colorRows').innerHTML = '';
-}
-
-async function collectColors(entryId){
-const rows = Array.from(document.querySelectorAll('#colorRows .color-row'));
-const colors = [];
-const images = [];
-for(const row of rows){
-const name = row.querySelector('.colorName').value.trim();
-if(!name) continue;
-let status = row.querySelector('.colorStatus').value;
-const qtyRaw = row.querySelector('.colorQty').value.trim();
-const qty = qtyRaw === '' ? null : Math.max(0, parseInt(qtyRaw, 10) || 0);
-// Quantity hit zero &#x2014; auto-switch from In Stock to Pre-Order so it stays
-// sellable instead of silently blocking orders.
-if(qty === 0 && status === 'in-stock') status = 'preorder';
-const file = row.querySelector('.colorImage').files[0];
-let imagePath = row.dataset.existingImage || '';
-if(file){
-const imgId = `${entryId}-${colorSlug(name)}`;
-const base64 = await resizeImage(file, 1200);
-images.push({ id: imgId, base64 });
-imagePath = `assets/products/${imgId}.jpg`;
-}
-const entry = { name, image: imagePath, status };
-if(qty !== null) entry.qty = qty;
-colors.push(entry);
-}
-return { colors, images };
-}
-
-// ---- Size variant rows ----
-function sizeRowHtml(size){
-size = size || {};
-return `
-<div class="size-admin-row">
-<div class="field">
-<label>Size Name</label>
-<input type="text" class="sizeName" value="${escapeAttr(size.name || '')}" placeholder="e.g. Small">
-</div>
-<div class="field field-stock">
-<label>Stock</label>
-<select class="sizeStatus">
-<option value="in-stock" ${(!size.status || size.status === 'in-stock') ? 'selected' : ''}>In Stock</option>
-<option value="preorder" ${size.status === 'preorder' ? 'selected' : ''}>Pre-Order</option>
-<option value="sold-out" ${size.status === 'sold-out' ? 'selected' : ''}>Sold Out</option>
-</select>
-</div>
-<div class="field field-stock">
-<label>Qty (optional)</label>
-<input type="number" class="sizeQty" min="0" step="1" value="${typeof size.qty === 'number' ? size.qty : ''}">
-</div>
-<button type="button" class="size-remove-btn" onclick="this.closest('.size-admin-row').remove()" aria-label="Remove size">✕</button>
-</div>`;
-}
-
-function addSizeRow(size){
-document.getElementById('sizeRows').insertAdjacentHTML('beforeend', sizeRowHtml(size));
-}
-
-function clearSizeRows(){
-document.getElementById('sizeRows').innerHTML = '';
-}
-
-function collectSizes(){
-const rows = Array.from(document.querySelectorAll('#sizeRows .size-admin-row'));
-const sizes = [];
-for(const row of rows){
-const name = row.querySelector('.sizeName').value.trim();
-if(!name) continue;
-let status = row.querySelector('.sizeStatus').value;
-const qtyRaw = row.querySelector('.sizeQty').value.trim();
-const qty = qtyRaw === '' ? null : Math.max(0, parseInt(qtyRaw, 10) || 0);
-if(qty === 0 && status === 'in-stock') status = 'preorder';
-const entry = { name, status };
-if(qty !== null) entry.qty = qty;
-sizes.push(entry);
-}
-return sizes;
-}
-
-async function saveProduct(){
-const name = document.getElementById('fName').value.trim();
-const price = document.getElementById('fPrice').value.trim();
-let status = document.getElementById('fStatus').value;
-const qtyRaw = document.getElementById('fQty').value.trim();
-const qty = qtyRaw === '' ? null : Math.max(0, parseInt(qtyRaw, 10) || 0);
-if(qty === 0 && status === 'in-stock') status = 'preorder';
-const category = document.getElementById('fCategory').value;
-const description = document.getElementById('fDescription').value.trim();
-const fileInput = document.getElementById('fImage');
-const file = fileInput.files[0];
-
-if(!name || !price){ showStatus('Please fill in item name and price.', true); return; }
-
-const saveBtn = document.getElementById('saveBtn');
-saveBtn.disabled = true;
-saveBtn.textContent = 'Saving…';
-
-try{
-const isNew = !editingId;
-let entry;
-if(editingId){
-entry = products.find(p => p.id === editingId);
-} else {
-entry = { id: slugify(name), image: '' };
-products.push(entry);
-}
-entry.name = name;
-entry.price = price;
-entry.status = status;
-if(qty !== null){ entry.qty = qty; } else { delete entry.qty; }
-entry.category = category;
-entry.description = description;
-
-const images = [];
-
-const { colors, images: colorImages } = await collectColors(entry.id);
-images.push(...colorImages);
-
-if(colors.length){
-entry.colors = colors;
-} else {
-delete entry.colors;
-}
-
-if(file){
-showStatus('Uploading photo…');
-const base64 = await resizeImage(file, 1200);
-images.push({ id: entry.id, base64 });
-entry.image = `assets/products/${entry.id}.jpg`;
-} else if(!entry.image && colors.length){
-entry.image = colors[0].image;
-}
-
-const sizes = collectSizes();
-if(sizes.length){ entry.sizes = sizes; } else { delete entry.sizes; }
-
-// Give brand-new products their own clean-URL page (e.g. /the-tiffany).
-// Existing products already have theirs, and the API skips creating one
-// if the file is already there, so this is safe to always send.
-const pages = isNew ? [{ id: entry.id, content: PRODUCT_PAGE_HTML }] : [];
-
-showStatus('Saving listing…');
-const data = await callAdmin('save', {
-products,
-sha: productsSha,
-images,
-pages,
-message: editingId ? `Update listing: ${name}` : `Add listing: ${name}`
-});
-productsSha = data.sha;
-
-showStatus('Saved! It will appear on the site in a minute <img src="/assets/flower-icon.png" class="flower-emoji" alt="">');
-cancelEdit();
-renderListings();
-}catch(err){
-showStatus(err.message || 'Something went wrong.', true);
-}finally{
-saveBtn.disabled = false;
-saveBtn.textContent = editingId ? 'Save Changes' : 'Add Listing';
-}
-}
-
-function editProduct(id){
-const p = products.find(x => x.id === id);
-if(!p) return;
-editingId = id;
-document.getElementById('formTitle').textContent = 'Edit Listing';
-document.getElementById('fName').value = p.name;
-document.getElementById('fPrice').value = p.price;
-document.getElementById('fStatus').value = p.status;
-document.getElementById('fQty').value = typeof p.qty === 'number' ? p.qty : '';
-document.getElementById('fCategory').value = p.category;
-document.getElementById('fDescription').value = p.description || '';
-  document.getElementById('coverExistingNote').style.display = p.image ? 'block' : 'none';
-document.getElementById('saveBtn').textContent = 'Save Changes';
-document.getElementById('cancelEditBtn').classList.remove('hidden');
-clearColorRows();
-(p.colors || []).forEach(c => addColorRow(c));
-clearSizeRows();
-(p.sizes || []).forEach(s => addSizeRow(s));
-switchTab('listings');
-window.scrollTo({top:0, behavior:'smooth'});
-}
-
-function cancelEdit(){
-editingId = null;
-document.getElementById('formTitle').textContent = 'Add a New Listing';
-document.getElementById('fName').value = '';
-document.getElementById('fPrice').value = '';
-document.getElementById('fStatus').value = 'in-stock';
-document.getElementById('fQty').value = '';
-document.getElementById('fCategory').value = 'Bags';
-document.getElementById('fDescription').value = '';
-document.getElementById('fImage').value = '';
-  document.getElementById('coverExistingNote').style.display = 'none';
-document.getElementById('saveBtn').textContent = 'Add Listing';
-document.getElementById('cancelEditBtn').classList.add('hidden');
-clearColorRows();
-clearSizeRows();
-}
-
-async function deleteProduct(id){
-const p = products.find(x => x.id === id);
-if(!p) return;
-if(!confirm(`Delete "${p.name}"? This can't be undone.`)) return;
-try{
-const filtered = products.filter(x => x.id !== id);
-const data = await callAdmin('save', {
-products: filtered,
-sha: productsSha,
-message: `Delete listing: ${p.name}`
-});
-products = filtered;
-productsSha = data.sha;
-showStatus('Deleted.');
-renderListings();
-}catch(err){
-showStatus(err.message, true);
-}
-}
-
-// ============ Access Requests ============
-async function loadRequests(){
-const wrap = document.getElementById('requestsList');
-wrap.innerHTML = '<p class="empty">Loading…</p>';
-try{
-const snap = await db.collection('leads').where('status','==','requested').get();
-let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-docs.sort((a,b) => (b.createdAt?.toMillis?.()||0) - (a.createdAt?.toMillis?.()||0));
-document.getElementById('reqCount').textContent = docs.length ? `(${docs.length})` : '';
-if(!docs.length){ wrap.innerHTML = '<p class="empty">No pending requests right now.</p>'; return; }
-wrap.innerHTML = docs.map(l => `
-<div class="req-card" id="req-${l.id}">
-<span class="pill-badge pill-requested">Requested</span>
-<h4>${escapeHtml(l.name||'(no name)')}</h4>
-<div class="meta">${escapeHtml(l.email||'')} ${l.phone ? '&middot; ' + escapeHtml(l.phone) : ''} ${l.social ? '&middot; ' + igLink(l.social) : ''} &middot; ${fmtDate(l.createdAt)}</div>
-${l.message ? `<div class="msg">${escapeHtml(l.message)}</div>` : ''}
-<div class="btn-row">
-<button class="btn primary" onclick="approveAndGenerate('${l.id}','${escapeAttr(l.email)}','${escapeAttr(l.name)}')">Approve &amp; Generate Password</button>
-<button class="btn secondary" onclick="declineRequest('${l.id}')">Decline</button>
-</div>
-</div>
-`).join('');
-}catch(err){
-wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
-}
-}
-
-async function declineRequest(id){
-if(!confirm('Decline this request?')) return;
-await db.collection('leads').doc(id).update({ status: 'denied' });
-showStatus('Request declined.');
-loadRequests();
-loadLeads();
-}
-
-// ============ Support Tickets ============
-// Pulls every support_request activity doc straight from Firestore &#x2014; this
-// is the backstop for the Make -> Gmail email alert, so a submission still
-// shows up here even if that email never arrives or Make hiccups.
-async function loadTickets(){
-const wrap = document.getElementById('ticketsList');
-wrap.innerHTML = '<p class="empty">Loading…</p>';
-try{
-const snap = await db.collection('activity').where('type','==','support_request').get();
-let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-docs.sort((a,b) => (b.timestamp?.toMillis?.()||0) - (a.timestamp?.toMillis?.()||0));
-const openDocs = docs.filter(t => !t.handled);
-document.getElementById('ticketCount').textContent = openDocs.length ? `(${openDocs.length})` : '';
-if(!docs.length){ wrap.innerHTML = '<p class="empty">No support messages yet.</p>'; return; }
-wrap.innerHTML = docs.map(t => `
-<div class="req-card" id="ticket-${t.id}" style="${t.handled ? 'opacity:.55;' : ''}">
-<span class="pill-badge ${t.handled ? 'pill-approved' : 'pill-requested'}">${t.handled ? 'Handled' : 'New'}</span>
-<h4>${escapeHtml(t.name || '(no name)')}</h4>
-<div class="meta">${escapeHtml(t.email || '')} ${t.social ? '&middot; ' + igLink(t.social) : ''} ${t.topic ? '&middot; ' + escapeHtml(t.topic) : ''}${t.orderNumber ? ' &middot; order ' + escapeHtml(t.orderNumber) : ''} &middot; ${fmtDate(t.timestamp)}</div>
-${t.message ? `<div class="msg">${escapeHtml(t.message)}</div>` : ''}
-<div class="btn-row">
-${t.email ? `<a class="btn secondary" href="mailto:${escapeAttr(t.email)}?subject=${encodeURIComponent('Re: your HAYCHIC support message')}">Reply by Email</a>` : ''}
-${!t.handled ? `<button class="btn primary" onclick="markTicketHandled('${t.id}')">Mark Handled</button>` : `<button class="btn secondary" onclick="markTicketHandled('${t.id}', false)">Mark Unhandled</button>`}
-</div>
-</div>
-`).join('');
-}catch(err){
-wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
-}
-}
-
-async function markTicketHandled(id, handled){
-handled = handled === undefined ? true : handled;
-await db.collection('activity').doc(id).update({ handled });
-loadTickets();
-}
-// ============ Item Requests ============
-// Pulls every item_request activity doc straight from Firestore &#x2014; this is
-// the backstop for the Make -> Gmail email alert, so a submission still
-// shows up here even if that email never arrives or Make hiccups.
-async function loadItemRequests(){
-const wrap = document.getElementById('itemRequestsList');
-wrap.innerHTML = '<p class="empty">Loading…</p>';
-try{
-const snap = await db.collection('activity').where('type','==','item_request').get();
-let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-docs.sort((a,b) => (b.timestamp?.toMillis?.()||0) - (a.timestamp?.toMillis?.()||0));
-const openDocs = docs.filter(t => !t.handled);
-document.getElementById('itemReqCount').textContent = openDocs.length ? `(${openDocs.length})` : '';
-if(!docs.length){ wrap.innerHTML = '<p class="empty">No item requests yet.</p>'; return; }
-wrap.innerHTML = docs.map(t => `
-<div class="req-card" id="itemreq-${t.id}" style="${t.handled ? 'opacity:.55;' : ''}">
-<span class="pill-badge ${t.handled ? 'pill-approved' : 'pill-requested'}">${t.handled ? 'Handled' : 'New'}</span>
-<h4>${escapeHtml(t.requestName || '(no name)')}</h4>
-<div class="meta">${t.requestSocial ? igLink(t.requestSocial) + ' &middot; ' : ''}${t.requestType ? escapeHtml(t.requestType) : ''} &middot; ${fmtDate(t.timestamp)}</div>
-${t.requestDetails ? `<div class="msg"><strong>Details:</strong> ${escapeHtml(t.requestDetails)}</div>` : ''}
-${t.requestText ? `<div class="msg">${escapeHtml(t.requestText)}</div>` : ''}
-<div class="btn-row">
-${!t.handled ? `<button class="btn primary" onclick="markItemRequestHandled('${t.id}')">Mark Handled</button>` : `<button class="btn secondary" onclick="markItemRequestHandled('${t.id}', false)">Mark Unhandled</button>`}
-</div>
-</div>
-`).join('');
-}catch(err){
-wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
-}
-}
-
-async function markItemRequestHandled(id, handled){
-handled = handled === undefined ? true : handled;
-await db.collection('activity').doc(id).update({ handled });
-loadItemRequests();
-}
-
-
-// ============ Orders / Tracking ============
-// Orders are written to Firestore by the Stripe webhook (api/order-notify.js
-// -> saveOrderToFirestore), not by this page &#x2014; this just reads and updates
-// them. See ORDER-TRACKING-SETUP.md for the Firestore rule this needs.
-let allOrders = [];
-// Keyed by orderId. Populated from /api/pending-shipments (reads Make's
-// "HAYCHIC Pending Shipments" Data Store) so the Orders tab can offer an
-// Approve/Reject-a-label flow right here, as an alternative to the email
-// Approve/Reject links. Purely additive &#x2014; an order with nothing in here
-// just shows the tracking fields like before.
-let pendingShipments = {};
-let orderSearchQuery = '';
-
-// Short, human-friendly stand-in for the long Stripe session id &#x2014; last 8
-// characters, uppercased. Not guaranteed globally unique but plenty for
-// eyeballing/referencing an order; the Copy ID button next to it copies
-// the real full id for anything that needs the exact value (Stripe
-// dashboard, Firestore, support emails).
-function shortOrderId(id){
-return String(id||'').slice(-8).toUpperCase();
-}
-
-// Formats the customer's shipping address (already saved to Firestore by
-// the checkout webhook) into an array of display lines. Returns [] if
-// there's no address on the order (e.g. very old orders from before this
-// was captured).
-function formatAddress(o){
-return [
-o.addressLine1,
-o.addressLine2,
-[o.city, o.state, o.zip].filter(Boolean).join(', '),
-o.country
-].filter(Boolean);
-}
-
-function filterOrders(q){
-orderSearchQuery = (q||'').trim().toLowerCase();
-renderOrders();
-}
-
-async function loadOrders(){
-const wrap = document.getElementById('ordersList');
-wrap.innerHTML = '<p class="empty">Loading…</p>';
-try{
-const snap = await db.collection('orders').get();
-allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-allOrders.sort((a,b) => new Date(b.createdAt||0) - new Date(a.createdAt||0));
-renderOrders();
-}catch(err){
-wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
-}
-loadPendingShipments();
-}
-
-async function loadPendingShipments(){
-if(!ghSession) return;
-try{
-const res = await fetch(PENDING_SHIPMENTS_API, {
-headers: { 'Authorization': `Bearer ${ghSession}` }
-});
-const data = await res.json().catch(() => ({}));
-if(!res.ok) throw new Error(data.error || 'Could not load pending shipments.');
-pendingShipments = {};
-(data.pending || []).forEach(p => { pendingShipments[p.orderId] = p; });
-renderOrders();
-}catch(err){
-// Non-fatal &#x2014; the Orders tab still works without this, it just won't
-// show the in-site label approval section for anyone.
-console.error('loadPendingShipments:', err.message);
-}
-}
-
-// Renders the "shipping label needs approval" block for one order, or ''
-// if there's nothing pending for it. Pre-selects whichever Shippo rate is
-// closest to what the customer actually paid at checkout &#x2014; the two don't
-// always match exactly since the live-rate quote at checkout and the rate
-// Shippo returns moments later (when the order webhook creates the actual
-// shipment) can drift slightly &#x2014; so Hayden should glance at the highlighted
-// one rather than assume it's automatically correct.
-function pendingShipmentHtml(o){
-const p = pendingShipments[o.id];
-if(!p || !p.rates || !p.rates.length) return '';
-const paid = parseFloat(p.shippingPaid);
-let closestIdx = 0;
-if(!isNaN(paid)){
-let bestDiff = Infinity;
-p.rates.forEach((r, i) => {
-const diff = Math.abs(parseFloat(r.amount) - paid);
-if(diff < bestDiff){ bestDiff = diff; closestIdx = i; }
-});
-}
-return `
-<div style="margin-top:12px;padding:14px 16px;background:var(--cream);border-radius:14px;grid-column:1/-1;">
-<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
-<span style="font-size:.82rem;font-weight:700;">Shipping label needs approval</span>
-${!isNaN(paid) ? `<span style="font-size:.76rem;color:var(--muted);">Customer paid $${escapeHtml(p.shippingPaid)}</span>` : ''}
-</div>
-<div style="display:flex;flex-direction:column;gap:7px;">
-${p.rates.map((r, i) => `
-<label style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:white;border:1.5px solid ${i===closestIdx ? 'var(--brown)' : 'var(--line)'};border-radius:12px;cursor:pointer;">
-<input type="radio" name="rate-${o.id}" value="${escapeAttr(r.id)}" ${i===closestIdx?'checked':''} style="flex-shrink:0;width:16px;height:16px;">
-<div style="flex:1;min-width:0;">
-<div style="font-size:.85rem;font-weight:600;">${escapeHtml(r.provider||'')} ${escapeHtml(r.serviceName||'')}</div>
-${r.estimatedDays ? `<div style="font-size:.74rem;color:var(--muted);margin-top:1px;">${escapeHtml(String(r.estimatedDays))} day${Number(r.estimatedDays)===1?'':'s'} delivery</div>` : ''}
-</div>
-<div style="text-align:right;flex-shrink:0;">
-<div style="font-size:.92rem;font-weight:700;">$${escapeHtml(String(r.amount||''))}</div>
-${i===closestIdx ? '<span class="pill-badge pill-approved" style="font-size:.6rem;padding:3px 9px;margin-top:2px;display:inline-block;">Closest match</span>' : ''}
-</div>
-</label>
-`).join('')}
-</div>
-<div class="btn-row" style="margin-top:10px;">
-<button class="btn primary" onclick="approveLabel('${o.id}')">Approve &amp; Buy Label</button>
-<button class="btn secondary" onclick="rejectLabel('${o.id}')">Reject &#x2014; ship manually</button>
-</div>
-</div>
-`;
-}
-
-async function approveLabel(orderId){
-const selected = document.querySelector(`input[name="rate-${orderId}"]:checked`);
-if(!selected){ showStatus('Pick a shipping rate first.', true); return; }
-if(!confirm('Buy this shipping label now? This charges your Shippo account for real.')) return;
-try{
-showStatus('Buying label…');
-const res = await fetch(APPROVE_LABEL_API, {
-method: 'POST',
-headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ghSession}` },
-body: JSON.stringify({ orderId, rateId: selected.value })
-});
-const data = await res.json().catch(() => ({}));
-if(!res.ok) throw new Error(data.error || 'Could not buy the label.');
-showStatus(`Label bought &#x2014; tracking ${data.trackingNumber} (${data.trackingCarrier})${data.emailSent ? ', customer emailed' : data.emailReason ? ` &#x2014; email not sent: ${data.emailReason}` : ''} <img src="/assets/flower-icon.png" class="flower-emoji" alt="">`);
-delete pendingShipments[orderId];
-loadOrders();
-}catch(err){
-showStatus(err.message, true);
-}
-}
-
-async function rejectLabel(orderId){
-if(!confirm("Reject this shipping quote? You'll need to buy the label yourself outside the site.")) return;
-try{
-await db.collection('orders').doc(orderId).update({
-shippingLabelStatus: 'manual',
-updatedAt: new Date().toISOString()
-});
-showStatus('Flagged for manual shipping.');
-delete pendingShipments[orderId];
-renderOrders();
-}catch(err){
-showStatus(err.message, true);
-}
-}
-
-function renderOrders(){
-const wrap = document.getElementById('ordersList');
-if(!allOrders.length){ wrap.innerHTML = '<p class="empty">No orders yet.</p>'; return; }
-const q = orderSearchQuery;
-const filtered = !q ? allOrders : allOrders.filter(o => {
-const hay = [o.customerName, o.email, o.id, shortOrderId(o.id), o.instagram, o.trackingNumber].filter(Boolean).join(' ').toLowerCase();
-return hay.includes(q);
-});
-if(!filtered.length){ wrap.innerHTML = '<p class="empty">No orders match your search.</p>'; return; }
-wrap.innerHTML = filtered.map(o => `
-<div class="lead-row">
-<div class="info">
-<h4>${escapeHtml(o.customerName||'(no name)')} <span class="pill-badge pill-${o.status==='shipped'?'approved':o.status==='delivered'?'approved':'requested'}">${escapeHtml(o.status||'processing')}</span></h4>
-<div style="font-size:.85rem;color:var(--muted);margin-top:3px;">${escapeHtml(o.email||'')}${o.instagram ? ' &middot; ' + igLink(o.instagram) : ''}</div>
-<div style="font-size:.85rem;color:var(--muted);margin-top:2px;">$${escapeHtml(o.amountTotal||'0.00')} &middot; ${fmtDate(o.createdAt)}${o.shippingMethod ? ' &middot; ' + escapeHtml(o.shippingMethod) : ''}</div>
-<div style="font-size:.8rem;color:var(--muted);margin-top:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-<span>Order <strong style="color:var(--ink);">#${escapeHtml(shortOrderId(o.id))}</strong></span>
-<button type="button" class="ig-copy-btn" title="Copy full order ID" onclick="copyText(event,'${escapeAttr(o.id)}','order ID')">Copy ID</button>
-</div>
-${formatAddress(o).length ? `<div style="font-size:.82rem;color:var(--muted);margin-top:6px;display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap;">
-<span>Ship to: ${formatAddress(o).map(l => escapeHtml(l)).join(', ')}</span>
-<button type="button" class="ig-copy-btn" title="Copy address" onclick="copyText(event,'${escapeAttr(formatAddress(o).join(', '))}','address')">Copy</button>
-</div>` : ''}
-</div>
-${o.items && o.items.length ? `<div style="font-size:.82rem;color:var(--muted);margin-top:6px;grid-column:1/-1;">${o.items.map(it => `${escapeHtml(String(it.quantity))}&times; ${escapeHtml(it.name||'')}${it.colorName ? ' &#x2014; ' + escapeHtml(it.colorName) : ''}${it.sizeName ? ' (' + escapeHtml(it.sizeName) + ')' : ''} &mdash; $${escapeHtml(it.amount||'0.00')}`).join('<br>')}</div>` : ''}
-${pendingShipmentHtml(o)}
-<div class="actions" style="grid-column:1/-1;">
-<button onclick="toggleLeadDetail('order-${o.id}')">Tracking</button>
-</div>
-<div class="lead-detail" id="detail-order-${o.id}">
-<div class="field-row">
-<div class="field"><label>Tracking number</label><input type="text" id="tracknum-${o.id}" value="${escapeAttr(o.trackingNumber||'')}" placeholder="e.g. 9400... "></div>
-<div class="field"><label>Carrier</label><input type="text" id="trackcarrier-${o.id}" value="${escapeAttr(o.trackingCarrier||'')}" placeholder="e.g. USPS"></div>
-</div>
-<div class="field" style="max-width:220px;margin-top:10px;">
-<label>Status</label>
-<select id="trackstatus-${o.id}">
-<option value="processing" ${o.status==='processing'||!o.status?'selected':''}>Processing</option>
-<option value="shipped" ${o.status==='shipped'?'selected':''}>Shipped</option>
-<option value="delivered" ${o.status==='delivered'?'selected':''}>Delivered</option>
-</select>
-</div>
-<div class="btn-row" style="margin-top:10px;">
-<button class="btn primary" onclick="saveOrderTracking('${o.id}')">Save &amp; Notify Customer</button>
-</div>
-</div>
-</div>
-`).join('');
-}
-
-async function saveOrderTracking(id){
-const trackingNumber = document.getElementById(`tracknum-${id}`).value.trim();
-const trackingCarrier = document.getElementById(`trackcarrier-${id}`).value.trim();
-const status = document.getElementById(`trackstatus-${id}`).value;
-const order = allOrders.find(o => o.id === id);
-try{
-await db.collection('orders').doc(id).update({
-trackingNumber, trackingCarrier, status,
-updatedAt: new Date().toISOString()
-});
-showStatus('Order updated.');
-if(order && order.email && trackingNumber){
-showStatus('Order updated &#x2014; sending tracking email…');
-await sendTrackingEmail(order.email, order.customerName, id, trackingNumber, trackingCarrier);
-}
-loadOrders();
-}catch(err){
-showStatus(err.message, true);
-}
-}
-
-async function sendTrackingEmail(email, name, orderId, trackingNumber, trackingCarrier){
-  let publicKey, serviceId, templateId;
-  try{
-    const doc = await db.collection('settings').doc('emailjs').get();
-    const s = doc.exists ? doc.data() : {};
-    publicKey = s.publicKey; serviceId = s.serviceId; templateId = s.trackingTemplateId;
-  }catch(err){ /* falls into the missing-settings branch below */ }
-  if(!publicKey || !serviceId || !templateId){
-    showStatus(`Tracking is ${trackingNumber} &#x2014; set up the Tracking Email Template in Email Settings to auto-send it.`, true);
-    return;
-  }
-  try{
-    emailjs.init(publicKey);
-    await emailjs.send(serviceId, templateId, {
-      to_email: email, to_name: name || 'there',
-      order_id: orderId, tracking_number: trackingNumber, tracking_carrier: trackingCarrier || '',
-      site_url: 'https://haychicboutique.com'
-    });
-    showStatus(`Tracking emailed to ${email} <img src="/assets/flower-icon.png" class="flower-emoji" alt="">`);
-  }catch(err){
-    showStatus(`Tracking is ${trackingNumber} but the email failed to send: ${err.text || err.message || err}`, true);
-  }
-}
-
-function generatePassword(){
-const words = ['chic','haute','blush','luxe','dainty','golden','pearl','velvet','rosy','sweet'];
-const w = words[Math.floor(Math.random()*words.length)];
-// A random 8-char alphanumeric suffix instead of a 3-digit number. The old
-// version only had ~9,000 possible codes total (10 words x 900 numbers),
-// which is brute-forceable in minutes against Firestore's open single-code
-// lookup (rules intentionally allow "get" but not "list", so this suffix
-// length is what actually makes guessing infeasible).
-const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-let suffix = '';
-for(let i=0;i<8;i++) suffix += chars[Math.floor(Math.random()*chars.length)];
-return `${w}-${suffix}`;
-}
-
-async function generateUniquePassword(){
-for(let i=0;i<8;i++){
-const pw = generatePassword();
-const doc = await db.collection('access_codes').doc(pw).get();
-if(!doc.exists) return pw;
-}
-return generatePassword() + '-' + Date.now().toString(36).slice(-3);
-}
-
-async function approveAndGenerate(leadId, email, name){
-try{
-showStatus('Generating password…');
-const password = await generateUniquePassword();
-await db.collection('access_codes').doc(password).set({
-leadId: leadId, email: email, active: true,
-createdAt: firebase.firestore.FieldValue.serverTimestamp()
-});
-await db.collection('leads').doc(leadId).update({
-status: 'approved', password: password,
-approvedAt: firebase.firestore.FieldValue.serverTimestamp()
-});
-showStatus('Password generated! Sending email…');
-await sendPasswordEmail(email, name, password);
-loadRequests();
-loadLeads();
-}catch(err){
-showStatus(err.message, true);
-}
-}
-
-// ============ EmailJS ============
-async function loadEmailSettings(){
-  try{
-  const doc = await db.collection('settings').doc('emailjs').get();
-    const s = doc.exists ? doc.data() : {};
-    document.getElementById('emailjsPublicKey').value = s.publicKey || '';
-    document.getElementById('emailjsServiceId').value = s.serviceId || '';
-    document.getElementById('emailjsTemplateId').value = s.templateId || '';
-    document.getElementById('emailjsTrackingTemplateId').value = s.trackingTemplateId || '';
-  }catch(err){
-    showStatus('Could not load Email Settings: ' + (err.message || err), true);
-  }
-}
-  async function saveEmailSettings(){
-    const publicKey = document.getElementById('emailjsPublicKey').value.trim();
-    const serviceId = document.getElementById('emailjsServiceId').value.trim();
-    const templateId = document.getElementById('emailjsTemplateId').value.trim();
-    const trackingTemplateId = document.getElementById('emailjsTrackingTemplateId').value.trim();
-    try{
-      await db.collection('settings').doc('emailjs').set({ publicKey, serviceId, templateId, trackingTemplateId }, { merge: true });
-      showStatus('Email settings saved &#x2014; synced for every device.');
-    }catch(err){
-      showStatus('Could not save email settings: ' + (err.message || err), true);
-    }
-  }
-
-  async function sendPasswordEmail(email, name, password){
-    let publicKey, serviceId, templateId;
-    try{
-      const doc = await db.collection('settings').doc('emailjs').get();
-      const s = doc.exists ? doc.data() : {};
-      publicKey = s.publicKey; serviceId = s.serviceId; templateId = s.templateId;
-    }catch(err){ /* falls into the missing-settings branch below */ }
-    if(!publicKey || !serviceId || !templateId){
-      showStatus(`Password is ${password} &#x2014; set up Email Settings tab to auto-send it.`, true);
-      return;
-    }
-    try{
-      emailjs.init(publicKey);
-      await emailjs.send(serviceId, templateId, {
-        to_email: email, to_name: name || 'there', password: password,
-        site_url: 'https://haychicboutique.com'
-      });
-      showStatus(`Password emailed to ${email} <img src="/assets/flower-icon.png" class="flower-emoji" alt="">`);
-    }catch(err){
-      showStatus(`Password is ${password} but the email failed to send: ${err.text || err.message || err}`, true);
-    }
-  }
-
-// ============ Leads / CRM ============
-let allLeads = [];
-let currentActivityEmail = '';
-
-async function loadLeads(){
-const wrap = document.getElementById('leadsList');
-wrap.innerHTML = '<p class="empty">Loading…</p>';
-try{
-const snap = await db.collection('leads').get();
-allLeads = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-allLeads.sort((a,b) => (b.createdAt?.toMillis?.()||0) - (a.createdAt?.toMillis?.()||0));
-renderLeads();
-}catch(err){
-wrap.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
-}
-}
-
-function renderLeads(){
-const wrap = document.getElementById('leadsList');
-if(!allLeads.length){ wrap.innerHTML = '<p class="empty">No leads yet.</p>'; return; }
-wrap.innerHTML = allLeads.map(l => `
-<div class="lead-row">
-<div class="info">
-<h4>${escapeHtml(l.name||'(no name)')} <span class="pill-badge pill-${l.status||'requested'}">${l.status||'requested'}</span></h4>
-<span>${escapeHtml(l.email||'')} ${l.phone ? '&middot; ' + escapeHtml(l.phone) : ''} ${l.social ? '&middot; ' + igLink(l.social) : ''} &middot; ${fmtDate(l.createdAt)}${l.password ? ' &middot; pw: ' : ''}${l.password ? `<span class="password-chip">${escapeHtml(l.password)}</span>` : ''}</span>
-</div>
-<div class="actions">
-<button onclick="toggleLeadDetail('${l.id}')">Notes</button>
-<button onclick="openActivity('${escapeAttr(l.email)}','${escapeAttr(l.name)}')">Activity</button>
-${l.status !== 'approved' ? `<button onclick="approveAndGenerate('${l.id}','${escapeAttr(l.email)}','${escapeAttr(l.name)}')">Approve</button>` : `<button onclick="sendPasswordEmail('${escapeAttr(l.email)}','${escapeAttr(l.name)}','${escapeAttr(l.password||'')}')">Resend Password</button>`}
-<button class="danger" onclick="deleteLead('${l.id}')">Remove</button>
-</div>
-<div class="lead-detail" id="detail-${l.id}">
-<label style="font-size:.8rem;font-weight:700;">Notes &amp; follow-up</label>
-<textarea id="notes-${l.id}">${escapeHtml(l.notes||'')}</textarea>
-<div class="field" style="margin-top:10px;max-width:220px;">
-<label>Status</label>
-<select id="status-${l.id}">
-<option value="requested" ${l.status==='requested'?'selected':''}>Requested</option>
-<option value="approved" ${l.status==='approved'?'selected':''}>Approved</option>
-<option value="denied" ${l.status==='denied'?'selected':''}>Denied</option>
-<option value="customer" ${l.status==='customer'?'selected':''}>Customer</option>
-</select>
-</div>
-<div class="btn-row">
-<button class="btn primary" onclick="saveLeadDetail('${l.id}')">Save</button>
-</div>
-</div>
-</div>
-`).join('');
-}
-
-function toggleLeadDetail(id){
-document.getElementById('detail-' + id).classList.toggle('open');
-}
-
-async function saveLeadDetail(id){
-const notes = document.getElementById('notes-' + id).value;
-const status = document.getElementById('status-' + id).value;
-try{
-await db.collection('leads').doc(id).update({ notes, status });
-showStatus('Saved.');
-loadLeads();
-loadRequests();
-}catch(err){
-showStatus(err.message, true);
-}
-}
-
-async function deleteLead(id){
-const l = allLeads.find(x => x.id === id);
-if(!l) return;
-if(!confirm(`Remove ${l.name || l.email || 'this lead'}? This can't be undone.`)) return;
-try{
-// If they had an active password, deactivate it too &#x2014; removing someone
-// as a lead should also cut off their site access.
-if(l.password){
-try{ await db.collection('access_codes').doc(l.password).update({ active: false }); }catch(e){ /* code may not exist &#x2014; fine */ }
-}
-await db.collection('leads').doc(id).delete();
-showStatus('Lead removed.');
-loadLeads();
-loadRequests();
-}catch(err){
-showStatus(err.message, true);
-}
-}
-
-function showAddLead(){ document.getElementById('addLeadForm').classList.remove('hidden'); }
-function hideAddLead(){ document.getElementById('addLeadForm').classList.add('hidden'); }
-
-async function addLeadManually(){
-const name = document.getElementById('newLeadName').value.trim();
-const email = document.getElementById('newLeadEmail').value.trim();
-const phone = document.getElementById('newLeadPhone').value.trim();
-const notes = document.getElementById('newLeadNotes').value.trim();
-if(!name || !email){ showStatus('Name and email are required.', true); return; }
-try{
-await db.collection('leads').add({
-name, email, phone, notes, message: '', status: 'requested',
-createdAt: firebase.firestore.FieldValue.serverTimestamp()
-});
-showStatus('Lead added.');
-document.getElementById('newLeadName').value = '';
-document.getElementById('newLeadEmail').value = '';
-document.getElementById('newLeadPhone').value = '';
-document.getElementById('newLeadNotes').value = '';
-hideAddLead();
-loadLeads();
-loadRequests();
-}catch(err){
-showStatus(err.message, true);
-}
-}
-
-// ============ Activity ============
-// Distinct icon per activity type, so the feed reads at a glance instead of
-// showing the same flower for everything. Falls back to a neutral dot for
-// any type not listed here.
-const ACTIVITY_ICONS = {
-item_request: '📦',
-support_request: '💬',
-product_interest: '🛍️',
-product_view: '🏷️',
-cart_abandoned: '🛒',
-page_view: '📄',
-access_request: '🔑'
-};
-
-async function openActivity(email, name){
-currentActivityEmail = email;
-document.getElementById('activityLeadName').textContent = name || email;
-document.getElementById('activityModal').classList.remove('hidden');
-const content = document.getElementById('activityContent');
-content.innerHTML = '<p class="empty">Loading…</p>';
-try{
-const snap = await db.collection('activity').where('leadEmail','==', email).get();
-let docs = snap.docs.map(d => d.data());
-docs.sort((a,b) => (b.timestamp?.toMillis?.()||0) - (a.timestamp?.toMillis?.()||0));
-if(!docs.length){ content.innerHTML = '<p class="empty">No tracked activity yet for this email &#x2014; activity is only linked once they unlock the site with their password.</p>'; return; }
-content.innerHTML = docs.slice(0,50).map(a => {
-// Thumbnail: look up the matching product's image for anything tied to a
-// productId (product_interest, product_view). Falls back to a plain
-// placeholder box for activity that isn't about a specific product.
-const product = a.productId ? products.find(p => p.id === a.productId) : null;
-const thumbImg = product && product.image ? `style="background-image:url('../${escapeAttr(product.image)}')"` : '';
-const thumbInner = product && product.image ? '' : (ACTIVITY_ICONS[a.type] || '•');
-const quoteText = a.requestText || a.message || '';
-return `
-<div class="activity-item">
-<div class="activity-thumb" ${thumbImg}>${thumbInner}</div>
-<div class="activity-body">
-<span class="a-type">${escapeHtml((a.type||'').replace(/_/g,' '))}</span>
-<span class="a-time">${fmtDate(a.timestamp)}</span><br>
-${a.page ? `<span>page: ${escapeHtml(a.page)}</span>` : ''}
-${a.productName ? `<span> &middot; product: ${escapeHtml(a.productName)}</span>` : ''}
-${a.topic ? `<span> &middot; ${escapeHtml(a.topic)}</span>` : ''}
-${quoteText ? `<div class="a-quote">"${escapeHtml(quoteText)}"</div>` : ''}
-</div>
-</div>
-`;
-}).join('');
-}catch(err){
-content.innerHTML = `<p style="color:#a05f70;">${err.message}</p>`;
-}
-}
-function closeActivity(){ document.getElementById('activityModal').classList.add('hidden'); }
-</script>
+<script src="assets/js/firebase-config.js"></script>
+<script src="assets/js/gate.js"></script>
+<script src="assets/js/cookie-consent.js"></script>
+<script src="script.js?v=4"></script>
 </body>
 </html>
