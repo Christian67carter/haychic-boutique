@@ -160,15 +160,15 @@
     "image": "assets/products/the-cutie-set-mskpheqd-blush-pink.jpg",
     "name": "The Cutie Set",
     "price": "$105.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Clothing",
     "description": "",
     "colors": [
       {
         "name": "Blush Pink",
         "image": "assets/products/the-cutie-set-mskpheqd-blush-pink.jpg",
-        "status": "in-stock",
-        "qty": 1
+        "status": "preorder",
+        "qty": 0
       },
       {
         "name": "Black",
