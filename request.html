@@ -13,6 +13,176 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css" />
+<style>
+  .request-hero {
+    text-align: center;
+    padding: 80px 7vw 20px;
+  }
+  .request-hero .flower-icon-lg {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .request-hero h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--pink-dark, #c48b70);
+    margin: 0 0 14px;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+  }
+  .request-hero p {
+    max-width: 520px;
+    margin: 0 auto 0;
+    color: var(--muted, #888);
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+  .request-form-wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 40px 7vw 80px;
+  }
+  .request-form-wrap .form-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .request-form-wrap .form-row label {
+    flex: 1 1 200px;
+  }
+  .request-form-wrap label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    font-size: .88rem;
+    letter-spacing: .03em;
+    color: var(--brown, #4A3F2E);
+    margin-bottom: 16px;
+    gap: 6px;
+  }
+  .request-form-wrap input,
+  .request-form-wrap select,
+  .request-form-wrap textarea {
+    font-family: inherit;
+    font-size: .95rem;
+    padding: 12px 14px;
+    border: 1.5px solid #e5ddd7;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--brown, #4A3F2E);
+    transition: border-color .18s;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .request-form-wrap input:focus,
+  .request-form-wrap select:focus,
+  .request-form-wrap textarea:focus {
+    border-color: var(--pink-dark, #c48b70);
+  }
+  .request-form-wrap textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  .request-form-wrap .photo-label {
+    font-weight: 600;
+    font-size: .88rem;
+    letter-spacing: .03em;
+    color: var(--brown, #4A3F2E);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .request-form-wrap .photo-upload-area {
+    border: 2px dashed #e0d4cc;
+    border-radius: 12px;
+    padding: 28px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .18s, background .18s;
+    background: #fdf8f5;
+    margin-bottom: 24px;
+  }
+  .request-form-wrap .photo-upload-area:hover {
+    border-color: var(--pink-dark, #c48b70);
+    background: #fdf3ef;
+  }
+  .request-form-wrap .photo-placeholder span {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .request-form-wrap .photo-placeholder p {
+    margin: 0 0 4px;
+    font-weight: 600;
+    color: var(--brown, #4A3F2E);
+    font-size: .92rem;
+  }
+  .request-form-wrap .photo-placeholder small {
+    color: var(--muted, #888);
+    font-size: .8rem;
+  }
+  #photoPreview {
+    max-width: 180px;
+    max-height: 180px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  .photo-remove-btn {
+    display: block;
+    margin: 0 auto;
+    background: none;
+    border: 1.5px solid #e0d4cc;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: .82rem;
+    cursor: pointer;
+    color: var(--muted, #888);
+  }
+  .photo-remove-btn:hover { color: #c0392b; border-color: #c0392b; }
+  .request-form-wrap .submit-row {
+    text-align: center;
+    margin-top: 8px;
+  }
+  .request-form-wrap .btn.primary {
+    min-width: 220px;
+    padding: 14px 32px;
+    font-size: 1rem;
+  }
+  .request-steps {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0 7vw 60px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .request-step {
+    flex: 1 1 180px;
+    background: #fdf8f5;
+    border-radius: 14px;
+    padding: 22px 18px;
+    text-align: center;
+    border: 1.5px solid #f0e8e0;
+  }
+  .request-step .step-icon {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .request-step h4 {
+    margin: 0 0 6px;
+    font-size: .92rem;
+    font-weight: 700;
+    color: var(--brown, #4A3F2E);
+  }
+  .request-step p {
+    margin: 0;
+    font-size: .82rem;
+    color: var(--muted, #888);
+    line-height: 1.5;
+  }
+</style>
 </head>
 <body>
 <div class="announcement"><img src="/assets/flower-icon.png" class="flower-emoji" alt="" aria-hidden="true"> NEW ARRIVALS + PRE-ORDERS AVAILABLE <img src="/assets/flower-icon.png" class="flower-emoji" alt="" aria-hidden="true"></div>
@@ -37,45 +207,71 @@
 </header>
 
 <main>
-<section class="request-section" id="request">
-<div>
-<span class="eyebrow">can't find it?</span>
-<h2>Send us what you're looking for.</h2>
-<p>Not everything HAYCHIC can order is listed online. Send a photo or description and we'll check availability, pricing, and expected timing.</p>
-</div>
-<form onsubmit="submitRequest(event)">
-<div class="form-row">
-<label>Name<input required name="name" placeholder="Your name"></label>
-<label>Instagram / TikTok<input name="social" placeholder="@username"></label>
-</div>
-<div class="form-row">
-<label>Item type
-<select name="type">
-<option>Bag</option><option>Clothing</option><option>Shoes</option>
-<option>Beauty</option><option>Accessory</option><option>Other</option>
-</select>
-</label>
-<label>Size / Color<input name="details" placeholder="Ex: Medium, pink"></label>
-</div>
-<label>What are you looking for?<textarea required name="request" rows="5" placeholder="Describe the item or paste a product link..."></textarea></label>
-<div class="photo-upload-wrap">
-<label class="photo-label">Reference Photo <span style="font-size:.8rem;color:var(--muted);font-weight:400;">(optional)</span></label>
-<div class="photo-upload-area" id="photoUploadArea" onclick="document.getElementById('photoInput').click()">
-<input type="file" id="photoInput" name="photo" accept="image/*" style="display:none;">
-<div id="photoPlaceholder" class="photo-placeholder">
-<span>📷</span>
-<p>Tap to add a reference photo</p>
-<small>Helps Hayden find exactly what you're looking for</small>
-</div>
-<div id="photoPreviewWrap" style="display:none;text-align:center;">
-<img id="photoPreview" alt="Reference photo preview">
-<button type="button" class="photo-remove-btn" onclick="event.stopPropagation();removePhoto()">✕ Remove photo</button>
-</div>
-</div>
-</div>
-<button class="btn primary" type="submit">Send My Request <img src="/assets/flower-icon.png" class="flower-emoji" alt="" aria-hidden="true"></button>
-</form>
-</section>
+  <!-- Hero -->
+  <section class="request-hero">
+    <span class="flower-icon-lg"><img src="/assets/flower-icon.png" class="flower-emoji" alt="" aria-hidden="true"></span>
+    <h1>Let HAYCHIC find it for you</h1>
+    <p>Not everything we can order is listed online. Share a photo or description and Hayden will check availability, pricing, and timing — just for you.</p>
+  </section>
+
+  <!-- How it works -->
+  <div class="request-steps">
+    <div class="request-step">
+      <span class="step-icon">📝</span>
+      <h4>Fill out the form</h4>
+      <p>Describe what you're looking for or drop a link or photo.</p>
+    </div>
+    <div class="request-step">
+      <span class="step-icon">🔍</span>
+      <h4>Hayden checks</h4>
+      <p>We'll look into availability, pricing, and expected timing.</p>
+    </div>
+    <div class="request-step">
+      <span class="step-icon">💌</span>
+      <h4>We'll reach out</h4>
+      <p>Expect a reply via Instagram DM or the contact info you share.</p>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="request-form-wrap">
+    <form onsubmit="submitRequest(event)">
+      <div class="form-row">
+        <label>Your Name<input required name="name" placeholder="First name or full name"></label>
+        <label>Instagram / TikTok<input name="social" placeholder="@username"></label>
+      </div>
+      <div class="form-row">
+        <label>Item Type
+          <select name="type">
+            <option>Bag</option><option>Clothing</option><option>Shoes</option>
+            <option>Beauty</option><option>Accessory</option><option>Other</option>
+          </select>
+        </label>
+        <label>Size / Color<input name="details" placeholder="Ex: Medium, dusty pink"></label>
+      </div>
+      <label>What are you looking for?<textarea required name="request" rows="5" placeholder="Describe the item or paste a product link — the more detail the better!"></textarea></label>
+
+      <div class="photo-upload-wrap">
+        <span class="photo-label">Reference Photo <span style="font-size:.8rem;color:var(--muted);font-weight:400;">(optional)</span></span>
+        <div class="photo-upload-area" id="photoUploadArea" onclick="document.getElementById('photoInput').click()">
+          <input type="file" id="photoInput" name="photo" accept="image/*" style="display:none;">
+          <div id="photoPlaceholder" class="photo-placeholder">
+            <span>📷</span>
+            <p>Tap to add a reference photo</p>
+            <small>Helps Hayden find exactly what you're looking for</small>
+          </div>
+          <div id="photoPreviewWrap" style="display:none;text-align:center;">
+            <img id="photoPreview" alt="Reference photo preview">
+            <button type="button" class="photo-remove-btn" onclick="event.stopPropagation();removePhoto()">✕ Remove photo</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button class="btn primary" type="submit">Send My Request <img src="/assets/flower-icon.png" class="flower-emoji" alt="" aria-hidden="true"></button>
+      </div>
+    </form>
+  </div>
 </main>
 
 <footer>
@@ -99,6 +295,25 @@
 <script src="assets/js/gate.js"></script>
 <script src="assets/js/cookie-consent.js"></script>
 <script src="script.js"></script>
+<script>
+// Photo preview
+document.getElementById('photoInput').addEventListener('change', function(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    document.getElementById('photoPreview').src = ev.target.result;
+    document.getElementById('photoPlaceholder').style.display = 'none';
+    document.getElementById('photoPreviewWrap').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+});
+function removePhoto() {
+  document.getElementById('photoInput').value = '';
+  document.getElementById('photoPreview').src = '';
+  document.getElementById('photoPlaceholder').style.display = 'block';
+  document.getElementById('photoPreviewWrap').style.display = 'none';
+}
+</script>
 </body>
 </html>
-☰📷✕©
