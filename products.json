@@ -1052,7 +1052,8 @@
       {
         "name": "Brown",
         "image": "assets/products/the-cindy-pouch-mstuy5ot-brown.jpg",
-        "status": "preorder"
+        "status": "in-stock",
+        "qty": 1
       },
       {
         "name": "Brown checker",
