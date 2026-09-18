@@ -1024,7 +1024,7 @@
     "image": "assets/products/the-cindy-pouch-mstuy5ot-black.jpg",
     "name": "The Cindy Pouch",
     "price": "$30.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Bags",
     "description": "",
     "colors": [
@@ -1051,8 +1051,7 @@
       {
         "name": "Brown",
         "image": "assets/products/the-cindy-pouch-mstuy5ot-brown.jpg",
-        "status": "in-stock",
-        "qty": 1
+        "status": "preorder"
       },
       {
         "name": "Brown checker",
