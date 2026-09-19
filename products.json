@@ -359,15 +359,15 @@
     "description": "",
     "colors": [
       {
-        "name": "Full tan original pattern",
-        "image": "assets/products/the-chelsey-msl8jhez-full-tan-original-pattern.jpg",
-        "status": "preorder"
-      },
-      {
         "name": "White checkered with pink trim",
         "image": "assets/products/the-chelsey-msl8jhez-white-checkered-with-pink-trim.jpg",
         "status": "in-stock",
         "qty": 2
+      },
+      {
+        "name": "Full tan original pattern",
+        "image": "assets/products/the-chelsey-msl8jhez-full-tan-original-pattern.jpg",
+        "status": "preorder"
       },
       {
         "name": "Pink trim original pattern",
