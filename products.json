@@ -1456,5 +1456,31 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-erin-mue9wjp2",
+    "image": "assets/products/the-erin-mue9wjp2-brown.jpg",
+    "name": "The Erin",
+    "price": "$130.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "Brown",
+        "image": "assets/products/the-erin-mue9wjp2-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Burgundy",
+        "image": "assets/products/the-erin-mue9wjp2-burgundy.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black",
+        "image": "assets/products/the-erin-mue9wjp2-black.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
