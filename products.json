@@ -538,7 +538,8 @@
       {
         "name": "Brown",
         "image": "assets/products/the-faye-msl8qdv7-brown.jpg",
-        "status": "preorder"
+        "status": "in-stock",
+        "qty": 1
       },
       {
         "name": "Tan",
