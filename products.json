@@ -1520,11 +1520,6 @@
     "description": "",
     "colors": [
       {
-        "name": "brown single strap",
-        "image": "assets/products/the-docs-mv6187v5-brown-single-strap.jpg",
-        "status": "preorder"
-      },
-      {
         "name": "brown double strap",
         "image": "assets/products/the-docs-mv6187v5-brown-double-strap.jpg",
         "status": "preorder"
@@ -1542,6 +1537,11 @@
       {
         "name": "red double strap",
         "image": "assets/products/the-docs-mv6187v5-red-double-strap.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "brown single strap",
+        "image": "assets/products/the-docs-mv6187v5-brown-single-strap.jpg",
         "status": "preorder"
       }
     ],
