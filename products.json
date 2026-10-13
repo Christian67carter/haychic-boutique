@@ -1483,5 +1483,31 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-brooklyn-mv60hy1s",
+    "image": "assets/products/the-brooklyn-mv60hy1s-brown-suede.jpg",
+    "name": "The Brooklyn",
+    "price": "$92",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "brown suede",
+        "image": "assets/products/the-brooklyn-mv60hy1s-brown-suede.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "brown",
+        "image": "assets/products/the-brooklyn-mv60hy1s-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "black",
+        "image": "assets/products/the-brooklyn-mv60hy1s-black.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
