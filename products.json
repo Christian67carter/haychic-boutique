@@ -1502,11 +1502,6 @@
         "name": "black",
         "image": "assets/products/the-brooklyn-mv60hy1s-black.jpg",
         "status": "preorder"
-      },
-      {
-        "name": "brown suede",
-        "image": "assets/products/the-brooklyn-mv60hy1s-brown-suede.jpg",
-        "status": "in-stock"
       }
     ]
   }
