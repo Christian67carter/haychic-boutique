@@ -1494,11 +1494,6 @@
     "description": "",
     "colors": [
       {
-        "name": "brown suede",
-        "image": "assets/products/the-brooklyn-mv60hy1s-brown-suede.jpg",
-        "status": "preorder"
-      },
-      {
         "name": "brown",
         "image": "assets/products/the-brooklyn-mv60hy1s-brown.jpg",
         "status": "preorder"
