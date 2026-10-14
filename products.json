@@ -302,6 +302,38 @@
         "name": "Large",
         "status": "preorder"
       }
+    ],
+    "colors": [
+      {
+        "name": "black",
+        "image": "",
+        "status": "preorder"
+      },
+      {
+        "name": "magenta",
+        "image": "assets/products/the-court-side-set-msl8gv62-magenta.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "gray",
+        "image": "assets/products/the-court-side-set-msl8gv62-gray.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "blue",
+        "image": "assets/products/the-court-side-set-msl8gv62-blue.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "light pink",
+        "image": "assets/products/the-court-side-set-msl8gv62-light-pink.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "light blue",
+        "image": "assets/products/the-court-side-set-msl8gv62-light-blue.jpg",
+        "status": "preorder"
+      }
     ]
   },
   {
