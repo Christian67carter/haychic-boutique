@@ -1515,11 +1515,6 @@
     "description": "",
     "colors": [
       {
-        "name": "brown",
-        "image": "assets/products/the-docs-mv7gqda9-brown.jpg",
-        "status": "preorder"
-      },
-      {
         "name": "white",
         "image": "assets/products/the-docs-mv7gqda9-white.jpg",
         "status": "preorder"
