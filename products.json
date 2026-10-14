@@ -1557,5 +1557,78 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-oc-s-mv7h58ws",
+    "image": "assets/products/the-oc-s-mv7h58ws-white-ankle.jpg",
+    "name": "The OC's",
+    "price": "$88.00",
+    "status": "preorder",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "white ankle",
+        "image": "assets/products/the-oc-s-mv7h58ws-white-ankle.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "white tennis",
+        "image": "assets/products/the-oc-s-mv7h58ws-white-tennis.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "white",
+        "image": "assets/products/the-oc-s-mv7h58ws-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "brown tennis",
+        "image": "assets/products/the-oc-s-mv7h58ws-brown-tennis.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "black and white",
+        "image": "assets/products/the-oc-s-mv7h58ws-black-and-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "black",
+        "image": "assets/products/the-oc-s-mv7h58ws-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "black tennis",
+        "image": "assets/products/the-oc-s-mv7h58ws-black-tennis.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "blue and white ankle",
+        "image": "assets/products/the-oc-s-mv7h58ws-blue-and-white-ankle.jpg",
+        "status": "preorder"
+      }
+    ],
+    "sizes": [
+      {
+        "name": "womens 5",
+        "status": "preorder"
+      },
+      {
+        "name": "womens 6",
+        "status": "preorder"
+      },
+      {
+        "name": "womens 7",
+        "status": "preorder"
+      },
+      {
+        "name": "womens 8",
+        "status": "preorder"
+      },
+      {
+        "name": "womens 9",
+        "status": "preorder"
+      }
+    ]
   }
 ]
