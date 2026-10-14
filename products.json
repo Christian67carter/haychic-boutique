@@ -1738,5 +1738,71 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-coach-tote-mv7i2lzm",
+    "image": "assets/products/the-coach-tote-mv7i2lzm-brown-canvas.jpg",
+    "name": "The Coach Tote",
+    "price": "$78.00",
+    "status": "in-stock",
+    "category": "Bags",
+    "description": "",
+    "colors": [
+      {
+        "name": "brown canvas",
+        "image": "assets/products/the-coach-tote-mv7i2lzm-brown-canvas.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "caramel canvas",
+        "image": "assets/products/the-coach-tote-mv7i2lzm-caramel-canvas.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "black canvas",
+        "image": "assets/products/the-coach-tote-mv7i2lzm-black-canvas.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "white canvas",
+        "image": "",
+        "status": "preorder"
+      },
+      {
+        "name": "tan canvas",
+        "image": "assets/products/the-coach-tote-mv7i2lzm-tan-canvas.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "yellow canvas with white accent",
+        "image": "assets/products/the-coach-tote-mv7i2lzm-yellow-canvas-with-white-accent.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "yellow canvas with pink canvas",
+        "image": "assets/products/the-coach-tote-mv7i2lzm-yellow-canvas-with-pink-canvas.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "white canvas",
+        "image": "assets/products/the-coach-tote-mv7i2lzm-white-canvas.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "yellow canvas with brown accents",
+        "image": "assets/products/the-coach-tote-mv7i2lzm-yellow-canvas-with-brown-accents.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "light brown canvas",
+        "image": "assets/products/the-coach-tote-mv7i2lzm-light-brown-canvas.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "light brown canvas with brown accent",
+        "image": "assets/products/the-coach-tote-mv7i2lzm-light-brown-canvas-with-brown-accent.jpg",
+        "status": "preorder"
+      }
+    ]
   }
 ]
