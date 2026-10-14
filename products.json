@@ -1,5 +1,5 @@
 [
-  {
+  
     "id": "the-tiffany",
     "name": "The Gabriella",
     "price": "$70.00",
@@ -1505,7 +1505,7 @@
       },
       {
         "name": "brown suede",
-        "image": "",
+        "image": "assets/products/the-brooklyn-mv60hy1s-brown-suede.jpg",
         "status": "preorder"
       }
     ]
