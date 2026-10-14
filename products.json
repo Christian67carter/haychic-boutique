@@ -1640,7 +1640,7 @@
     "id": "the-gazelles-mv7himf3",
     "image": "assets/products/the-gazelles-mv7himf3-gray.jpg",
     "name": "The Gazelles",
-    "price": "$88.00",
+    "price": "$73.00",
     "status": "preorder",
     "category": "Shoes",
     "description": "",
@@ -1734,7 +1734,7 @@
         "status": "preorder"
       },
       {
-        "name": "women's 9",
+        "name": "women\\'s 9",
         "status": "preorder"
       }
     ]
