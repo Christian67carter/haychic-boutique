@@ -1744,7 +1744,7 @@
     "image": "assets/products/the-coach-tote-mv7i2lzm-brown-canvas.jpg",
     "name": "The Coach Tote",
     "price": "$78.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Bags",
     "description": "",
     "colors": [
