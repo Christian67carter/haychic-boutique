@@ -1635,5 +1635,108 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "the-gazelles-mv7himf3",
+    "image": "assets/products/the-gazelles-mv7himf3-gray.jpg",
+    "name": "The Gazelles",
+    "price": "$88.00",
+    "status": "preorder",
+    "category": "Shoes",
+    "description": "",
+    "colors": [
+      {
+        "name": "gray",
+        "image": "assets/products/the-gazelles-mv7himf3-gray.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "red",
+        "image": "assets/products/the-gazelles-mv7himf3-red.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "mint",
+        "image": "assets/products/the-gazelles-mv7himf3-mint.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "cream",
+        "image": "assets/products/the-gazelles-mv7himf3-cream.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "forest green",
+        "image": "assets/products/the-gazelles-mv7himf3-forest-green.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "light grey",
+        "image": "assets/products/the-gazelles-mv7himf3-light-grey.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "sage",
+        "image": "assets/products/the-gazelles-mv7himf3-sage.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "magenta",
+        "image": "assets/products/the-gazelles-mv7himf3-magenta.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "black",
+        "image": "assets/products/the-gazelles-mv7himf3-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "pink and green",
+        "image": "assets/products/the-gazelles-mv7himf3-pink-and-green.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "black and brown",
+        "image": "assets/products/the-gazelles-mv7himf3-black-and-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "cream, brown, and green",
+        "image": "assets/products/the-gazelles-mv7himf3-cream-brown-and-green.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "pink and navy",
+        "image": "assets/products/the-gazelles-mv7himf3-pink-and-navy.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "grey and pink",
+        "image": "assets/products/the-gazelles-mv7himf3-grey-and-pink.jpg",
+        "status": "preorder"
+      }
+    ],
+    "sizes": [
+      {
+        "name": "womens 5",
+        "status": "preorder"
+      },
+      {
+        "name": "womens 6",
+        "status": "preorder"
+      },
+      {
+        "name": "womens 7",
+        "status": "preorder"
+      },
+      {
+        "name": "womens 8",
+        "status": "preorder"
+      },
+      {
+        "name": "women's 9",
+        "status": "preorder"
+      }
+    ]
   }
 ]
