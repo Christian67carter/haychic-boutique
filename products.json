@@ -175,6 +175,26 @@
         "image": "assets/products/the-cutie-set-mskpheqd-black.jpg",
         "status": "preorder",
         "qty": 0
+      },
+      {
+        "name": "lilac",
+        "image": "assets/products/the-cutie-set-mskpheqd-lilac.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "red",
+        "image": "assets/products/the-cutie-set-mskpheqd-red.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "navy",
+        "image": "assets/products/the-cutie-set-mskpheqd-navy.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "gray",
+        "image": "assets/products/the-cutie-set-mskpheqd-gray.jpg",
+        "status": "preorder"
       }
     ],
     "sizes": [
