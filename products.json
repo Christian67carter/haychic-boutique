@@ -273,7 +273,14 @@
     "price": "$62.00",
     "status": "preorder",
     "category": "Bags",
-    "description": ""
+    "description": "",
+    "colors": [
+      {
+        "name": "white",
+        "image": "",
+        "status": "preorder"
+      }
+    ]
   },
   {
     "id": "the-gigi-msl8ek07",
