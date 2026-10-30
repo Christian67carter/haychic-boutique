@@ -1874,6 +1874,11 @@
     "description": "",
     "colors": [
       {
+        "name": "White",
+        "image": "assets/products/alo-headbands-cotton-mvv38do2-white.jpg",
+        "status": "preorder"
+      },
+      {
         "name": "Black",
         "image": "assets/products/alo-headbands-cotton-mvv38do2-black.jpg",
         "status": "preorder"
@@ -1886,11 +1891,6 @@
       {
         "name": "Navy",
         "image": "assets/products/alo-headbands-cotton-mvv38do2-navy.jpg",
-        "status": "preorder"
-      },
-      {
-        "name": "White",
-        "image": "assets/products/alo-headbands-cotton-mvv38do2-white.jpg",
         "status": "preorder"
       },
       {
