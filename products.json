@@ -1874,43 +1874,43 @@
     "description": "",
     "colors": [
       {
+        "name": "black",
+        "image": "assets/products/alo-headbands-cotton-mvv38do2-black.jpg",
+        "status": "in-stock"
+      },
+      {
         "name": "White",
         "image": "assets/products/alo-headbands-cotton-mvv38do2-white.jpg",
         "status": "preorder"
       },
       {
-        "name": "Black",
-        "image": "assets/products/alo-headbands-cotton-mvv38do2-black.jpg",
+        "name": "blue",
+        "image": "assets/products/alo-headbands-cotton-mvv38do2-blue.jpg",
         "status": "preorder"
       },
       {
-        "name": "Brown",
+        "name": "gray",
+        "image": "assets/products/alo-headbands-cotton-mvv38do2-gray.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "pink",
+        "image": "assets/products/alo-headbands-cotton-mvv38do2-pink.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "green",
+        "image": "assets/products/alo-headbands-cotton-mvv38do2-green.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "tan",
+        "image": "assets/products/alo-headbands-cotton-mvv38do2-tan.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "brown",
         "image": "assets/products/alo-headbands-cotton-mvv38do2-brown.jpg",
-        "status": "preorder"
-      },
-      {
-        "name": "Navy",
-        "image": "assets/products/alo-headbands-cotton-mvv38do2-navy.jpg",
-        "status": "preorder"
-      },
-      {
-        "name": "Hot pink",
-        "image": "assets/products/alo-headbands-cotton-mvv38do2-hot-pink.jpg",
-        "status": "preorder"
-      },
-      {
-        "name": "Light pink",
-        "image": "assets/products/alo-headbands-cotton-mvv38do2-light-pink.jpg",
-        "status": "preorder"
-      },
-      {
-        "name": "orange",
-        "image": "assets/products/alo-headbands-cotton-mvv38do2-orange.jpg",
-        "status": "preorder"
-      },
-      {
-        "name": "yellow",
-        "image": "assets/products/alo-headbands-cotton-mvv38do2-yellow.jpg",
         "status": "preorder"
       }
     ]
