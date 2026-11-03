@@ -1922,16 +1922,16 @@
     "price": "$55.00",
     "status": "preorder",
     "category": "Clothing",
-    "description": "The logo will look normal!",
+    "description": "The logo will look normal! Recommend sizing up!",
     "colors": [
-      {
-        "name": "Black",
-        "image": "assets/products/alo-leggings-mw0wp1kf-black.jpg",
-        "status": "preorder"
-      },
       {
         "name": "Black flare",
         "image": "assets/products/alo-leggings-mw0wp1kf-black-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black regular",
+        "image": "assets/products/alo-leggings-mw0wp1kf-black.jpg",
         "status": "preorder"
       },
       {
@@ -2026,6 +2026,10 @@
       },
       {
         "name": "Large",
+        "status": "preorder"
+      },
+      {
+        "name": "X-Large",
         "status": "preorder"
       }
     ]
