@@ -2044,13 +2044,13 @@
     "description": "The logo will be normal!",
     "colors": [
       {
-        "name": "Black",
-        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-black.jpg",
+        "name": "White",
+        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-white.jpg",
         "status": "preorder"
       },
       {
-        "name": "White",
-        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-white.jpg",
+        "name": "Black",
+        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-black.jpg",
         "status": "preorder"
       },
       {
