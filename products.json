@@ -1914,5 +1914,120 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "alo-leggings-mw0wp1kf",
+    "image": "assets/products/alo-leggings-mw0wp1kf-black.jpg",
+    "name": "Alo leggings",
+    "price": "$55.00",
+    "status": "preorder",
+    "category": "Clothing",
+    "description": "The logo will look normal!",
+    "colors": [
+      {
+        "name": "Black",
+        "image": "assets/products/alo-leggings-mw0wp1kf-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-black-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-white-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Navy flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-navy-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Lilac flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-lilac-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Burgundy/red flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-burgundy-red-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Charcoal flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-charcoal-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Blue flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-blue-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-brown-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Black fold over flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-black-fold-over-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Winter blue fold over flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-winter-blue-fold-over-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Purple fold over flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-purple-fold-over-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Lilac fold over flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-lilac-fold-over-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Light pink fold over flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-light-pink-fold-over-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Hot pink/ red fold over flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-hot-pink-red-fold-over-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown fold over flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-brown-fold-over-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Sage fold over flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-sage-fold-over-flare.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Navy fold over flare",
+        "image": "assets/products/alo-leggings-mw0wp1kf-navy-fold-over-flare.jpg",
+        "status": "preorder"
+      }
+    ],
+    "sizes": [
+      {
+        "name": "Small",
+        "status": "preorder"
+      },
+      {
+        "name": "Medium",
+        "status": "preorder"
+      },
+      {
+        "name": "Large",
+        "status": "preorder"
+      }
+    ]
   }
 ]
