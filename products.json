@@ -2029,5 +2029,79 @@
         "status": "preorder"
       }
     ]
+  },
+  {
+    "id": "alo-windbreaker-pants-mw0x6zqb",
+    "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-black.jpg",
+    "name": "Alo windbreaker pants",
+    "price": "$60.00",
+    "status": "preorder",
+    "category": "Clothing",
+    "description": "The logo will be normal!",
+    "colors": [
+      {
+        "name": "Black",
+        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-black.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "White",
+        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-white.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Navy",
+        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-navy.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Gray",
+        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-gray.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Brown",
+        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-brown.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Mauve",
+        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-mauve.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Pink",
+        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-pink.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Tan",
+        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-tan.jpg",
+        "status": "preorder"
+      },
+      {
+        "name": "Army green",
+        "image": "assets/products/alo-windbreaker-pants-mw0x6zqb-army-green.jpg",
+        "status": "preorder"
+      }
+    ],
+    "sizes": [
+      {
+        "name": "Small",
+        "status": "preorder"
+      },
+      {
+        "name": "Medium",
+        "status": "preorder"
+      },
+      {
+        "name": "Large",
+        "status": "preorder"
+      },
+      {
+        "name": "X-Large",
+        "status": "preorder"
+      }
+    ]
   }
 ]
