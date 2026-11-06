@@ -1238,11 +1238,6 @@
     "description": "",
     "colors": [
       {
-        "name": "Black Hoodie",
-        "image": "assets/products/the-scarlet-hoodies-zip-up-sweatshirts-msumcp9t-black-hoodie.jpg",
-        "status": "preorder"
-      },
-      {
         "name": "Light Pink Hoodie",
         "image": "assets/products/the-scarlet-hoodies-zip-up-sweatshirts-msumcp9t-light-pink-hoodie.jpg",
         "status": "preorder"
@@ -1265,7 +1260,8 @@
       {
         "name": "Grey Zip-UP",
         "image": "assets/products/the-scarlet-hoodies-zip-up-sweatshirts-msumcp9t-grey-zip-up.jpg",
-        "status": "preorder"
+        "status": "in-stock",
+        "qty": 1
       },
       {
         "name": "Black Sweatshirt",
@@ -1289,11 +1285,12 @@
         "status": "preorder"
       },
       {
-        "name": "Medium",
-        "status": "preorder"
+        "name": "Large",
+        "status": "in-stock",
+        "qty": 1
       },
       {
-        "name": "Large",
+        "name": "Medium",
         "status": "preorder"
       }
     ]
