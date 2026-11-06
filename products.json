@@ -1926,7 +1926,8 @@
       {
         "name": "Black flare",
         "image": "assets/products/alo-leggings-mw0wp1kf-black-flare.jpg",
-        "status": "preorder"
+        "status": "in-stock",
+        "qty": 1
       },
       {
         "name": "Black regular",
@@ -2017,7 +2018,8 @@
     "sizes": [
       {
         "name": "Small",
-        "status": "preorder"
+        "status": "in-stock",
+        "qty": 1
       },
       {
         "name": "Medium",
