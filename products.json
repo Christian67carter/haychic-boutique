@@ -993,15 +993,15 @@
     "image": "assets/products/the-terry-mstsmjst-black-with-gold-hardware.jpg",
     "name": "The Terry",
     "price": "$60.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Bags",
     "description": "",
     "colors": [
       {
         "name": "Black with gold hardware",
         "image": "assets/products/the-terry-mstsmjst-black-with-gold-hardware.jpg",
-        "status": "in-stock",
-        "qty": 1
+        "status": "preorder",
+        "qty": 0
       },
       {
         "name": "White with gold hardware",
