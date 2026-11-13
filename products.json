@@ -592,15 +592,14 @@
     "image": "assets/products/the-faye-msl8qdv7-brown.jpg",
     "name": "The FAYE",
     "price": "$88.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Bags",
     "description": "",
     "colors": [
       {
         "name": "Brown",
         "image": "assets/products/the-faye-msl8qdv7-brown.jpg",
-        "status": "in-stock",
-        "qty": 1
+        "status": "preorder"
       },
       {
         "name": "Tan",
@@ -638,7 +637,7 @@
         "status": "preorder"
       }
     ],
-    "qty": 1
+    "qty": 0
   },
   {
     "id": "the-molly-mstlq06p",
