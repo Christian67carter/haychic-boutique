@@ -485,7 +485,8 @@
         "image": "assets/products/the-chelsey-msl8jhez-white-checkered-with-white-trim.jpg",
         "status": "preorder"
       }
-    ]
+    ],
+    "qty": 1
   },
   {
     "id": "the-lucia-msl8kixe",
