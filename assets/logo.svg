@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 60" width="260" height="60" role="img" aria-label="HAYCHIC Boutique">
+  <defs>
+    <clipPath id="logo-clip">
+      <rect width="260" height="60" rx="30"/>
+    </clipPath>
+  </defs>
+  <!-- Rainbow stripe background -->
+  <g clip-path="url(#logo-clip)">
+    <rect x="0"   y="0" width="43.33" height="60" fill="#F490B9"/>
+    <rect x="43.33" y="0" width="43.33" height="60" fill="#F4A951"/>
+    <rect x="86.66" y="0" width="43.33" height="60" fill="#F9CC5A"/>
+    <rect x="129.99" y="0" width="43.33" height="60" fill="#BEE4E7"/>
+    <rect x="173.32" y="0" width="43.33" height="60" fill="#95C7C2"/>
+    <rect x="216.65" y="0" width="43.35" height="60" fill="#FFD4E5"/>
+    <!-- White overlay for text legibility -->
+    <rect x="0" y="0" width="260" height="60" fill="rgba(0,0,0,0.08)"/>
+  </g>
+  <!-- Daisy/flower icon -->
+  <text x="20" y="38" font-size="22" text-anchor="middle" fill="white">✿</text>
+  <!-- HAYCHIC text -->
+  <text x="142" y="32" font-family="Nunito,Arial Black,sans-serif" font-weight="900" font-size="22" fill="white" text-anchor="middle" letter-spacing="3">HAYCHIC</text>
+  <!-- BOUTIQUE subtext -->
+  <text x="142" y="47" font-family="Nunito,Arial,sans-serif" font-weight="700" font-size="9" fill="rgba(255,255,255,0.92)" text-anchor="middle" letter-spacing="6">BOUTIQUE</text>
+</svg>
