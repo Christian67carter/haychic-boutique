@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>HAYCHIC Admin</title>
   <link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" href="/assets/favicon/favicon.svg" type="image/svg+xml" />
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16.png" />
   <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../styles.css" />
 <style>
 body{background:var(--cream);}
@@ -108,7 +109,8 @@ body{background:var(--cream);}
 <body>
 
 <div id="loginScreen">
-<h1 style="font-family:'Playfair Display',serif;">HAYCHIC Admin <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h1>
+<div style="margin-bottom:16px;"><img src="/assets/logo.svg" alt="HAYCHIC Boutique" style="height:50px;width:auto;" /></div>
+<h2 style="font-family:'Nunito',sans-serif;font-weight:900;letter-spacing:.12em;font-size:1rem;margin-top:0;color:var(--brown);">ADMIN PANEL</h2>
 <p style="color:var(--muted);" id="loginTagline">Log in to manage listings, access requests and customers &#x2014; all in one place.</p>
 <div class="field">
 <label>Email</label>
@@ -137,7 +139,7 @@ body{background:var(--cream);}
 
 <div id="adminApp" class="hidden">
 <div class="admin-header">
-<a class="brand" href="../index.html" style="font-family:'Playfair Display',serif;">HAYCHIC <span style="font-size:.6rem;letter-spacing:.2em;">ADMIN</span></a>
+<a class="brand" href="../index.html" style="display:flex;align-items:center;gap:8px;"><img src="/assets/logo.svg" alt="HAYCHIC Boutique" style="height:40px;width:auto;" /></a>
 <button class="btn secondary" onclick="doSignOut()">Log Out</button>
 </div>
 
@@ -316,7 +318,7 @@ body{background:var(--cream);}
 <div id="activityModal" class="hidden" style="position:fixed;inset:0;background:rgba(74,63,46,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;">
 <div style="background:white;border-radius:24px;max-width:520px;width:100%;max-height:80vh;overflow:auto;padding:26px;">
 <div style="display:flex;justify-content:space-between;align-items:center;">
-<h3 style="margin:0;font-family:'Playfair Display',serif;">Activity &#x2014; <span id="activityLeadName"></span></h3>
+<h3 style="margin:0;font-family:'Nunito',sans-serif;font-weight:900;">Activity &#x2014; <span id="activityLeadName"></span></h3>
 <button class="link-btn" onclick="closeActivity()">Close</button>
 </div>
 <div id="activityContent" class="activity-list"><p class="empty">Loading…</p></div>
@@ -354,11 +356,11 @@ const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
   <meta name="description" content="Shop this item from HAYCHIC Boutique." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="announcement"><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> NEW ARRIVALS + PRE-ORDERS AVAILABLE <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></div>
+  <div class="announcement">✦ NEW ARRIVALS + PRE-ORDERS AVAILABLE ✦</div>
 
   <header class="site-header">
     <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
@@ -375,7 +377,7 @@ const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
       <a class="nav-cta" href="shop.html">Shop Now</a>
     </nav>
     <div class="header-actions">
-      <button class="bag-btn" aria-label="Shopping bag">Bag <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></button>
+      <button class="bag-btn" aria-label="Shopping bag">Bag</button>
     </div>
   </header>
 
@@ -387,7 +389,7 @@ const PRODUCT_PAGE_HTML = `<!DOCTYPE html>
   </main>
 
   <footer>
-    <a class="brand footer-brand" href="index.html">HAYCHIC <span>Boutique</span></a>
+    <a class="brand footer-brand" href="index.html"><img src="/assets/logo.svg" alt="HAYCHIC Boutique" style="height:40px;width:auto;" /></a>
     <div class="footer-links">
       <a href="shop.html">Shop</a><a href="new-arrivals.html">New Arrivals</a><a href="preorders.html">Pre-Orders</a><a href="in-stock.html">In Stock</a>
       <a href="request.html">Request an Item</a><a href="about.html">About</a><a href="pr.html">PR Team</a><a href="faq.html">FAQ</a><a href="support.html">Support</a>
@@ -830,7 +832,7 @@ message: editingId ? `Update listing: ${name}` : `Add listing: ${name}`
 });
 productsSha = data.sha;
 
-showStatus('Saved! It will appear on the site in a minute <img src="/assets/flower-icon.png" class="flower-emoji" alt="">');
+showStatus('Saved! It will appear on the site in a minute ✿');
 cancelEdit();
 renderListings();
 }catch(err){
