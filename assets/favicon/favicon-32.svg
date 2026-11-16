@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <clipPath id="fc">
+      <rect width="32" height="32" rx="8"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#fc)">
+    <rect x="0"      y="0" width="5.33" height="32" fill="#F490B9"/>
+    <rect x="5.33"   y="0" width="5.33" height="32" fill="#F4A951"/>
+    <rect x="10.66"  y="0" width="5.33" height="32" fill="#F9CC5A"/>
+    <rect x="15.99"  y="0" width="5.33" height="32" fill="#BEE4E7"/>
+    <rect x="21.32"  y="0" width="5.33" height="32" fill="#95C7C2"/>
+    <rect x="26.65"  y="0" width="5.35" height="32" fill="#FFD4E5"/>
+  </g>
+  <text x="16" y="21" font-family="Arial Black,sans-serif" font-weight="900" font-size="16" fill="white" text-anchor="middle">H</text>
+</svg>

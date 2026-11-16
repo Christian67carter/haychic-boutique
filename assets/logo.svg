@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 60" width="260" height="60" role="img" aria-label="HAYCHIC Boutique">
+  <defs><clipPath id="logo-clip"><rect width="260" height="60" rx="30"/></clipPath></defs>
+  <g clip-path="url(#logo-clip)">
+    <rect x="0"      y="0" width="43.33" height="60" fill="#F490B9"/>
+    <rect x="43.33"  y="0" width="43.33" height="60" fill="#F4A951"/>
+    <rect x="86.66"  y="0" width="43.33" height="60" fill="#F9CC5A"/>
+    <rect x="129.99" y="0" width="43.33" height="60" fill="#BEE4E7"/>
+    <rect x="173.32" y="0" width="43.33" height="60" fill="#95C7C2"/>
+    <rect x="216.65" y="0" width="43.35" height="60" fill="#FFD4E5"/>
+    <rect x="0" y="0" width="260" height="60" fill="rgba(0,0,0,0.07)"/>
+  </g>
+  <g transform="translate(22,30)">
+    <ellipse cx="0" cy="-14" rx="6"   ry="10.5" fill="rgba(255,248,240,0.95)" transform="rotate(0)"/>
+    <ellipse cx="0" cy="-14" rx="6"   ry="10.5" fill="rgba(255,248,240,0.95)" transform="rotate(60)"/>
+    <ellipse cx="0" cy="-14" rx="6"   ry="10.5" fill="rgba(255,248,240,0.95)" transform="rotate(120)"/>
+    <ellipse cx="0" cy="-14" rx="6"   ry="10.5" fill="rgba(255,248,240,0.95)" transform="rotate(180)"/>
+    <ellipse cx="0" cy="-14" rx="6"   ry="10.5" fill="rgba(255,248,240,0.95)" transform="rotate(240)"/>
+    <ellipse cx="0" cy="-14" rx="6"   ry="10.5" fill="rgba(255,248,240,0.95)" transform="rotate(300)"/>
+    <ellipse cx="0" cy="-13" rx="4.2" ry="8.5"  fill="#F490B9" transform="rotate(0)"/>
+    <ellipse cx="0" cy="-13" rx="4.2" ry="8.5"  fill="#F490B9" transform="rotate(60)"/>
+    <ellipse cx="0" cy="-13" rx="4.2" ry="8.5"  fill="#F490B9" transform="rotate(120)"/>
+    <ellipse cx="0" cy="-13" rx="4.2" ry="8.5"  fill="#F490B9" transform="rotate(180)"/>
+    <ellipse cx="0" cy="-13" rx="4.2" ry="8.5"  fill="#F490B9" transform="rotate(240)"/>
+    <ellipse cx="0" cy="-13" rx="4.2" ry="8.5"  fill="#F490B9" transform="rotate(300)"/>
+    <circle r="6"   fill="white"/>
+    <circle r="4"   fill="#F490B9"/>
+    <circle r="2.2" fill="white"/>
+  </g>
+  <text x="148" y="32" font-family="Nunito,Arial Black,sans-serif" font-weight="900" font-size="22" fill="white" text-anchor="middle" letter-spacing="3">HAYCHIC</text>
+  <text x="148" y="47" font-family="Nunito,Arial,sans-serif" font-weight="700" font-size="9" fill="rgba(255,255,255,0.92)" text-anchor="middle" letter-spacing="6">BOUTIQUE</text>
+</svg>

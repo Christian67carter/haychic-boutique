@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>HAYCHIC Boutique</title>
+<link rel="icon" href="/assets/favicon/favicon.svg" type="image/svg+xml" />
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16.png" />
@@ -11,15 +12,15 @@
 <meta name="description" content="HAYCHIC Boutique — trendy bags, clothing, shoes, accessories, beauty, pre-orders and special-order finds." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Nunito:wght@600;700;800;900&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<div class="announcement"><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> NEW ARRIVALS + PRE-ORDERS AVAILABLE <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></div>
+<div class="announcement">✿ NEW ARRIVALS + PRE-ORDERS AVAILABLE ✿</div>
 
 <header class="site-header">
 <button class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
-<a class="brand" href="#home">HAYCHIC <span>Boutique</span></a>
+<a class="brand" href="/"><img src="/assets/logo.svg" alt="HAYCHIC Boutique" class="brand-logo" /></a>
 <nav id="nav">
 <a href="new-arrivals.html">New Arrivals</a>
 <a href="preorders.html">Pre-Orders</a>
@@ -32,15 +33,16 @@
 <a class="nav-cta" href="shop.html">Shop Now</a>
 </nav>
 <div class="header-actions">
-<button class="bag-btn" aria-label="Shopping bag">Bag <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></button>
+<button class="bag-btn" aria-label="Shopping bag">Bag ✿</button>
 </div>
 </header>
 
 <main>
+<!-- ── HERO ───────────────────────────────────────── -->
 <section class="hero" id="home">
 <div class="hero-content">
 <span class="eyebrow">cute finds • special orders • boutique favorites</span>
-<h1>Your newest obsession is waiting <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h1>
+<h1>Your newest obsession is waiting ✿</h1>
 <p>Shop trendy bags, clothing, shoes, beauty, accessories and pre-order finds picked for HAYCHIC Boutique.</p>
 <div class="hero-actions">
 <a class="btn primary" href="new-arrivals.html">Shop New Arrivals</a>
@@ -66,23 +68,25 @@
 </div>
 </section>
 
+<!-- ── MARQUEE ─────────────────────────────────────── -->
 <div class="marquee" aria-hidden="true">
 <div class="marquee-track">
-<span>★ Thank you for shopping small</span>
-<span>★ New drops weekly</span>
-<span>★ Follow along on Instagram</span>
-<span>★ Happy Shopping <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></span>
-<span>★ Thank you for shopping small</span>
-<span>★ New drops weekly</span>
-<span>★ Follow along on Instagram</span>
-<span>★ Happy Shopping <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></span>
+<span>✿ Thank you for shopping small</span>
+<span>✿ New drops weekly</span>
+<span>✿ Follow along on Instagram</span>
+<span>✿ Happy Shopping</span>
+<span>✿ Thank you for shopping small</span>
+<span>✿ New drops weekly</span>
+<span>✿ Follow along on Instagram</span>
+<span>✿ Happy Shopping</span>
 </div>
 </div>
 
+<!-- ── SHOP BY CATEGORY ────────────────────────────── -->
 <section class="section" id="shop">
 <div class="section-heading">
 <span class="eyebrow">shop by category</span>
-<h2>Find your favorite <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h2>
+<h2>Find your favorite ✿</h2>
 </div>
 <div class="category-grid">
 <a class="category-card blush" href="new-arrivals.html"><span>🎀</span><h3>New Arrivals</h3><p>Shop the latest drops.</p></a>
@@ -94,10 +98,11 @@
 </div>
 </section>
 
+<!-- ── NEW ARRIVALS ────────────────────────────────── -->
 <section class="section products-section" id="just-dropped">
 <div class="section-heading">
 <span class="eyebrow">just dropped</span>
-<h2>New Arrivals <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h2>
+<h2>New Arrivals ✿</h2>
 </div>
 <div class="product-grid" id="home-newarrivals"></div>
 <div class="home-shop-band">
@@ -105,6 +110,7 @@
 </div>
 </section>
 
+<!-- ── IN-STOCK BANNER ─────────────────────────────── -->
 <section class="banner">
 <div class="banner-content">
 <span class="eyebrow">on hand &amp; in stock</span>
@@ -114,9 +120,10 @@
 </div>
 </section>
 
+<!-- ── PRE-ORDERS SPLIT ────────────────────────────── -->
 <section class="split-section" id="preorders">
 <div class="split-art">
-<div class="big-heart"><img src="/assets/flower-icon.png" class="flower-emoji" alt=""></div>
+<div class="big-heart">✿</div>
 <p>pre-order with confidence</p>
 </div>
 <div class="split-copy">
@@ -127,17 +134,19 @@
 </div>
 </section>
 
+<!-- ── REQUEST BAND ────────────────────────────────── -->
 <section class="request-band">
 <span class="eyebrow">can't find it?</span>
-<h2>Let HAYCHIC find it for you <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h2>
+<h2>Let HAYCHIC find it for you ✿</h2>
 <p>Send us a photo or description and we'll check availability, pricing and timing — this is one of the things that makes HAYCHIC different from a regular online store.</p>
 <a class="btn" href="request.html">Request an Item →</a>
 </section>
 
+<!-- ── ABOUT HAYDEN ────────────────────────────────── -->
 <section class="about-section">
 <div class="about-card">
 <span class="eyebrow">meet the boutique</span>
-<h2>Hey, I'm Hayden <img src="/assets/flower-icon.png" class="flower-emoji" alt=""></h2>
+<h2>Hey, I'm Hayden ✿</h2>
 <p>HAYCHIC Boutique is all about bringing together cute, trendy finds — from clothing and bags to shoes, accessories, beauty and special-order favorites.</p>
 <div class="hero-actions" style="justify-content:center;">
 <a class="btn primary" href="about.html">Meet Hayden →</a>
@@ -146,6 +155,7 @@
 </div>
 </section>
 
+<!-- ── FOLLOW BAND ─────────────────────────────────── -->
 <section class="follow-band">
 <span class="eyebrow">social media</span>
 <h2>Follow along @HAYCHICBOUTIQUE</h2>
@@ -153,6 +163,7 @@
 <a class="btn" href="https://instagram.com/" target="_blank" rel="noopener">Follow on Instagram →</a>
 </section>
 
+<!-- ── PR TEAM CALLOUT ─────────────────────────────── -->
 <section class="section" style="padding-top:60px;padding-bottom:60px;">
 <div class="pr-standalone">
 <strong>Join the PR Team</strong>
@@ -161,8 +172,9 @@
 </div>
 </section>
 
+<!-- ── NEWSLETTER ──────────────────────────────────── -->
 <section class="newsletter">
-<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""></span>
+<span>✿</span>
 <div><h2>Join the HAYCHIC list</h2><p>Be first to know about drops, restocks and boutique news.</p></div>
 <form onsubmit="newsletter(event)">
 <input type="email" required placeholder="Email address">
@@ -170,26 +182,35 @@
 </form>
 </section>
 
+<!-- ── BRAND MARQUEE ───────────────────────────────── -->
 <div class="marquee brand-marquee" aria-hidden="true">
 <div class="marquee-track">
-<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
-<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
-<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
-<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
-<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
-<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
-<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
-<span><img src="/assets/flower-icon.png" class="flower-emoji" alt=""> HAYCHIC BOUTIQUE</span>
+<span>✿ HAYCHIC BOUTIQUE</span>
+<span>✿ HAYCHIC BOUTIQUE</span>
+<span>✿ HAYCHIC BOUTIQUE</span>
+<span>✿ HAYCHIC BOUTIQUE</span>
+<span>✿ HAYCHIC BOUTIQUE</span>
+<span>✿ HAYCHIC BOUTIQUE</span>
+<span>✿ HAYCHIC BOUTIQUE</span>
+<span>✿ HAYCHIC BOUTIQUE</span>
 </div>
 </div>
 </main>
 
 <footer>
-<a class="brand footer-brand" href="#home">HAYCHIC <span>Boutique</span></a>
+<a class="brand" href="/"><img src="/assets/logo.svg" alt="HAYCHIC Boutique" class="brand-logo" style="height:40px;" /></a>
 <div class="footer-links">
 <a href="shop.html">Shop</a><a href="new-arrivals.html">New Arrivals</a><a href="preorders.html">Pre-Orders</a><a href="in-stock.html">In Stock</a>
 <a href="request.html">Request an Item</a><a href="about.html">About</a><a href="pr.html">PR Team</a><a href="faq.html">FAQ</a><a href="support.html">Support</a><a href="track-order.html">Track Order</a>
 </div>
+<div class="footer-links">
+<a href="https://www.instagram.com/haychicboutique" target="_blank" rel="noopener">Instagram</a>
+<a href="https://www.tiktok.com/@haychicboutique" target="_blank" rel="noopener">TikTok</a>
+</div>
+<div class="footer-links footer-legal">
+<a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="refund-policy.html">Refund Policy</a><a href="cookies.html">Cookie Policy</a>
+</div>
+<p class="footer-location">Abilene, TX</p>
 <p>© 2026 HAYCHIC Boutique. All rights reserved.</p>
 </footer>
 
@@ -200,6 +221,6 @@
 <script src="assets/js/firebase-config.js"></script>
 <script src="assets/js/gate.js"></script>
 <script src="assets/js/cookie-consent.js"></script>
-<script src="script.js?v=4"></script>
+<script src="script.js?v=5"></script>
 </body>
 </html>
