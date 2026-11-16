@@ -235,10 +235,10 @@
     "image": "assets/products/the-special-terry-mskpkxca.jpg",
     "name": "The Special Terry",
     "price": "$60.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Bags",
     "description": "",
-    "qty": 1
+    "qty": 0
   },
   {
     "id": "the-candace-msl8cgbc",
