@@ -245,16 +245,16 @@
     "image": "assets/products/the-candace-msl8cgbc.jpg",
     "name": "The Candace",
     "price": "$55.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Bags",
     "description": "",
-    "qty": 1,
+    "qty": 0,
     "colors": [
       {
         "name": "Brown Checkered",
         "image": "",
-        "status": "in-stock",
-        "qty": 1
+        "status": "preorder",
+        "qty": 0
       },
       {
         "name": "White checkered pink inside",
