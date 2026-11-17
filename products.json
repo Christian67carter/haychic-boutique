@@ -219,16 +219,15 @@
     "image": "assets/products/the-make-up-bag-mskpilrg.jpg",
     "name": "The Make-Up Bag",
     "price": "$50.00",
-    "status": "in-stock",
+    "status": "preorder",
     "category": "Beauty",
     "description": "",
     "sizes": [
       {
         "name": "Large",
-        "status": "in-stock"
+        "status": "preorder"
       }
-    ],
-    "qty": 1
+    ]
   },
   {
     "id": "the-special-terry-mskpkxca",
