@@ -194,8 +194,8 @@
       {
         "name": "gray",
         "image": "assets/products/the-cutie-set-mskpheqd-gray.jpg",
-        "status": "in-stock",
-        "qty": 1
+        "status": "preorder",
+        "qty": 0
       }
     ],
     "sizes": [
